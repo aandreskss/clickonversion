@@ -50,9 +50,9 @@ export function Hero() {
             Growth Systems for Service Businesses
           </p>
 
-          {/* H1 — single, descriptive */}
+          {/* H1 */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
-            <span className="text-white">Turn search, traffic and clicks into </span>
+            <span className="text-white">Turn Google into a consistent source of </span>
             <span
               style={{
                 background: "linear-gradient(135deg, #FF5A1F 0%, #FF8A50 100%)",
@@ -61,14 +61,14 @@ export function Hero() {
                 backgroundClip: "text",
               }}
             >
-              customers.
+              qualified leads.
             </span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-lg text-[#8A9099] max-w-xl leading-relaxed">
-            ClicKonversion connects SEO, paid acquisition, conversion and smarter follow-up
-            into one measurable growth system for service businesses.
+            ClicKonversion helps service businesses get found, convert more visitors,
+            follow up faster — and understand what actually produces customers.
           </p>
 
           {/* CTAs */}
@@ -90,9 +90,13 @@ export function Hero() {
             </a>
           </div>
 
+          <p className="text-sm text-[#3D4A5C]">
+            See the opportunities before deciding whether to work with us.
+          </p>
+
           {/* Service strip */}
           <div className="flex flex-wrap gap-2" role="list" aria-label="Services">
-            {["SEO", "Paid Acquisition", "CRO", "Automation", "Analytics"].map((tag) => (
+            {["Local SEO", "Google Ads", "Conversion", "Follow-up", "Analytics"].map((tag) => (
               <span
                 key={tag}
                 role="listitem"

@@ -49,6 +49,10 @@ export const analytics = {
     track("founder_linkedin_click")
   },
 
+  cleaningCtaClick(location: string) {
+    track("cleaning_landing_cta", { cta_location: location, landing: "cleaning" })
+  },
+
   pageView(path: string) {
     track("page_view", { page: path })
   },

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
+import Script from "next/script"
 import "./globals.css"
 
 const inter = Inter({
@@ -7,9 +8,9 @@ const inter = Inter({
   display: "swap",
 })
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://clickonversion.com"
-const gaId    = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
-const gscVerify = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+const siteUrl    = process.env.NEXT_PUBLIC_SITE_URL ?? "https://clickonversion.com"
+const gaId       = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+const gscVerify  = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -20,8 +21,16 @@ const jsonLd = {
       name: "ClicKonversion",
       url: siteUrl,
       logo: { "@type": "ImageObject", url: `${siteUrl}/logo-mark.svg` },
-      founder: { "@type": "Person", name: "Arnaldo Casadiego", sameAs: "https://www.linkedin.com/in/arnaldocasadiego/" },
-      contactPoint: { "@type": "ContactPoint", email: "hello@clickonversion.com", contactType: "customer support" },
+      founder: {
+        "@type": "Person",
+        name: "Arnaldo Casadiego",
+        sameAs: "https://www.linkedin.com/in/arnaldocasadiego/",
+      },
+      contactPoint: {
+        "@type": "ContactPoint",
+        email: "hello@clickonversion.com",
+        contactType: "customer support",
+      },
     },
     {
       "@type": "WebSite",
@@ -36,30 +45,40 @@ const jsonLd = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "SEO, Google Ads & Growth Systems for Service Businesses | ClicKonversion",
+    default: "More Qualified Leads for Service Businesses | ClicKonversion",
     template: "%s | ClicKonversion",
   },
   description:
-    "ClicKonversion connects SEO, paid acquisition, CRO and follow-up into one measurable growth system for local service businesses. Turn search and traffic into customers.",
+    "ClicKonversion helps service businesses get found on Google, convert more visitors into leads, follow up faster and understand what actually produces customers.",
   keywords: [
-    "growth marketing", "local SEO", "lead generation",
-    "conversion optimization", "Google Ads", "service business marketing",
-    "HVAC marketing", "roofing marketing", "cleaning company marketing",
+    "lead generation for service businesses",
+    "local SEO service business",
+    "Google Ads cleaning company",
+    "growth system service business",
+    "conversion optimization",
+    "HVAC marketing",
+    "roofing marketing",
+    "cleaning company marketing",
   ],
   authors: [{ name: "ClicKonversion" }],
   creator: "ClicKonversion",
+  alternates: {
+    canonical: siteUrl,
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: siteUrl,
     siteName: "ClicKonversion",
-    title: "SEO, Google Ads & Growth Systems for Service Businesses | ClicKonversion",
-    description: "We connect SEO, paid acquisition, CRO and follow-up into one measurable growth system for local service businesses.",
+    title: "More Qualified Leads for Service Businesses | ClicKonversion",
+    description:
+      "ClicKonversion helps service businesses get found, convert more visitors, follow up faster and understand what actually produces customers.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SEO, Google Ads & Growth Systems for Service Businesses | ClicKonversion",
-    description: "We connect SEO, paid acquisition, CRO and follow-up into one measurable growth system for local service businesses.",
+    title: "More Qualified Leads for Service Businesses | ClicKonversion",
+    description:
+      "ClicKonversion helps service businesses get found, convert more visitors, follow up faster and understand what actually produces customers.",
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   ...(gscVerify ? { verification: { google: gscVerify } } : {}),
@@ -80,18 +99,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+      </head>
+      <body className={inter.className}>
+        {children}
+
+        {/* GA4 — loads after page is interactive, no render blocking */}
         {gaId && (
           <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
-            <script
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script
+              id="gtag-init"
+              strategy="afterInteractive"
               dangerouslySetInnerHTML={{
                 __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}',{send_page_view:true});`,
               }}
             />
           </>
         )}
-      </head>
-      <body className={inter.className}>{children}</body>
+      </body>
     </html>
   )
 }

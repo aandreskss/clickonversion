@@ -47,13 +47,18 @@ export function ServiceSection() {
               Local Revenue Engine
             </h2>
             <p className="text-lg text-[#8A9099] leading-relaxed mb-8">
-              A focused growth system for service businesses that need more qualified opportunities
-              from Google and their existing traffic.
+              A focused growth system designed to help service businesses generate more qualified
+              opportunities from Google and convert more of that demand into customers.
             </p>
-            <p className="text-sm text-[#546072] leading-relaxed mb-10">
+            <p className="text-sm text-[#546072] leading-relaxed mb-4">
               We don&apos;t run a single channel in isolation. Search visibility, paid acquisition,
               conversion, follow-up, and measurement are built and managed as one connected
               system — because that&apos;s how revenue actually works.
+            </p>
+            <p className="text-sm text-[#546072] leading-relaxed mb-10">
+              Your Growth Audit identifies where the acquisition system is leaking first — so we
+              prioritize the areas most likely to create meaningful improvement instead of selling
+              disconnected marketing tasks.
             </p>
             <Link
               href="/audit"

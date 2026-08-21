@@ -1,26 +1,195 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   ClicKonversion — Design System Tokens
+   ============================================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Brand */
+  --color-brand:          #FF5A1F;
+  --color-brand-hover:    #E54A15;
+  --color-brand-muted:    rgba(255, 90, 31, 0.12);
+
+  /* Surfaces (dark — marketing site) */
+  --color-obsidian:       #0B0D0F;
+  --color-surface-dark:   #14171A;
+  --color-surface:        #1C2026;
+  --color-surface-raised: #232930;
+
+  /* Text */
+  --color-warm-white:     #F7F7F3;
+  --color-foreground:     #F0EFE8;
+  --color-muted:          #8A9099;
+  --color-muted-light:    #B0B8C1;
+
+  /* Neutral grays */
+  --color-gray-900:  #111418;
+  --color-gray-800:  #1C2026;
+  --color-gray-700:  #2A3340;
+  --color-gray-600:  #3D4A5C;
+  --color-gray-500:  #546072;
+  --color-gray-400:  #6E7D8F;
+  --color-gray-300:  #98A6B4;
+  --color-gray-200:  #C8D0D8;
+  --color-gray-100:  #E8ECF0;
+  --color-gray-50:   #F4F6F8;
+
+  /* Semantic */
+  --color-success:       #22C55E;
+  --color-success-muted: rgba(34, 197, 94, 0.12);
+  --color-warning:       #F59E0B;
+  --color-warning-muted: rgba(245, 158, 11, 0.12);
+  --color-danger:        #EF4444;
+  --color-danger-muted:  rgba(239, 68, 68, 0.12);
+
+  /* Borders */
+  --color-border:        rgba(255,255,255,0.08);
+  --color-border-strong: rgba(255,255,255,0.15);
+
+  /* Light surfaces (CRM) */
+  --color-bg-light:      #F7F8FA;
+  --color-surface-light: #FFFFFF;
+  --color-border-light:  #E2E8F0;
+  --color-text-light:    #0F172A;
+  --color-muted-dark:    #64748B;
+
+  /* Typography */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Radius */
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-xl:   1rem;
+  --radius-2xl:  1.5rem;
+  --radius-full: 9999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================================
+   Base
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background-color: var(--color-obsidian);
+  color: var(--color-foreground);
+  line-height: 1.6;
+  min-height: 100dvh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-warm-white);
+}
+
+p { color: var(--color-muted-light); line-height: 1.7; }
+
+/* ============================================================
+   Focus
+   ============================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2A3340; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #3D4A5C; }
+
+/* ============================================================
+   Selection
+   ============================================================ */
+
+::selection { background: rgba(255, 90, 31, 0.25); color: #F7F7F3; }
+
+/* ============================================================
+   Reduced Motion
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Section Helpers
+   ============================================================ */
+
+.section-dark    { background-color: var(--color-obsidian); }
+.section-surface { background-color: var(--color-surface-dark); }
+
+.section-light                               { background-color: #FFFFFF; color: #0F172A; }
+.section-light h1, .section-light h2,
+.section-light h3, .section-light h4        { color: #0F172A; }
+.section-light p                             { color: #475569; }
+
+/* ============================================================
+   Gradient Utilities
+   ============================================================ */
+
+.gradient-brand      { background: linear-gradient(135deg, #FF5A1F 0%, #FF8A50 100%); }
+.gradient-text-brand {
+  background: linear-gradient(135deg, #FF5A1F 0%, #FF8A50 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-in-up { animation: fade-in-up 0.5s ease forwards; }
+.animate-fade-in    { animation: fade-in    0.3s ease forwards; }
+
+/* ============================================================
+   Container
+   ============================================================ */
+
+.container-tight {
+  max-width: 64rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.container-wide {
+  max-width: 88rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-tight, .container-wide { padding-inline: 2.5rem; }
 }

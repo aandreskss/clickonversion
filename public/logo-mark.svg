@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="310" height="330" viewBox="0 0 310 330" role="img" aria-label="ClicKonversion mark">
+  <!-- Light background variant: C+arrow=#0B0D0F, hole=#FFFFFF, K=#FF5A1F -->
+  <path fill="#0B0D0F" d="M190 0 C86 0 18 70 18 165 C18 260 86 330 190 330 L190 270 C124 270 79 226 79 165 C79 104 124 60 190 60 Z"/>
+  <path fill="#FFFFFF" d="M189 88 C139 88 105 119 105 165 C105 211 139 242 189 242 L189 206 C161 206 143 188 143 165 C143 142 161 124 189 124 Z"/>
+  <path fill="#0B0D0F" d="M105 145 H190 L161 116 L183 94 L250 165 L183 236 L161 214 L190 185 H105 Z"/>
+  <path fill="#FF5A1F" d="M222 0 H300 L207 117 L250 161 L208 204 L300 330 H220 L160 248 L205 205 L160 160 L205 116 L160 72 Z"/>
+</svg>

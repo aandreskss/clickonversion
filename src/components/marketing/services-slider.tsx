@@ -17,50 +17,50 @@ const SERVICES: Service[] = [
   {
     emoji: "📍",
     title: "SEO & Local Visibility",
-    description: "Get found by people already searching for your service in the areas that matter.",
-    highlights: ["Technical SEO", "GBP optimization", "Local search structure"],
+    description: "Get found by people already searching for your service — in the cities and markets where you work.",
+    highlights: ["Local Search", "Google Business Profile", "Technical SEO"],
     accent: "#FF5A1F",
   },
   {
     emoji: "📈",
     title: "Google Ads",
-    description: "Capture high-intent demand and turn paid clicks into measurable lead opportunities.",
-    highlights: ["Search campaigns", "Landing pages", "Lead generation"],
+    description: "Reach high-intent prospects when they're actively looking and turn paid clicks into measurable lead opportunities.",
+    highlights: ["Search Campaigns", "Landing Experience", "Conversion Tracking"],
     accent: "#4285F4",
   },
   {
     emoji: "🧩",
     title: "Website Conversion",
-    description: "Improve pages, forms and calls to action so more visitors actually become leads.",
-    highlights: ["CRO analysis", "Forms & CTAs", "User flow"],
+    description: "Improve the gap between someone landing on your site and actually reaching out.",
+    highlights: ["Landing Pages", "Calls to Action", "Forms & UX"],
     accent: "#8B5CF6",
   },
   {
     emoji: "🤝",
     title: "CRM & Follow-up",
-    description: "Create a smoother process for responding to and managing incoming leads before they go cold.",
-    highlights: ["Lead response", "Pipeline clarity", "Next-step structure"],
+    description: "Build a cleaner process for responding to leads so fewer inquiries fall through the cracks.",
+    highlights: ["Lead Management", "Follow-up Process", "Pipeline Visibility"],
     accent: "#10B981",
   },
   {
     emoji: "📊",
     title: "Analytics & Tracking",
-    description: "See what is working, where leads come from and what channels deserve more investment.",
-    highlights: ["Attribution", "GA4 setup", "Search Console"],
+    description: "See which channels, pages and campaigns are actually producing leads — so you can invest with confidence.",
+    highlights: ["GA4 Setup", "Search Console", "Lead Attribution"],
     accent: "#06B6D4",
   },
   {
     emoji: "⚙️",
     title: "Automation",
-    description: "Reduce repetitive work and create cleaner, more scalable lead-handling processes.",
-    highlights: ["Process cleanup", "Lead workflows", "Scalability"],
+    description: "Automate the repetitive parts of your lead process without losing the human side of the conversation.",
+    highlights: ["Lead Workflows", "Response Automation", "Scalable Process"],
     accent: "#F59E0B",
   },
   {
     emoji: "🤖",
     title: "AI-Ready Systems",
-    description: "Build a stronger operational foundation for future AI-assisted workflows — without overcomplicating things.",
-    highlights: ["Structured data", "Workflow readiness", "Smarter execution"],
+    description: "Prepare your workflows and data so AI tools can actually improve the business — not just add more noise.",
+    highlights: ["Structured Workflows", "Clean Data", "Future-Ready Systems"],
     accent: "#6366F1",
   },
 ]
@@ -101,13 +101,13 @@ export function ServicesSlider() {
               Services
             </p>
             <h2 className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
-              The services behind
+              What we help
               <br />
-              the system.
+              you improve.
             </h2>
             <p className="text-lg text-[#8A9099] leading-relaxed">
-              From visibility and lead generation to conversion, follow-up and analytics —
-              practical areas where ClicKonversion helps service businesses improve results.
+              From search visibility and acquisition to conversion, follow-up and measurement —
+              we improve the parts of your growth system that actually drive customers.
             </p>
           </div>
 

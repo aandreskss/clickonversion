@@ -19,7 +19,7 @@ const VALUE_PROPS = [
   },
   {
     title: "Acquisition setup",
-    body: "We evaluate your Google Ads, Local Services setup, and any paid channels — what's working, what's wasted spend.",
+    body: "We evaluate your Google Ads, Local Services Ads (where applicable), and any paid channels — what's working, what's wasted spend.",
   },
   {
     title: "Follow-up & CRM",

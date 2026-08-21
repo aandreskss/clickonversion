@@ -193,3 +193,7 @@ p { color: var(--color-muted-light); line-height: 1.7; }
 @media (min-width: 768px) {
   .container-tight, .container-wide { padding-inline: 2.5rem; }
 }
+
+/* Hides scrollbar for slider containers */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

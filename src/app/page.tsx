@@ -4,6 +4,7 @@ import { ProblemSection }         from "@/components/marketing/problem-section"
 import { SystemSection }          from "@/components/marketing/system-section"
 import { ServiceSection }         from "@/components/marketing/service-section"
 import { Differentiators }        from "@/components/marketing/differentiators"
+import { ServicesSlider }         from "@/components/marketing/services-slider"
 import { IndustriesSection }      from "@/components/marketing/industries-section"
 import { ProcessSection }         from "@/components/marketing/process-section"
 import { AuditExampleSection }    from "@/components/marketing/audit-example-section"
@@ -18,6 +19,7 @@ export default function HomePage() {
       <SystemSection />
       <ServiceSection />
       <Differentiators />
+      <ServicesSlider />
       <IndustriesSection />
       <ProcessSection />
       <AuditExampleSection />

@@ -63,7 +63,7 @@ export function Navbar() {
             onClick={() => analytics.primaryCtaClick("navbar")}
             className="px-5 py-2.5 bg-[#FF5A1F] text-white text-sm font-semibold rounded-lg hover:bg-[#E54A15] transition-colors duration-150 active:scale-[0.98]"
           >
-            Get a Growth Audit
+            Get a Free Growth Audit
           </Link>
         </div>
 
@@ -107,7 +107,7 @@ export function Navbar() {
             onClick={() => { handleLinkClick(); analytics.primaryCtaClick("mobile-nav") }}
             className="mt-3 px-5 py-3 bg-[#FF5A1F] text-white text-sm font-semibold rounded-lg hover:bg-[#E54A15] transition-colors text-center"
           >
-            Get a Growth Audit
+            Get a Free Growth Audit
           </Link>
         </nav>
       </div>

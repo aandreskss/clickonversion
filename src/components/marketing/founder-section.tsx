@@ -104,7 +104,7 @@ export function FounderSection() {
                 <p className="text-base text-[#8A9099] leading-relaxed">
                   ClicKonversion is built around hands-on expertise across SEO, paid acquisition,
                   CRM, conversion strategy, analytics and AI-enabled workflows — applied directly
-                  to your business, not delegated to a junior team.
+                  to your business with senior-level involvement from strategy through execution.
                 </p>
               </div>
 

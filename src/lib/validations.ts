@@ -4,7 +4,7 @@ import { z } from "zod"
 
 export const auditFormSchema = z.object({
   first_name:    z.string().min(1, "First name is required").max(80).trim(),
-  work_email:    z.string().email("Enter a valid work email").max(254).trim().toLowerCase(),
+  email:         z.string().email("Enter a valid email").max(254).trim().toLowerCase(),
   company_name:  z.string().min(1, "Company name is required").max(200).trim(),
   website_url:   z.string().min(1, "Website URL is required").max(500).trim(),
   main_service:  z.string().min(1, "Main service is required").max(100).trim(),

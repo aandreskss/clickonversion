@@ -58,7 +58,6 @@ export function ProcessSection() {
                   aria-hidden="true"
                 />
               )}
-
               <div className="relative z-10 rounded-2xl border border-white/8 bg-[#0B0D0F] p-6 h-full hover:border-white/15 transition-colors duration-200">
                 <span
                   className="text-4xl font-bold block mb-4"
@@ -84,7 +83,7 @@ export function ProcessSection() {
             onClick={() => analytics.primaryCtaClick("process-section")}
             className="inline-flex items-center gap-2 px-8 py-4 bg-[#FF5A1F] text-white font-semibold rounded-lg hover:bg-[#E54A15] transition-colors duration-150 active:scale-[0.98] text-base"
           >
-            Start With a Growth Audit
+            Get a Free Growth Audit
             <ArrowRight size={18} />
           </Link>
         </div>

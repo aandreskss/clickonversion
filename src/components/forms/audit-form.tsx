@@ -112,18 +112,18 @@ export function AuditForm() {
               )}
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="work_email" className="text-sm font-medium text-[#B0B8C1]">
-                Work email <span className="text-[#FF5A1F]">*</span>
+              <label htmlFor="email" className="text-sm font-medium text-[#B0B8C1]">
+                Email <span className="text-[#FF5A1F]">*</span>
               </label>
               <input
-                id="work_email"
+                id="email"
                 type="email"
                 className={inputClass}
-                placeholder="alex@company.com"
-                {...register("work_email")}
+                placeholder="alex@gmail.com"
+                {...register("email")}
               />
-              {errors.work_email && (
-                <p className="text-xs text-red-400" role="alert">{errors.work_email.message}</p>
+              {errors.email && (
+                <p className="text-xs text-red-400" role="alert">{errors.email.message}</p>
               )}
             </div>
           </div>
@@ -278,7 +278,7 @@ export function AuditForm() {
               </>
             ) : (
               <>
-                Get My Growth Audit
+                Get My Free Growth Audit
                 <ArrowRight size={18} />
               </>
             )}

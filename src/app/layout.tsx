@@ -7,21 +7,44 @@ const inter = Inter({
   display: "swap",
 })
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://clicKonversion.com"
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://clickonversion.com"
 const gaId    = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 const gscVerify = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${siteUrl}/#organization`,
+      name: "ClicKonversion",
+      url: siteUrl,
+      logo: { "@type": "ImageObject", url: `${siteUrl}/logo-mark.svg` },
+      founder: { "@type": "Person", name: "Arnaldo Casadiego", sameAs: "https://www.linkedin.com/in/arnaldocasadiego/" },
+      contactPoint: { "@type": "ContactPoint", email: "hello@clickonversion.com", contactType: "customer support" },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: "ClicKonversion",
+      publisher: { "@id": `${siteUrl}/#organization` },
+    },
+  ],
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "ClicKonversion — Growth Systems for Service Businesses",
+    default: "SEO, Google Ads & Growth Systems for Service Businesses | ClicKonversion",
     template: "%s | ClicKonversion",
   },
   description:
-    "ClicKonversion builds growth systems that turn search, traffic and attention into customers. SEO, paid acquisition, CRO and smarter follow-up for local service businesses.",
+    "ClicKonversion connects SEO, paid acquisition, CRO and follow-up into one measurable growth system for local service businesses. Turn search and traffic into customers.",
   keywords: [
     "growth marketing", "local SEO", "lead generation",
     "conversion optimization", "Google Ads", "service business marketing",
+    "HVAC marketing", "roofing marketing", "cleaning company marketing",
   ],
   authors: [{ name: "ClicKonversion" }],
   creator: "ClicKonversion",
@@ -30,13 +53,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: "ClicKonversion",
-    title: "ClicKonversion — Growth Systems for Service Businesses",
-    description: "We build growth systems that turn search, traffic and attention into customers.",
+    title: "SEO, Google Ads & Growth Systems for Service Businesses | ClicKonversion",
+    description: "We connect SEO, paid acquisition, CRO and follow-up into one measurable growth system for local service businesses.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ClicKonversion — Growth Systems for Service Businesses",
-    description: "We build growth systems that turn search, traffic and attention into customers.",
+    title: "SEO, Google Ads & Growth Systems for Service Businesses | ClicKonversion",
+    description: "We connect SEO, paid acquisition, CRO and follow-up into one measurable growth system for local service businesses.",
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   ...(gscVerify ? { verification: { google: gscVerify } } : {}),
@@ -53,6 +76,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {gaId && (
           <>
             <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />

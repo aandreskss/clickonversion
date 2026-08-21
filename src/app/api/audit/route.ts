@@ -81,14 +81,14 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient()
 
     const normalizedDomain = normalizeDomain(data.website_url)
-    const normalizedEmail  = normalizeEmail(data.work_email)
+    const normalizedEmail  = normalizeEmail(data.email)
 
     // 1. Insert audit request first (always succeeds — public form)
     const { data: auditRecord, error: auditError } = await supabase
       .from("audit_requests")
       .insert({
         first_name:          data.first_name,
-        work_email:          data.work_email,
+        work_email:          data.email,
         company_name:        data.company_name,
         website_url:         data.website_url,
         main_service:        data.main_service,
@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
           .insert({
             company_id:      companyId,
             first_name:      data.first_name,
-            email:           data.work_email,
+            email:           data.email,
             normalized_email: normalizedEmail,
             phone:           data.phone ?? null,
             is_primary:      true,
@@ -222,7 +222,7 @@ export async function POST(request: NextRequest) {
           from: "noreply@clicKonversion.com",
           to: notificationEmail,
           subject: `New Growth Audit Request — ${data.company_name}`,
-          text: `Name: ${data.first_name}\nEmail: ${data.work_email}\nCompany: ${data.company_name}\nWebsite: ${data.website_url}\nService: ${data.main_service}\nCity: ${data.city}\nGoal: ${data.primary_goal}`,
+          text: `Name: ${data.first_name}\nEmail: ${data.email}\nCompany: ${data.company_name}\nWebsite: ${data.website_url}\nService: ${data.main_service}\nCity: ${data.city}\nGoal: ${data.primary_goal}`,
         }),
       }).catch(() => {}) // Fire and forget
     }

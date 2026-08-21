@@ -17,8 +17,13 @@ const PILLARS = [
   },
   {
     title: "Conversion",
-    description: "Systematic improvements to the gap between someone's interest and their decision to contact you.",
+    description: "Systematic improvements to the gap between someone's first interest and their decision to contact you.",
     items: ["CRO analysis", "Form optimization", "Call flow", "CTA improvement"],
+  },
+  {
+    title: "Follow-up",
+    description: "A structured process to make sure qualified leads don't disappear because of slow or inconsistent outreach.",
+    items: ["CRM structure", "Lead-response process", "Basic automation", "Follow-up workflows"],
   },
   {
     title: "Measurement",
@@ -32,6 +37,7 @@ export function ServiceSection() {
     <section id="services" className="section-surface py-24 lg:py-32">
       <div className="container-wide">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
+
           {/* Left — service intro */}
           <div className="lg:sticky lg:top-32">
             <p className="text-xs font-semibold tracking-widest text-[#FF5A1F] uppercase mb-4">
@@ -41,17 +47,20 @@ export function ServiceSection() {
               Local Revenue Engine
             </h2>
             <p className="text-lg text-[#8A9099] leading-relaxed mb-8">
-              A focused growth system for service businesses that need more qualified opportunities from Google and their existing traffic.
+              A focused growth system for service businesses that need more qualified opportunities
+              from Google and their existing traffic.
             </p>
             <p className="text-sm text-[#546072] leading-relaxed mb-10">
-              We don&apos;t run a single channel in isolation. Search visibility, paid acquisition, conversion, and measurement are built and managed as one connected system — because that&apos;s how revenue actually works.
+              We don&apos;t run a single channel in isolation. Search visibility, paid acquisition,
+              conversion, follow-up, and measurement are built and managed as one connected
+              system — because that&apos;s how revenue actually works.
             </p>
             <Link
               href="/audit"
               onClick={() => analytics.serviceCtaClick("local-revenue-engine", "service-section")}
               className="inline-flex items-center gap-2 px-7 py-4 bg-[#FF5A1F] text-white font-semibold rounded-lg hover:bg-[#E54A15] transition-colors duration-150 active:scale-[0.98]"
             >
-              Request Your Growth Audit
+              Get a Free Growth Audit
               <ArrowRight size={18} />
             </Link>
             <p className="text-xs text-[#3D4A5C] mt-4">

@@ -26,7 +26,8 @@ export function AuditCTA() {
               system is leaking.
             </h2>
             <p className="text-lg text-[#8A9099] max-w-xl mx-auto leading-relaxed mb-10">
-              We&apos;ll look at your search visibility, website, conversion path, and acquisition setup to identify the biggest opportunities for growth.
+              We&apos;ll look at your search visibility, website, conversion path, and acquisition
+              setup to identify the biggest opportunities for growth.
             </p>
 
             <Link
@@ -34,14 +35,14 @@ export function AuditCTA() {
               onClick={() => analytics.primaryCtaClick("audit-cta-section")}
               className="inline-flex items-center gap-2 px-8 py-4 bg-[#FF5A1F] text-white font-semibold rounded-lg hover:bg-[#E54A15] transition-colors duration-150 active:scale-[0.98] text-base"
             >
-              Get My Growth Audit
+              Get a Free Growth Audit
               <ArrowRight size={18} />
             </Link>
 
-            <div className="flex items-center justify-center gap-6 mt-6">
+            <div className="flex items-center justify-center gap-6 mt-6 flex-wrap">
               {["No obligation", "No countdown timers", "No fake availability"].map((item) => (
                 <span key={item} className="text-xs text-[#3D4A5C] flex items-center gap-1.5">
-                  <span className="w-1 h-1 rounded-full bg-[#3D4A5C] inline-block" />
+                  <span className="w-1 h-1 rounded-full bg-[#3D4A5C] inline-block" aria-hidden="true" />
                   {item}
                 </span>
               ))}

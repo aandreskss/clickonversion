@@ -1,3 +1,5 @@
+import { Fragment } from "react"
+
 const STAGES = [
   {
     number: "01",
@@ -16,7 +18,7 @@ const STAGES = [
   {
     number: "03",
     title: "Convert",
-    description: "Improve the experience between someone's first interest and their decision.",
+    description: "Improve the experience between someone's first interest and their decision to contact you.",
     tags: ["Messaging", "Offers", "Friction Reduction"],
     color: "#FF8A50",
   },
@@ -36,6 +38,7 @@ const STAGES = [
   },
 ]
 
+// Single DOM structure — layout adapts via flex-direction CSS, no duplicate content
 export function SystemSection() {
   return (
     <section id="system" className="section-dark py-24 lg:py-32">
@@ -54,16 +57,13 @@ export function SystemSection() {
           </p>
         </div>
 
-        {/* Desktop: horizontal flow */}
-        <div className="hidden lg:flex items-stretch gap-3">
+        {/* Single responsive container — flex-col on mobile, flex-row on desktop */}
+        <div className="flex flex-col lg:flex-row items-stretch gap-4 lg:gap-3">
           {STAGES.map((stage, i) => (
-            <div key={stage.number} className="flex-1 flex gap-3 items-stretch">
-              <div className="flex-1 rounded-2xl border border-white/8 bg-[#14171A] p-6 hover:border-white/15 transition-colors duration-200">
+            <Fragment key={stage.number}>
+              <div className="rounded-xl lg:rounded-2xl border border-white/8 bg-[#14171A] p-6 lg:flex-1 hover:border-white/15 transition-colors duration-200">
                 <div className="flex items-center gap-3 mb-4">
-                  <span
-                    className="text-2xl font-bold"
-                    style={{ color: stage.color }}
-                  >
+                  <span className="text-xl lg:text-2xl font-bold" style={{ color: stage.color }}>
                     {stage.number}
                   </span>
                   <h3 className="text-base font-bold text-white">{stage.title}</h3>
@@ -87,55 +87,28 @@ export function SystemSection() {
                   ))}
                 </div>
               </div>
-              {i < STAGES.length - 1 && (
-                <div className="flex items-center">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                    <path d="M7 10h9M13 7l3 3-3 3" stroke="#2A3340" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
 
-        {/* Mobile: vertical stack */}
-        <div className="lg:hidden flex flex-col gap-4">
-          {STAGES.map((stage, i) => (
-            <div key={stage.number}>
-              <div className="rounded-xl border border-white/8 bg-[#14171A] p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-xl font-bold" style={{ color: stage.color }}>
-                    {stage.number}
-                  </span>
-                  <h3 className="text-base font-bold text-white">{stage.title}</h3>
-                </div>
-                <p className="text-sm text-[#546072] leading-relaxed mb-3">
-                  {stage.description}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {stage.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-0.5 text-xs font-medium rounded-md"
-                      style={{
-                        backgroundColor: `${stage.color}15`,
-                        color: stage.color,
-                        border: `1px solid ${stage.color}25`,
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
               {i < STAGES.length - 1 && (
-                <div className="flex justify-center py-1" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M10 7v9M7 13l3 3 3-3" stroke="#2A3340" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <div className="flex items-center justify-center lg:flex-shrink-0" aria-hidden="true">
+                  {/* Single SVG — rotate-90 on mobile (↓), rotate-0 on desktop (→) */}
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    className="rotate-90 lg:rotate-0"
+                  >
+                    <path
+                      d="M7 10h9M13 7l3 3-3 3"
+                      stroke="#2A3340"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </div>
               )}
-            </div>
+            </Fragment>
           ))}
         </div>
       </div>

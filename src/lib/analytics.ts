@@ -45,6 +45,10 @@ export const analytics = {
     track("service_cta_click", { event_label: service, cta_location: location })
   },
 
+  founderLinkedInClick() {
+    track("founder_linkedin_click")
+  },
+
   pageView(path: string) {
     track("page_view", { page: path })
   },

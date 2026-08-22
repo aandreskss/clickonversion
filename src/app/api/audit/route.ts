@@ -118,14 +118,16 @@ export async function POST(request: NextRequest) {
     // 2. Try to create CRM records (best-effort — audit_request is already saved)
     try {
       // Get the single organization for this single-tenant CRM
-      const { data: org } = await supabase
+      const { data: org, error: orgError } = await supabase
         .from("organizations")
         .select("id")
         .limit(1)
         .single()
 
+      if (orgError) console.error("[audit] org fetch error:", orgError.message)
       if (!org) throw new Error("No organization found")
       const orgId = org.id
+      console.log("[audit] orgId:", orgId)
 
       // Find or create company based on normalized domain
       let companyId: string | null = null
@@ -139,8 +141,9 @@ export async function POST(request: NextRequest) {
 
         if (existing) {
           companyId = existing.id
+          console.log("[audit] existing company:", companyId)
         } else {
-          const { data: newCompany } = await supabase
+          const { data: newCompany, error: companyError } = await supabase
             .from("companies")
             .insert({
               organization_id:  orgId,
@@ -155,14 +158,18 @@ export async function POST(request: NextRequest) {
             })
             .select("id")
             .single()
+          if (companyError) console.error("[audit] company insert error:", companyError.message)
           if (newCompany) companyId = newCompany.id
+          console.log("[audit] new companyId:", companyId)
         }
+      } else {
+        console.log("[audit] normalizedDomain is null, skipping company creation")
       }
 
       // Create contact
       let contactId: string | null = null
       if (companyId) {
-        const { data: contact } = await supabase
+        const { data: contact, error: contactError } = await supabase
           .from("contacts")
           .insert({
             organization_id: orgId,
@@ -175,13 +182,15 @@ export async function POST(request: NextRequest) {
           })
           .select("id")
           .single()
+        if (contactError) console.error("[audit] contact insert error:", contactError.message)
         if (contact) contactId = contact.id
+        console.log("[audit] contactId:", contactId)
       }
 
       // Create opportunity
       let opportunityId: string | null = null
       if (companyId) {
-        const { data: opp } = await supabase
+        const { data: opp, error: oppError } = await supabase
           .from("opportunities")
           .insert({
             organization_id:    orgId,
@@ -194,7 +203,9 @@ export async function POST(request: NextRequest) {
           })
           .select("id")
           .single()
+        if (oppError) console.error("[audit] opportunity insert error:", oppError.message)
         if (opp) opportunityId = opp.id
+        console.log("[audit] opportunityId:", opportunityId)
       }
 
       // Update audit request with CRM links

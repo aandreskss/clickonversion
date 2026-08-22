@@ -217,6 +217,7 @@ Never put recipient names or emails inside UTM parameters.
 4. **Honeypot + Turnstile on audit form** — both verified server-side before any DB write.
 5. **Rate limiting on public routes** — audit form is rate-limited by IP (in-memory, per invocation).
 6. **No PII in GA4** — events contain only non-sensitive marketing context.
+7. **Public API routes must use `createAdminClient()`** — the regular `createClient()` uses the anon key and is blocked by RLS without a user session. Use `createAdminClient()` (service role) for trusted server-side writes like the audit form.
 
 ---
 
@@ -226,6 +227,10 @@ Never put recipient names or emails inside UTM parameters.
 - `"strict": true` — do not weaken
 - No `any` — use `unknown` and narrow
 - Generate Supabase types: `pnpm supabase gen types typescript --local > src/types/database.ts`
+
+### Supabase Clients
+- `createClient()` — session-aware, uses anon key, subject to RLS. For Server Components and authenticated routes.
+- `createAdminClient()` — service role, bypasses RLS. For trusted server-side API routes (e.g. `/api/audit`). Never use in client components or expose to the browser.
 
 ### Database
 - Schema changes via SQL migrations in `supabase/migrations/`
@@ -335,6 +340,25 @@ Future content will be close to money: high-intent queries from service business
 | Custom CMS | Blog editor, content management |
 | Native mobile app | iOS/Android, Capacitor, React Native |
 | SEO content expansion | Blog, city pages, programmatic SEO |
+
+---
+
+## Email Infrastructure
+
+| Address | Purpose | Provider |
+|---------|---------|----------|
+| `arnaldo@clickonversion.com` | Main inbox — sales, clients, conversations | Zoho Mail Free |
+| `hello@clickonversion.com` | Public contact — alias redirects to arnaldo | Zoho Mail Free |
+| `notifications@clickonversion.com` | Automated sends only — audit form notifications | Resend (sends only, no inbox) |
+
+**Flow:** audit form submit → Supabase → Resend sends from `notifications@` → delivered to `arnaldo@`
+
+**Env vars:**
+- `EMAIL_FROM` — `ClicKonversion <notifications@clickonversion.com>`
+- `NOTIFICATION_EMAIL` — `arnaldo@clickonversion.com`
+- `RESEND_API_KEY` — server-only, never `NEXT_PUBLIC_`
+
+**DNS (Cloudflare):** MX → Zoho, SPF split by subdomain (@ for Zoho, send. for Resend/SES — do not combine). DKIM selector: `zoho._domainkey`. SSL: Universal via Google Trust Services, auto-renews every 3 months — no action needed.
 
 ---
 

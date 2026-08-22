@@ -115,9 +115,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: true })
     }
 
-    // 2. Try to create CRM records (requires org context — may fail without Supabase auth setup)
-    // These are best-effort in Phase 0
+    // 2. Try to create CRM records (best-effort — audit_request is already saved)
     try {
+      // Get the single organization for this single-tenant CRM
+      const { data: org } = await supabase
+        .from("organizations")
+        .select("id")
+        .limit(1)
+        .single()
+
+      if (!org) throw new Error("No organization found")
+      const orgId = org.id
+
       // Find or create company based on normalized domain
       let companyId: string | null = null
 
@@ -134,6 +143,7 @@ export async function POST(request: NextRequest) {
           const { data: newCompany } = await supabase
             .from("companies")
             .insert({
+              organization_id:  orgId,
               name:             data.company_name,
               normalized_name:  data.company_name.toLowerCase().trim(),
               website:          data.website_url,
@@ -155,6 +165,7 @@ export async function POST(request: NextRequest) {
         const { data: contact } = await supabase
           .from("contacts")
           .insert({
+            organization_id: orgId,
             company_id:      companyId,
             first_name:      data.first_name,
             email:           data.email,
@@ -173,6 +184,7 @@ export async function POST(request: NextRequest) {
         const { data: opp } = await supabase
           .from("opportunities")
           .insert({
+            organization_id:    orgId,
             company_id:         companyId,
             primary_contact_id: contactId,
             name:               `${data.company_name} — Growth Audit`,
@@ -196,12 +208,13 @@ export async function POST(request: NextRequest) {
       // Log activity
       if (companyId) {
         await supabase.from("activities").insert({
-          company_id:    companyId,
-          contact_id:    contactId,
-          opportunity_id: opportunityId,
-          activity_type: "audit",
-          title:         "Growth Audit Requested",
-          body:          `Goal: ${data.primary_goal}${data.current_challenge ? `\n\nChallenge: ${data.current_challenge}` : ""}`,
+          organization_id: orgId,
+          company_id:      companyId,
+          contact_id:      contactId,
+          opportunity_id:  opportunityId,
+          activity_type:   "audit",
+          title:           "Growth Audit Requested",
+          body:            `Goal: ${data.primary_goal}${data.current_challenge ? `\n\nChallenge: ${data.current_challenge}` : ""}`,
         })
       }
     } catch (crmErr) {

@@ -27,7 +27,7 @@ export function getServerEnv() {
   return {
     turnstileSecret: optionalEnv("TURNSTILE_SECRET_KEY"),
     resendApiKey:    optionalEnv("RESEND_API_KEY"),
-    notificationEmail: optionalEnv("NOTIFICATION_EMAIL", "hello@clicKonversion.com"),
+    notificationEmail: optionalEnv("NOTIFICATION_EMAIL", "hello@clickonversion.com"),
   }
 }
 

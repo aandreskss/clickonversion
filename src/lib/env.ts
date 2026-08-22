@@ -29,6 +29,7 @@ export function getServerEnv() {
     resendApiKey:      optionalEnv("RESEND_API_KEY"),
     emailFrom:         optionalEnv("EMAIL_FROM", "ClicKonversion <notifications@clickonversion.com>"),
     notificationEmail: optionalEnv("NOTIFICATION_EMAIL", "arnaldo@clickonversion.com"),
+    orgId:             optionalEnv("SUPABASE_ORG_ID"),
   }
 }
 

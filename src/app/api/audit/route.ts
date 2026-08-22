@@ -117,16 +117,8 @@ export async function POST(request: NextRequest) {
 
     // 2. Try to create CRM records (best-effort — audit_request is already saved)
     try {
-      // Get the single organization for this single-tenant CRM
-      const { data: org, error: orgError } = await supabase
-        .from("organizations")
-        .select("id")
-        .limit(1)
-        .single()
-
-      if (orgError) console.error("[audit] org fetch error:", orgError.message)
-      if (!org) throw new Error("No organization found")
-      const orgId = org.id
+      const { orgId } = getServerEnv()
+      if (!orgId) throw new Error("SUPABASE_ORG_ID not configured")
       console.log("[audit] orgId:", orgId)
 
       // Find or create company based on normalized domain

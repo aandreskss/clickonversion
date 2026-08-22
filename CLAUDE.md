@@ -6,10 +6,29 @@
 Build a growth operating system to help ClicKonversion acquire its first 3 clients and reach $2,000 MRR.
 
 ## Current Phase
-Phase 0: Build the sales machine — marketing site + CRM. Full scope in `docs/PHASE-0.md`.
+**Phase 0 — Marketing site + CRM: complete. Now in active outreach.**
 
-## Scope Rule
-Do NOT add features unless they directly serve: **acquisition**, **sales management**, or **measurement**. If a feature doesn't map to one of those three functions, it is out of scope for Phase 0. When unsure, ask before building.
+The marketing site is live and production-ready. The CRM is operational. Current priorities:
+1. Support outbound sales to cleaning companies and other service verticals
+2. Acquire first 1–3 paying clients
+3. Maintain and refine the site based on what resonates during outreach
+
+SEO content expansion (blog, city pages, industry clusters) starts **after the first paying client is acquired**.
+
+---
+
+## Positioning Hierarchy
+
+Always communicate in this order. Do not lead with Level 4.
+
+| Level | What | Example |
+|---|---|---|
+| 1 | Outcome | More qualified opportunities |
+| 2 | Product | Local Revenue Engine |
+| 3 | System | Search → Visit → Lead → Follow-up → Customer |
+| 4 | Capabilities | SEO, Google Ads, CRO, CRM, Analytics |
+
+**Core commercial message:** "Turn Google into a consistent source of qualified leads."
 
 ---
 
@@ -32,23 +51,29 @@ Do NOT add features unless they directly serve: **acquisition**, **sales managem
 
 ### Server vs. Client Components
 - **Default to Server Components** — only add `"use client"` when you need interactivity (event handlers, useState, useEffect, browser APIs)
-- Server Actions handle all form mutations — no separate API routes unless there is a clear reason
+- API routes handle public form submissions (audit form) — server actions for CRM mutations
 - Data fetching happens in Server Components, not inside `useEffect`
+
+### Next.js 16 Specifics
+- The auth middleware file is `proxy.ts` (not `middleware.ts`) and exports `proxy` not `middleware`
+- `"use client"` pages cannot export `metadata` — create a `layout.tsx` in the same route for noindex/metadata
+- Supabase FK joins return arrays — always normalize: `Array.isArray(x) ? x[0] : x`
 
 ### File Structure
 ```
 src/
   app/
-    (marketing)/          # Public marketing pages group
-      page.tsx            # Homepage /
-      audit/page.tsx      # /audit
-      thank-you/page.tsx  # /thank-you
-      privacy/page.tsx    # /privacy
-      terms/page.tsx      # /terms
-    (app)/                # Protected CRM group
-      login/page.tsx
+    (marketing)/              # Public marketing pages group
+      page.tsx                # Homepage /
+      audit/page.tsx          # /audit — 2-column layout with value props
+      cleaning/page.tsx       # /cleaning — outbound landing (noindex)
+      thank-you/page.tsx      # /thank-you (noindex)
+      privacy/page.tsx
+      terms/page.tsx
+    login/page.tsx            # /login (noindex)
+    (app)/                    # Protected CRM group
       app/
-        page.tsx          # /app dashboard
+        page.tsx              # /app dashboard
         pipeline/
         companies/
         contacts/
@@ -56,69 +81,182 @@ src/
         activities/
         tasks/
         audit-requests/
-        research/
+        import/
         settings/
-    api/                  # API routes (use sparingly)
-    layout.tsx
-    globals.css
+    api/
+      audit/route.ts          # Public audit form submission
+      export/companies/       # CSV export (auth-protected)
+      auth/callback/          # Supabase auth callback
+    layout.tsx                # Root layout — GA4 via next/script, JSON-LD
+    globals.css               # Tailwind @theme tokens + global helpers
+    robots.ts
+    sitemap.ts
   components/
-    ui/                   # Base UI components (Button, Input, Badge, etc.)
-    crm/                  # CRM-specific components
-    marketing/            # Marketing site components
+    ui/                       # button, input, badge, logo
+    crm/                      # app-sidebar, activity-timeline, company-actions, etc.
+    marketing/
+      navbar.tsx
+      footer.tsx
+      marketing-layout.tsx
+      hero.tsx
+      problem-section.tsx
+      system-section.tsx
+      service-section.tsx     # Local Revenue Engine — 5 pillars
+      differentiators.tsx     # Stop paying for disconnected marketing
+      services-slider.tsx     # CSS scroll-snap slider — 7 service cards
+      industries-section.tsx  # Service business verticals
+      process-section.tsx     # 4-step process
+      audit-example-section.tsx # Fictional Sunrise Cleaning demo
+      founder-section.tsx     # Arnaldo — photo or AC monogram fallback
+      audit-cta.tsx
+    forms/
+      audit-form.tsx
   lib/
-    supabase/
-      client.ts           # Browser client
-      server.ts           # Server client (cookies)
-      middleware.ts        # Middleware client
-    validations/          # Zod schemas
+    analytics.ts              # All GA4 events
+    validations.ts            # Zod schemas (auditFormSchema uses `email` not `work_email`)
+    normalize.ts
+    env.ts
     utils.ts
+    supabase/
+      client.ts
+      server.ts
+      middleware.ts
   types/
-    database.ts           # Generated Supabase types
-    app.ts                # Application types
-  middleware.ts           # Auth protection
+    database.ts
+    app.ts
 ```
+
+---
+
+## Homepage Section Order
+
+```
+Hero → ProblemSection → SystemSection → ServiceSection →
+Differentiators → ServicesSlider → IndustriesSection →
+ProcessSection → AuditExampleSection → FounderSection → AuditCTA
+```
+
+---
+
+## CTA Copy Rules — Non-Negotiable
+
+| Location | Text |
+|---|---|
+| All marketing CTAs | **Get a Free Growth Audit** |
+| Audit form submit button | **Get My Free Growth Audit** |
+| Secondary hero CTA | **See the System** |
+
+Never introduce new conversion paths. All CTAs go to `/audit`.
+
+---
+
+## Analytics Events (`src/lib/analytics.ts`)
+
+All events fire via `window.gtag`. No PII ever.
+
+| Event | When | Parameters |
+|---|---|---|
+| `primary_cta_click` | Any primary CTA clicked | `cta_location` |
+| `audit_started` | Audit form interaction begins | — |
+| `audit_submitted` | Successful audit form submission | — |
+| `booking_click` | User proceeds toward booking | `source` |
+| `service_cta_click` | Service-level CTA | `event_label`, `cta_location` |
+| `founder_linkedin_click` | LinkedIn link in founder section | — |
+| `cleaning_landing_cta` | CTA on /cleaning page | `cta_location`, `landing` |
+
+**Key events to mark in GA4 UI:** `audit_submitted` (primary), `booking_click` (secondary).
+
+**No PII rule:** never send name, email, phone, company name or form text to GA4.
+
+---
+
+## GA4 Implementation
+
+GA4 is loaded via `next/script` with `strategy="afterInteractive"` (non-blocking).
+Measurement ID is read from `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
+If the env var is not set, no GA4 scripts load — no errors.
+
+Do NOT add a second gtag snippet. Check `src/app/layout.tsx` before touching GA4.
+
+---
+
+## Outbound Landing Pages
+
+Convention for vertical-specific landing pages:
+
+- URL: `/[vertical]` (e.g., `/cleaning`)
+- **noindex** during outbound phase via `layout.tsx` in the same route
+- **NOT added to sitemap** while noindex
+- Use `analytics.[vertical]CtaClick(location)` for attribution
+- All CTAs lead to `/audit` — no new funnels
+- UTM structure: `?utm_source=loom&utm_medium=outbound&utm_campaign=cleaning_florida_2026`
+
+To create a new vertical page, follow `src/app/(marketing)/cleaning/` as the template.
+
+---
+
+## UTM Convention
+
+| Channel | `utm_source` | `utm_medium` |
+|---|---|---|
+| Cold email | `cold_email` | `outbound` |
+| Loom | `loom` | `outbound` |
+| LinkedIn | `linkedin` | `outbound` |
+| Referral | `referral` | `partner` |
+
+Campaign format: `[vertical]_[market]_[year]` — e.g., `cleaning_florida_2026`.
+Never put recipient names or emails inside UTM parameters.
 
 ---
 
 ## Security Rules
 
-1. **RLS on every table** — no table is readable or writable without a policy. Never trust "it's behind auth" as a substitute for RLS.
-2. **Never use `NEXT_PUBLIC_` prefix for secrets** — `SUPABASE_SERVICE_ROLE_KEY`, `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY` must never be exposed to the client bundle.
-3. **Always validate server-side** — Zod validation runs in Server Actions and API routes. Client-side validation is UX-only; it is never a security measure.
-4. **Honeypot + Turnstile on all public forms** — the `/audit` form includes a hidden honeypot field and Cloudflare Turnstile token. Both are verified server-side before any data is written.
-5. **Rate limiting on public Server Actions** — audit form submissions should be rate-limited by IP (using Vercel's `@vercel/kv` or a simple in-memory counter in dev).
-6. **No PII in GA4 events** — `audit_form_submit` sends `industry` and `state` only. No names, emails, or company names in analytics events.
+1. **RLS on every table** — no table is readable or writable without a policy.
+2. **Never use `NEXT_PUBLIC_` prefix for secrets** — `SUPABASE_SERVICE_ROLE_KEY`, `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY` are server-only.
+3. **Always validate server-side** — Zod validation in API routes. Client validation is UX only.
+4. **Honeypot + Turnstile on audit form** — both verified server-side before any DB write.
+5. **Rate limiting on public routes** — audit form is rate-limited by IP (in-memory, per invocation).
+6. **No PII in GA4** — events contain only non-sensitive marketing context.
 
 ---
 
 ## Engineering Standards
 
 ### TypeScript
-- `"strict": true` in `tsconfig.json` — already set, do not weaken
-- No `any` type — use `unknown` when the type is genuinely unknown and narrow it
-- Type assertions (`as SomeType`) require a comment explaining why it is safe
-- Generate Supabase types with: `pnpm supabase gen types typescript --local > src/types/database.ts`
+- `"strict": true` — do not weaken
+- No `any` — use `unknown` and narrow
+- Generate Supabase types: `pnpm supabase gen types typescript --local > src/types/database.ts`
 
 ### Database
-- All schema changes go through SQL migration files in `supabase/migrations/`
-- Never make schema changes through the Supabase Dashboard — the dashboard is read-only for schema
-- Every migration file starts with a rollback comment:
-  ```sql
-  -- Rollback: DROP TABLE IF EXISTS table_name;
-  ```
-- Every table has RLS enabled before it is used in production
+- Schema changes via SQL migrations in `supabase/migrations/`
+- Never use Supabase Dashboard for schema changes
+- Every migration file includes rollback comment
+- Every table has RLS enabled
+
+### Icons
+- Use `lucide-react` for icons throughout the app
+- **lucide-react v1.33.0 does NOT have a `Linkedin` icon** — use inline SVG (see `footer.tsx` and `founder-section.tsx` for the correct SVG paths)
+- Do not mix icon libraries on the same page
 
 ### Components
-- Semantic HTML — use `<button>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<header>`, `<footer>` correctly
+- Semantic HTML: `<button>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<header>`, `<footer>`
 - ARIA labels on icon-only buttons
 - Form inputs always have associated `<label>` elements
-- Mobile-first responsive design — build for mobile, enhance for desktop
+- Mobile-first responsive design
 
 ### Styling
-- Tailwind 4 CSS-first: all tokens are defined in `src/app/globals.css` under `@theme`
-- **Never hardcode hex colors in components** — always use design tokens: `bg-[var(--color-orange)]` or the Tailwind utility class after token definition
-- Never mix multiple icon libraries on the same page — use one consistent set (Lucide React recommended)
-- No inline `style` attributes for brand values
+- Tailwind 4 CSS-first: tokens defined in `src/app/globals.css` under `@theme`
+- Prefer token references over hardcoded hex in Tailwind classes
+- Use `style={{}}` only for dynamic values (colors from data arrays, gradients)
+- Section classes: `.section-dark` (#0B0D0F), `.section-surface` (#14171A)
+- Container classes: `.container-wide` (88rem), `.container-tight` (64rem)
+- `.no-scrollbar` — hides scrollbar for slider containers
+
+### Sliders / Carousels
+- Use native CSS `scroll-snap-type: x mandatory` — no library dependencies
+- Cards: `snap-start flex-shrink-0` with fixed width
+- Navigation: `scrollBy()` on a `useRef` container
+- Hide scrollbar with `.no-scrollbar` class (defined in `globals.css`)
 
 ---
 
@@ -126,45 +264,77 @@ src/
 
 | Token | Value | Usage |
 |---|---|---|
-| `--color-orange` | `#FF5A1F` | CTAs, highlights, active states |
+| `--color-brand` | `#FF5A1F` | CTAs, highlights, active states |
 | `--color-obsidian` | `#0B0D0F` | App shell, dark backgrounds |
-| `--color-surface` | `#14171A` | Cards, sidebars, modals |
-| `--color-warm-white` | `#F7F7F3` | Body text on dark, light page bg |
-| `--color-border` | `#1F2428` | Subtle dividers on dark surfaces |
-| `--color-success` | `#22C55E` | WON status, positive metrics |
-| `--color-warning` | `#F59E0B` | NURTURE, approaching deadlines |
-| `--color-danger` | `#EF4444` | LOST status, errors |
+| `--color-surface-dark` | `#14171A` | Cards, sidebars, modals |
+| `--color-warm-white` | `#F7F7F3` | Body text on dark |
+| `--color-muted` | `#8A9099` | Secondary text |
+| `--color-gray-500` | `#546072` | Tertiary text |
+| `--color-gray-600` | `#3D4A5C` | Very muted text, captions |
+| `--color-success` | `#22C55E` | WON, positive states |
+| `--color-warning` | `#F59E0B` | NURTURE, deadlines |
+| `--color-danger` | `#EF4444` | LOST, errors |
 
 Typography: Inter (primary), system-mono (code/data). Max 2 font families.
 
-Full brand system: `docs/BRAND.md`
+Logo: `src/components/ui/logo.tsx` — variants `light` (dark bg) / `dark` (light bg). Sizes: sm/md/lg. Wordmark: "Clic**Konversion**" (full "Konversion" in orange).
+
+Founder photo: `public/founder.jpg` — if missing, component falls back to "AC" monogram automatically.
 
 ---
 
-## Product Philosophy
+## Copy Rules
 
-- **Simple > Clever** — if two approaches work, ship the simpler one
-- **Reliable > Flashy** — a dashboard that always loads beats one with pretty animations that fail
-- **Revenue utility > Feature count** — one feature that closes a deal beats five features that don't
-- **No lead without a next move** — every open opportunity must have a task. The CRM enforces this visually.
+- **Outcome → explanation → mechanism** (never mechanism first)
+- Avoid: leverage, innovative, comprehensive, cutting-edge, transformative, supercharge, unlock, seamless
+- Every description must answer: "What does this help me accomplish?"
+- Language test: would a cleaning company owner immediately understand why this matters?
+
+---
+
+## Pages & Indexing
+
+| Route | Indexed | Notes |
+|---|---|---|
+| `/` | ✅ | Homepage |
+| `/audit` | ✅ | 2-column layout with value props |
+| `/privacy` | ✅ | |
+| `/terms` | ✅ | |
+| `/cleaning` | ❌ noindex | Outbound landing — revisit after validation |
+| `/thank-you` | ❌ noindex | Conversion confirmation |
+| `/login` | ❌ noindex | Auth page |
+| `/app/**` | ❌ disallow | Protected CRM |
+| `/api/**` | ❌ disallow | API routes |
+
+---
+
+## SEO Baseline — Measurement First
+
+Search Console and GA4 are installed. Data accumulates from day one.
+
+**SEO Phase 1 starts after the first paying client is acquired.** Until then:
+- No blog posts
+- No city pages
+- No programmatic content
+- No industry page expansion beyond `/cleaning` (outbound use only)
+
+Future content will be close to money: high-intent queries from service business owners (not "what is SEO?").
 
 ---
 
 ## What NOT to Build in Phase 0
 
-Attempting to build any of these in Phase 0 is scope creep. Push back if asked.
-
 | Category | Examples |
 |---|---|
-| Billing / payments | Stripe integration, subscription management |
-| AI features | GPT-powered drafts, lead scoring, enrichment |
-| Email automation | Sequences, drip campaigns, auto-follow-up |
-| Social scheduler | Instagram, LinkedIn, Google My Business posting |
+| Billing / payments | Stripe, subscription management |
+| AI features | GPT drafts, lead scoring, enrichment |
+| Email automation | Sequences, drip campaigns |
+| Social scheduler | Instagram, LinkedIn, GMB posting |
 | Client portal | Client-facing dashboard, report sharing |
-| LMS / education | Playbooks, courses, video content delivery |
 | Complex permissions | Multi-role RBAC, team management |
-| Custom CMS | Blog editor, content management system |
-| Native mobile app | iOS/Android builds, Capacitor, React Native |
+| Custom CMS | Blog editor, content management |
+| Native mobile app | iOS/Android, Capacitor, React Native |
+| SEO content expansion | Blog, city pages, programmatic SEO |
 
 ---
 
@@ -174,7 +344,7 @@ Attempting to build any of these in Phase 0 is scope creep. Push back if asked.
 |---|---|
 | `docs/PHASE-0.md` | Full Phase 0 scope, stack, routes, DB schema, pipeline |
 | `docs/CRM.md` | Pipeline stages, workflows, metrics, data relationships |
-| `docs/BRAND.md` | Colors, typography, voice, copy examples, what NOT to do |
+| `docs/BRAND.md` | Colors, typography, voice, copy examples |
 | `docs/DEPLOYMENT.md` | Supabase setup, env vars, Vercel, DNS, GA4, Turnstile |
 
 ---
@@ -187,12 +357,12 @@ pnpm dev                    # Start dev server at localhost:3000
 
 # Database
 pnpm supabase start         # Start local Supabase
-pnpm supabase db push       # Apply migrations to local or linked project
-pnpm supabase db diff       # Preview pending migration diffs
+pnpm supabase db push       # Apply migrations
+pnpm supabase db diff       # Preview pending diffs
 pnpm supabase gen types typescript --local > src/types/database.ts
 
-# Build
-pnpm build                  # Production build
+# Build & Lint
+pnpm build                  # Production build — must pass with 0 errors
 pnpm lint                   # ESLint check
 
 # Deploy

@@ -25,9 +25,10 @@ export const TURNSTILE_SITE  = optionalEnv("NEXT_PUBLIC_TURNSTILE_SITE_KEY")
 
 export function getServerEnv() {
   return {
-    turnstileSecret: optionalEnv("TURNSTILE_SECRET_KEY"),
-    resendApiKey:    optionalEnv("RESEND_API_KEY"),
-    notificationEmail: optionalEnv("NOTIFICATION_EMAIL", "hello@clickonversion.com"),
+    turnstileSecret:   optionalEnv("TURNSTILE_SECRET_KEY"),
+    resendApiKey:      optionalEnv("RESEND_API_KEY"),
+    emailFrom:         optionalEnv("EMAIL_FROM", "ClicKonversion <notifications@clickonversion.com>"),
+    notificationEmail: optionalEnv("NOTIFICATION_EMAIL", "arnaldo@clickonversion.com"),
   }
 }
 

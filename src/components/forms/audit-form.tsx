@@ -4,9 +4,18 @@ import { useState, useEffect } from "react"
 import { useForm }   from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter }   from "next/navigation"
+import Script from "next/script"
 import { ArrowRight, Loader2 } from "lucide-react"
 import { auditFormSchema, type AuditFormInput, BUDGET_RANGES, PRIMARY_GOALS } from "@/lib/validations"
 import { analytics } from "@/lib/analytics"
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+
+declare global {
+  interface Window {
+    onTurnstileToken?: (token: string) => void
+  }
+}
 
 function getUTMParams() {
   if (typeof window === "undefined") return {}
@@ -45,6 +54,15 @@ export function AuditForm() {
     analytics.auditStarted()
   }, [setValue])
 
+  // Register Turnstile callback so the widget can set the token
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return
+    window.onTurnstileToken = (token: string) => {
+      setValue("cf_turnstile_response", token)
+    }
+    return () => { delete window.onTurnstileToken }
+  }, [setValue])
+
   async function onSubmit(data: AuditFormInput) {
     setServerError(null)
     try {
@@ -74,6 +92,12 @@ export function AuditForm() {
 
   return (
     <div className="max-w-2xl mx-auto">
+      {TURNSTILE_SITE_KEY && (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+          strategy="lazyOnload"
+        />
+      )}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="rounded-2xl border border-white/8 bg-[#14171A] p-8 lg:p-10"
@@ -263,6 +287,16 @@ export function AuditForm() {
             <div className="rounded-lg border border-red-500/20 bg-red-500/8 px-4 py-3" role="alert">
               <p className="text-sm text-red-400">{serverError}</p>
             </div>
+          )}
+
+          {/* Turnstile bot challenge */}
+          {TURNSTILE_SITE_KEY && (
+            <div
+              className="cf-turnstile"
+              data-sitekey={TURNSTILE_SITE_KEY}
+              data-callback="onTurnstileToken"
+              data-theme="dark"
+            />
           )}
 
           {/* Submit */}

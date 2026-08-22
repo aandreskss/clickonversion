@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { auditFormSchema }          from "@/lib/validations"
 import { normalizeDomain, normalizeEmail } from "@/lib/normalize"
 import { getServerEnv }             from "@/lib/env"
-import { createClient }             from "@/lib/supabase/server"
+import { createAdminClient }        from "@/lib/supabase/server"
 
 // Simple in-memory rate limiter (resets per serverless invocation)
 const submissionCount = new Map<string, { count: number; window: number }>()
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
 
   // Persist to Supabase
   try {
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const normalizedDomain = normalizeDomain(data.website_url)
     const normalizedEmail  = normalizeEmail(data.email)
@@ -210,7 +210,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Optional: email notification (fire-and-forget)
-    const { resendApiKey, notificationEmail } = getServerEnv()
+    const { resendApiKey, emailFrom, notificationEmail } = getServerEnv()
     if (resendApiKey && notificationEmail) {
       fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -219,10 +219,22 @@ export async function POST(request: NextRequest) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "noreply@clicKonversion.com",
-          to: notificationEmail,
-          subject: `New Growth Audit Request — ${data.company_name}`,
-          text: `Name: ${data.first_name}\nEmail: ${data.email}\nCompany: ${data.company_name}\nWebsite: ${data.website_url}\nService: ${data.main_service}\nCity: ${data.city}\nGoal: ${data.primary_goal}`,
+          from: emailFrom,
+          to:   notificationEmail,
+          subject: `New Growth Audit — ${data.company_name}`,
+          text: [
+            `Name: ${data.first_name}`,
+            `Email: ${data.email}`,
+            `Company: ${data.company_name}`,
+            `Website: ${data.website_url}`,
+            `Service: ${data.main_service}`,
+            `City: ${data.city}`,
+            `Goal: ${data.primary_goal}`,
+            data.budget_range        ? `Budget: ${data.budget_range}` : "",
+            data.phone               ? `Phone: ${data.phone}` : "",
+            data.current_challenge   ? `\nChallenge:\n${data.current_challenge}` : "",
+            data.utm_source          ? `\nSource: ${data.utm_source} / ${data.utm_medium ?? ""} / ${data.utm_campaign ?? ""}` : "",
+          ].filter(Boolean).join("\n"),
         }),
       }).catch(() => {}) // Fire and forget
     }

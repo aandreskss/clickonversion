@@ -6,9 +6,9 @@
 Build a growth operating system to help ClicKonversion acquire its first 3 clients and reach $2,000 MRR.
 
 ## Current Phase
-**Phase 0 — Marketing site live. CRM lead capture in progress.**
+**Phase 0 — Marketing site live. CRM lead capture wired, pending final verification.**
 
-The marketing site is live on www.clickonversion.com (Cloudflare DNS + Vercel). `audit_requests` saves correctly. CRM creation (companies/contacts/opportunities) is wired but pending final debug — `organizations` table needs a seeded row and there may be a remaining issue with the CRM block. Current priorities:
+The marketing site is live on www.clickonversion.com (Cloudflare DNS + Vercel). `audit_requests` saves correctly. CRM creation (companies/contacts/opportunities) uses `SUPABASE_ORG_ID` env var — needs verification after Vercel redeploy. Current priorities:
 1. Confirm CRM lead flow end-to-end (audit form → companies → pipeline)
 2. Support outbound sales to cleaning companies and other service verticals
 3. Acquire first 1–3 paying clients
@@ -235,22 +235,26 @@ Never put recipient names or emails inside UTM parameters.
 ### organizations table — must have exactly one row
 This is a single-tenant CRM. The `organizations` table must have a seeded row or all CRM inserts will fail silently — `companies`, `contacts`, `opportunities`, and `activities` all have `organization_id NOT NULL`.
 
-If the table is empty, run in Supabase SQL Editor:
+The org ID is stored as `SUPABASE_ORG_ID` (server-only env var) and read via `getServerEnv().orgId`. **Never query the organizations table from a public API route** — RLS filters out rows when there is no `auth.uid()`, even with the service role client, because the `is_org_member()` function uses `SECURITY DEFINER` and checks `auth.uid()`.
+
+Current org ID: `db071585-6652-4d2a-87fd-ec4670c44c93`
+
+If starting fresh, seed with:
 ```sql
 INSERT INTO organizations (name, slug) VALUES ('ClicKonversion', 'clickonversion');
 ```
-
-All public API routes that write CRM data must fetch this org first:
-```ts
-const { data: org } = await supabase.from("organizations").select("id").limit(1).single()
-if (!org) throw new Error("No organization found")
-```
+Then add the resulting UUID as `SUPABASE_ORG_ID` in Vercel env vars.
 
 ### Database
 - Schema changes via SQL migrations in `supabase/migrations/`
 - Never use Supabase Dashboard for schema changes
 - Every migration file includes rollback comment
 - Every table has RLS enabled
+
+### Favicon
+- `src/app/icon.tsx` — generates a 32×32 PNG via `ImageResponse` (CK mark, obsidian bg + orange K). Next.js serves it at `/icon` and auto-injects the `<link rel="icon">` tag.
+- Do NOT add a manual `<link rel="icon">` in `layout.tsx` — Next.js handles it via the file convention.
+- Verify at `https://www.clickonversion.com/icon` after deploy.
 
 ### Icons
 - Use `lucide-react` for icons throughout the app

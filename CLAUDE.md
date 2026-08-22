@@ -6,12 +6,12 @@
 Build a growth operating system to help ClicKonversion acquire its first 3 clients and reach $2,000 MRR.
 
 ## Current Phase
-**Phase 0 — Marketing site + CRM: complete. Now in active outreach.**
+**Phase 0 — Marketing site live. CRM lead capture in progress.**
 
-The marketing site is live and production-ready. The CRM is operational. Current priorities:
-1. Support outbound sales to cleaning companies and other service verticals
-2. Acquire first 1–3 paying clients
-3. Maintain and refine the site based on what resonates during outreach
+The marketing site is live on www.clickonversion.com (Cloudflare DNS + Vercel). `audit_requests` saves correctly. CRM creation (companies/contacts/opportunities) is wired but pending final debug — `organizations` table needs a seeded row and there may be a remaining issue with the CRM block. Current priorities:
+1. Confirm CRM lead flow end-to-end (audit form → companies → pipeline)
+2. Support outbound sales to cleaning companies and other service verticals
+3. Acquire first 1–3 paying clients
 
 SEO content expansion (blog, city pages, industry clusters) starts **after the first paying client is acquired**.
 
@@ -231,6 +231,20 @@ Never put recipient names or emails inside UTM parameters.
 ### Supabase Clients
 - `createClient()` — session-aware, uses anon key, subject to RLS. For Server Components and authenticated routes.
 - `createAdminClient()` — service role, bypasses RLS. For trusted server-side API routes (e.g. `/api/audit`). Never use in client components or expose to the browser.
+
+### organizations table — must have exactly one row
+This is a single-tenant CRM. The `organizations` table must have a seeded row or all CRM inserts will fail silently — `companies`, `contacts`, `opportunities`, and `activities` all have `organization_id NOT NULL`.
+
+If the table is empty, run in Supabase SQL Editor:
+```sql
+INSERT INTO organizations (name, slug) VALUES ('ClicKonversion', 'clickonversion');
+```
+
+All public API routes that write CRM data must fetch this org first:
+```ts
+const { data: org } = await supabase.from("organizations").select("id").limit(1).single()
+if (!org) throw new Error("No organization found")
+```
 
 ### Database
 - Schema changes via SQL migrations in `supabase/migrations/`

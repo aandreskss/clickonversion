@@ -8,7 +8,7 @@ const inter = Inter({
   display: "swap",
 })
 
-const siteUrl    = process.env.NEXT_PUBLIC_SITE_URL ?? "https://clickonversion.com"
+const siteUrl    = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.clickonversion.com"
 const gaId       = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 const gscVerify  = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
 

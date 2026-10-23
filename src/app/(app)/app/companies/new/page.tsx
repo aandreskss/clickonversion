@@ -3,9 +3,9 @@
 import { useState }     from "react"
 import { useRouter }    from "next/navigation"
 import { useForm }      from "react-hook-form"
+import { useSession }   from "next-auth/react"
 import { zodResolver }  from "@hookform/resolvers/zod"
 import { companySchema, type CompanyInput } from "@/lib/validations"
-import { createClient } from "@/lib/supabase/client"
 import { normalizeDomain, normalizeName } from "@/lib/normalize"
 import { ArrowLeft, Loader2 } from "lucide-react"
 import Link from "next/link"
@@ -29,7 +29,8 @@ const SOURCES = [
 ]
 
 export default function NewCompanyPage() {
-  const router  = useRouter()
+  const router   = useRouter()
+  const { data: session } = useSession()
   const [error, setError] = useState<string | null>(null)
 
   const {
@@ -40,23 +41,12 @@ export default function NewCompanyPage() {
 
   async function onSubmit(data: CompanyInput) {
     setError(null)
-    const supabase = createClient()
+    if (!session?.user) { setError("Not authenticated"); return }
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { setError("Not authenticated"); return }
-
-    // Get organization
-    const { data: membership } = await supabase
-      .from("organization_members")
-      .select("organization_id")
-      .eq("user_id", user.id)
-      .single()
-    if (!membership) { setError("No organization found"); return }
-
-    const { data: company, error: insertError } = await supabase
-      .from("companies")
-      .insert({
-        organization_id:  membership.organization_id,
+    const res = await fetch("/api/crm/companies", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         name:             data.name,
         normalized_name:  normalizeName(data.name),
         website:          data.website ?? null,
@@ -68,25 +58,16 @@ export default function NewCompanyPage() {
         source:           data.source ?? null,
         lifecycle_status: data.lifecycle_status ?? "prospect",
         notes_summary:    data.notes_summary ?? null,
-      })
-      .select("id")
-      .single()
+      }),
+    })
 
-    if (insertError || !company) {
+    if (!res.ok) {
       setError("Failed to create company. Please try again.")
       return
     }
 
-    // Create opportunity automatically
-    await supabase.from("opportunities").insert({
-      organization_id: membership.organization_id,
-      company_id:      company.id,
-      name:            `${data.name} — Growth`,
-      stage:           "NEW",
-      source:          data.source ?? null,
-    })
-
-    router.push(`/app/companies/${company.id}`)
+    const { id } = await res.json()
+    router.push(`/app/companies/${id}`)
   }
 
   const inputClass = "w-full rounded-lg border border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF5A1F]/30 focus:border-[#FF5A1F]/60 hover:border-slate-300 transition-colors"

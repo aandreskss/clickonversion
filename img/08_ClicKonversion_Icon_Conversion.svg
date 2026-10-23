@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="140" viewBox="0 0 460 140">
+<defs>
+  <style>
+    .black{fill:#0B0D0F}
+    .dark{fill:#14171A}
+    .orange{fill:#FF5A1F}
+    .white{fill:#FFFFFF}
+    .muted{fill:#5D6368}
+    .title{font-family:Inter,Arial,sans-serif;font-weight:800}
+    .body{font-family:Inter,Arial,sans-serif;font-weight:400}
+    .caps{font-family:Inter,Arial,sans-serif;font-weight:700;letter-spacing:3px}
+  </style>
+</defs>
+<rect width="460" height="140" fill="none"/>
+<g transform="translate(0,12)">
+  <path d="M65 18 A44 44 0 1 1 20 70" fill="none" stroke="#0B0D0F" stroke-width="10" stroke-linecap="round"/>
+  <path d="M18 70 L7 50 L31 51 Z" class="black"/>
+  <path d="M25 22 A44 44 0 0 1 72 74" fill="none" stroke="#FF5A1F" stroke-width="10" stroke-linecap="round"/>
+  <path d="M74 74 L85 95 L61 94 Z" class="orange"/>
+</g>
+<text x="105" y="34" font-size="22" class="title black">CONVERSION</text>
+<text x="105" y="68" font-size="17" class="body black">Turning clicks into</text>
+<text x="105" y="92" font-size="17" class="body black">measurable results.</text>
+</svg>

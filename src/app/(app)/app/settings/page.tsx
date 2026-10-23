@@ -1,8 +1,7 @@
-import { createClient } from "@/lib/supabase/server"
+import { auth } from "@/lib/auth"
 
 export default async function SettingsPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const session = await auth()
 
   const ga = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
   const turnstile = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
@@ -14,7 +13,7 @@ export default async function SettingsPage() {
 
       {/* Account */}
       <Card title="Account">
-        <Row label="Email" value={user?.email ?? "—"} />
+        <Row label="Email" value={session?.user?.email ?? "—"} />
         <Row label="Account type" value="Owner" />
       </Card>
 

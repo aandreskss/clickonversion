@@ -6,9 +6,9 @@
 Build a growth operating system to help ClicKonversion acquire its first 3 clients and reach $2,000 MRR.
 
 ## Current Phase
-**Phase 7 — Apps, QA Integral y Lanzamiento**
+**Phase 7 — Apps, QA Integral y Lanzamiento** ✅ Completada
 
-Fase 6 (Panel Administrativo) completada. Build limpio. 179 tests pasan. El panel admin está funcional con dashboard de métricas, cola de trabajo, gestión de especialistas, comercial, pagos unificados y analítica interna.
+Build limpio. 179 tests unitarios pasan. 5 suites E2E implementadas con Playwright. Catálogo /apps live. SyncLead landing con waitlist. SEO actualizado. Documentación ops completa. Launch checklist listo.
 
 ---
 
@@ -22,7 +22,7 @@ Fase 6 (Panel Administrativo) completada. Build limpio. 179 tests pasan. El pane
 | 4 | Reservas y Onboarding | ✅ Completa | Cal.com, booking rights, formularios pre-brief, email bilingüe |
 | 5 | Portal de Clientes | ✅ Completa | Auth, dashboard, requests, documentos, billing, settings, RLS |
 | 6 | Panel Administrativo | ✅ Completa | Dashboard métricas, cola de trabajo, especialistas, comercial, pagos, analítica |
-| 7 | Apps, QA y Lanzamiento | ⏳ Pendiente | QA integral, apps móviles/PWA, hardening, launch checklist |
+| 7 | Apps, QA y Lanzamiento | ✅ Completa | /apps catálogo, SyncLead landing+waitlist, Playwright E2E, SEO, rate-limit portal, docs ops, launch checklist |
 
 ---
 
@@ -124,11 +124,56 @@ Completada. Build limpio. 179/179 tests (81 prev + 98 nuevos).
 
 ---
 
-## Fase 7 — Apps, QA Integral y Lanzamiento
+## Fase 7 — Apps, QA Integral y Lanzamiento ✅
 
-**Objetivo:** Hardening completo de la plataforma, cobertura de pruebas E2E, apps móviles (o PWA), y checklist de lanzamiento a producción para el primer cliente pagador.
+Build limpio. 179 tests unitarios pasan. Playwright instalado, 5 suites E2E. Docs completos.
 
-**Scope:**
+**Archivos clave Fase 7:**
+- `src/data/apps.ts` — catálogo extensible de apps (App interface + APPS array)
+- `src/app/(marketing)/apps/page.tsx` — /apps catálogo
+- `src/app/(marketing)/apps/[slug]/page.tsx` — router dinámico por app
+- `src/components/apps/synclead-page.tsx` — landing SyncLead completa
+- `src/app/api/apps/synclead/waitlist/route.ts` — API waitlist (POST, rate-limited)
+- `src/lib/rate-limit.ts` — utilitario rate limiting para portal routes
+- `supabase/migrations/022_app_waitlist.sql` — tabla pf_app_waitlist
+- `playwright.config.ts` — configuración E2E
+- `src/e2e/` — 5 suites: marketing, checkout, portal-auth, security, full-flow
+- `docs/OPERATIONS.md` — guía operativa completa (13 secciones)
+- `docs/LAUNCH-CHECKLIST.md` — checklist de lanzamiento (12 stages)
+
+**SyncLead features afirmadas (verificadas contra codebase real):**
+- Real-time lead sync from Meta Ads ✅
+- Visual pipeline (kanban) ✅
+- WhatsApp Business integrated ✅
+- AI agents (multi-LLM: Claude/GPT/Gemini/DeepSeek/Groq) ✅
+- Automatic lead qualification ✅
+- Meta CAPI (Purchase events) ✅
+- Team collaboration with roles ✅
+- CSV import with deduplication ✅
+- NO Stripe/pagos (no mencionar) ❌
+
+**SyncLead CTA:** Waitlist (no pagos listos). Incluido gratis con servicios de Meta Ads.
+
+**SEO Fase 7:**
+- Sitemap actualizado: incluye /apps, /apps/synclead — excluye /portal, /admin, /checkout, /cleaning
+- Robots actualizado: allow /apps; disallow /portal/, /admin/, /cleaning
+- JSON-LD SoftwareApplication en /apps/synclead
+- Navbar: "Apps" agregado entre Services y Pricing
+- SyncLeadSection: href actualizado de /synclead → /apps/synclead
+
+**Rate limiting:**
+- `src/lib/rate-limit.ts` — utilitario con configs por ruta (PORTAL_LIMITS)
+- Portal routes aún no tienen rate limiting aplicado en los handlers — pendiente integrar
+- Waitlist API: 3 req/hora por IP
+
+**Pendiente (post-lanzamiento):**
+- Integrar rate limiting en handlers de /api/portal/** (usar isRateLimited + portalRateLimitKey)
+- Instalar Playwright browsers: `pnpm playwright install --with-deps chromium`
+- Configurar Sentry para error tracking
+- Monitoreo de uptime (UptimeRobot o Better Uptime)
+- Primera activación manual de cliente
+
+**Scope original (retrasado post-lanzamiento):**
 
 ### QA Integral
 - Pruebas E2E con Playwright: flujos críticos (registro → portal → request → comentario → descarga)

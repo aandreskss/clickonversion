@@ -1,33 +1,92 @@
-import { NextResponse }  from "next/server"
-import { createClient }  from "@/lib/supabase/server"
-import { csvSanitize }   from "@/lib/utils"
+import { NextResponse }      from "next/server"
+import { auth }              from "@/lib/auth"
+import { db }                from "@/lib/db"
+import { companies, contacts, opportunities, organizationMembers } from "@/lib/db/schema"
+import { eq, desc, inArray } from "drizzle-orm"
+import { csvSanitize }       from "@/lib/utils"
 
 export async function GET() {
-  const supabase = await createClient()
+  const session = await auth()
+  if (!session?.user?.id) return new NextResponse("Unauthorized", { status: 401 })
 
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return new NextResponse("Unauthorized", { status: 401 })
-
-  const { data: membership } = await supabase
-    .from("organization_members")
-    .select("organization_id")
-    .eq("user_id", user.id)
-    .single()
+  // Resolve org membership
+  const [membership] = await db
+    .select({ organizationId: organizationMembers.organizationId })
+    .from(organizationMembers)
+    .where(eq(organizationMembers.userId, session.user.id))
+    .limit(1)
 
   if (!membership) return new NextResponse("Forbidden", { status: 403 })
 
-  const { data: companies, error } = await supabase
-    .from("companies")
-    .select(`
-      name, website, city, state, industry, phone, source, lifecycle_status,
-      notes_summary, created_at,
-      opportunities(stage, estimated_value, mrr_value, next_action),
-      contacts(first_name, last_name, email, phone, is_primary)
-    `)
-    .eq("organization_id", membership.organization_id)
-    .order("created_at", { ascending: false })
+  // Fetch companies with related contacts and opportunities
+  const rows = await db
+    .select({
+      id:              companies.id,
+      name:            companies.name,
+      website:         companies.website,
+      city:            companies.city,
+      state:           companies.state,
+      industry:        companies.industry,
+      phone:           companies.phone,
+      source:          companies.source,
+      lifecycleStatus: companies.lifecycleStatus,
+      notesSummary:    companies.notesSummary,
+      createdAt:       companies.createdAt,
+    })
+    .from(companies)
+    .where(eq(companies.organizationId, membership.organizationId))
+    .orderBy(desc(companies.createdAt))
 
-  if (error) return new NextResponse("Export failed", { status: 500 })
+  if (!rows) return new NextResponse("Export failed", { status: 500 })
+
+  // Fetch related contacts and opportunities in bulk
+  const companyIds = rows.map((c) => c.id)
+
+  let allContacts: {
+    id: string
+    companyId: string | null
+    firstName: string
+    lastName: string | null
+    email: string | null
+    phone: string | null
+    isPrimary: boolean
+  }[] = []
+
+  let allOpportunities: {
+    id: string
+    companyId: string
+    stage: string
+    estimatedValue: string | null
+    mrrValue: string | null
+    nextAction: string | null
+  }[] = []
+
+  if (companyIds.length > 0) {
+    allContacts = await db
+      .select({
+        id:        contacts.id,
+        companyId: contacts.companyId,
+        firstName: contacts.firstName,
+        lastName:  contacts.lastName,
+        email:     contacts.email,
+        phone:     contacts.phone,
+        isPrimary: contacts.isPrimary,
+      })
+      .from(contacts)
+      .where(inArray(contacts.companyId, companyIds))
+
+    allOpportunities = await db
+      .select({
+        id:             opportunities.id,
+        companyId:      opportunities.companyId,
+        stage:          opportunities.stage,
+        estimatedValue: opportunities.estimatedValue,
+        mrrValue:       opportunities.mrrValue,
+        nextAction:     opportunities.nextAction,
+      })
+      .from(opportunities)
+      .where(inArray(opportunities.companyId, companyIds))
+  }
 
   const HEADERS = [
     "company_name", "website", "city", "state", "industry",
@@ -37,11 +96,14 @@ export async function GET() {
     "notes", "created_at",
   ]
 
-  const rows = (companies ?? []).map((co) => {
-    const opp     = co.opportunities?.[0]
-    const contact = co.contacts?.find((c) => c.is_primary) ?? co.contacts?.[0]
+  const csvRows = rows.map((co) => {
+    const coContacts = allContacts.filter((c) => c.companyId === co.id)
+    const coOpps     = allOpportunities.filter((o) => o.companyId === co.id)
+
+    const opp     = coOpps[0]
+    const contact = coContacts.find((c) => c.isPrimary) ?? coContacts[0]
     const contactName = contact
-      ? [contact.first_name, contact.last_name].filter(Boolean).join(" ")
+      ? [contact.firstName, contact.lastName].filter(Boolean).join(" ")
       : ""
 
     return [
@@ -52,20 +114,20 @@ export async function GET() {
       csvSanitize(co.industry),
       csvSanitize(co.phone),
       csvSanitize(co.source),
-      csvSanitize(co.lifecycle_status),
+      csvSanitize(co.lifecycleStatus),
       csvSanitize(contactName),
       csvSanitize(contact?.email),
       csvSanitize(contact?.phone),
       csvSanitize(opp?.stage),
-      csvSanitize(opp?.estimated_value),
-      csvSanitize(opp?.mrr_value),
-      csvSanitize(opp?.next_action),
-      csvSanitize(co.notes_summary),
-      csvSanitize(co.created_at),
+      csvSanitize(opp?.estimatedValue),
+      csvSanitize(opp?.mrrValue),
+      csvSanitize(opp?.nextAction),
+      csvSanitize(co.notesSummary),
+      csvSanitize(co.createdAt?.toISOString()),
     ].map((v) => `"${v.replace(/"/g, '""')}"`).join(",")
   })
 
-  const csv = [HEADERS.join(","), ...rows].join("\r\n")
+  const csv  = [HEADERS.join(","), ...csvRows].join("\r\n")
   const date = new Date().toISOString().slice(0, 10)
 
   return new NextResponse(csv, {

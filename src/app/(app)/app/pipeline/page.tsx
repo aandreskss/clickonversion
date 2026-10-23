@@ -1,5 +1,7 @@
 import Link             from "next/link"
-import { createClient } from "@/lib/supabase/server"
+import { db }           from "@/lib/db"
+import { opportunities, companies } from "@/lib/db/schema"
+import { inArray, desc, eq } from "drizzle-orm"
 import { StageBadge }   from "@/components/ui/badge"
 import { formatCurrency, formatRelativeDate, isOverdue } from "@/lib/utils"
 import { AlertTriangle } from "lucide-react"
@@ -12,24 +14,33 @@ const ACTIVE_STAGES: OpportunityStage[] = [
 
 
 export default async function PipelinePage() {
-  const supabase = await createClient()
+  const rows = await db
+    .select({
+      id: opportunities.id,
+      name: opportunities.name,
+      stage: opportunities.stage,
+      estimatedValue: opportunities.estimatedValue,
+      mrrValue: opportunities.mrrValue,
+      nextAction: opportunities.nextAction,
+      nextActionAt: opportunities.nextActionAt,
+      source: opportunities.source,
+      createdAt: opportunities.createdAt,
+      companyId: opportunities.companyId,
+      companyName: companies.name,
+      companyCity: companies.city,
+      companyIndustry: companies.industry,
+    })
+    .from(opportunities)
+    .leftJoin(companies, eq(opportunities.companyId, companies.id))
+    .where(inArray(opportunities.stage, [...ACTIVE_STAGES, "NURTURE" as OpportunityStage]))
+    .orderBy(desc(opportunities.createdAt))
 
-  const { data: opportunities } = await supabase
-    .from("opportunities")
-    .select(`
-      id, name, stage, estimated_value, mrr_value,
-      next_action, next_action_at, source, created_at,
-      company:companies(id, name, city, industry)
-    `)
-    .in("stage", [...ACTIVE_STAGES, "NURTURE"])
-    .order("created_at", { ascending: false })
-
-  const byStage: Record<string, typeof opportunities> = {}
+  const byStage: Record<string, typeof rows> = {}
   for (const stage of [...ACTIVE_STAGES, "NURTURE" as OpportunityStage]) {
-    byStage[stage] = opportunities?.filter((o) => o.stage === stage) ?? []
+    byStage[stage] = rows.filter((o) => o.stage === stage)
   }
 
-  const totalPipeline = opportunities?.reduce((s, o) => s + (o.estimated_value ?? 0), 0) ?? 0
+  const totalPipeline = rows.reduce((s, o) => s + Number(o.estimatedValue ?? 0), 0)
 
   return (
     <div className="p-6 lg:p-8">
@@ -37,7 +48,7 @@ export default async function PipelinePage() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Pipeline</h1>
           <p className="text-sm text-slate-500 mt-1">
-            {opportunities?.length ?? 0} active opportunities · {formatCurrency(totalPipeline)} total
+            {rows.length} active opportunities · {formatCurrency(totalPipeline)} total
           </p>
         </div>
         <Link
@@ -53,7 +64,7 @@ export default async function PipelinePage() {
         <div className="flex gap-4 min-w-max">
           {[...ACTIVE_STAGES, "NURTURE" as OpportunityStage].map((stage) => {
             const cards = byStage[stage] ?? []
-            const stageValue = cards.reduce((s, o) => s + (o.estimated_value ?? 0), 0)
+            const stageValue = cards.reduce((s, o) => s + Number(o.estimatedValue ?? 0), 0)
 
             return (
               <div key={stage} className="w-64 flex-shrink-0">
@@ -76,30 +87,27 @@ export default async function PipelinePage() {
                     </div>
                   ) : (
                     cards.map((opp) => {
-                      const overdue = isOverdue(opp.next_action_at)
-                      const noAction = !opp.next_action
-                      // Supabase returns arrays for joins; grab first element
-                      const company = Array.isArray(opp.company) ? opp.company[0] : opp.company
-                      const co = company as { id?: string; name?: string; city?: string; industry?: string } | null
+                      const overdue = isOverdue(opp.nextActionAt?.toISOString() ?? null)
+                      const noAction = !opp.nextAction
 
                       return (
                         <Link
                           key={opp.id}
-                          href={`/app/companies/${co?.id ?? ""}`}
+                          href={`/app/companies/${opp.companyId ?? ""}`}
                           className="block bg-white rounded-xl border border-slate-200 p-4 hover:border-slate-300 hover:shadow-sm transition-all"
                         >
                           <p className="text-sm font-semibold text-slate-900 leading-tight mb-0.5">
-                            {co?.name ?? opp.name}
+                            {opp.companyName ?? opp.name}
                           </p>
-                          {co?.city && (
+                          {opp.companyCity && (
                             <p className="text-xs text-slate-400 mb-2">
-                              {co.city}
-                              {co.industry ? ` · ${co.industry}` : ""}
+                              {opp.companyCity}
+                              {opp.companyIndustry ? ` · ${opp.companyIndustry}` : ""}
                             </p>
                           )}
 
-                          {opp.estimated_value ? (
-                            <p className="text-sm font-bold text-slate-800 mb-2">{formatCurrency(opp.estimated_value)}</p>
+                          {opp.estimatedValue ? (
+                            <p className="text-sm font-bold text-slate-800 mb-2">{formatCurrency(Number(opp.estimatedValue))}</p>
                           ) : null}
 
                           {/* Next action */}
@@ -112,11 +120,11 @@ export default async function PipelinePage() {
                             ) : (
                               <>
                                 <p className={`truncate ${overdue ? "text-amber-700" : "text-slate-600"}`}>
-                                  {opp.next_action}
+                                  {opp.nextAction}
                                 </p>
-                                {opp.next_action_at && (
+                                {opp.nextActionAt && (
                                   <p className={`mt-0.5 ${overdue ? "text-red-500" : "text-slate-400"}`}>
-                                    {formatRelativeDate(opp.next_action_at)}
+                                    {formatRelativeDate(opp.nextActionAt.toISOString())}
                                   </p>
                                 )}
                               </>

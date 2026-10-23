@@ -3,9 +3,9 @@
 import { useState }     from "react"
 import { useRouter }    from "next/navigation"
 import { useForm }      from "react-hook-form"
+import { useSession }   from "next-auth/react"
 import { zodResolver }  from "@hookform/resolvers/zod"
 import { activitySchema, type ActivityInput } from "@/lib/validations"
-import { createClient } from "@/lib/supabase/client"
 import { formatRelativeDate } from "@/lib/utils"
 import { Plus, Loader2, FileText, Phone, Mail, Video, Users } from "lucide-react"
 import type { Activity, ActivityType } from "@/types/database"
@@ -43,6 +43,7 @@ export function ActivityTimeline({ activities, companyId, opportunityId }: Props
   const [showForm, setShowForm] = useState(false)
   const [error,    setError]    = useState<string | null>(null)
   const router = useRouter()
+  const { data: session } = useSession()
 
   const {
     register,
@@ -56,29 +57,22 @@ export function ActivityTimeline({ activities, companyId, opportunityId }: Props
 
   async function onSubmit(data: ActivityInput) {
     setError(null)
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
+    if (!session?.user) return
 
-    const { data: membership } = await supabase
-      .from("organization_members")
-      .select("organization_id")
-      .eq("user_id", user.id)
-      .single()
-    if (!membership) return
-
-    const { error: insertErr } = await supabase.from("activities").insert({
-      organization_id: membership.organization_id,
-      company_id:      companyId,
-      opportunity_id:  opportunityId ?? null,
-      activity_type:   data.activity_type,
-      title:           data.title,
-      body:            data.body ?? null,
-      occurred_at:     data.occurred_at ?? new Date().toISOString(),
-      created_by:      user.id,
+    const res = await fetch("/api/crm/activities", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        company_id:      companyId,
+        opportunity_id:  opportunityId ?? null,
+        activity_type:   data.activity_type,
+        title:           data.title,
+        body:            data.body ?? null,
+        occurred_at:     data.occurred_at ?? new Date().toISOString(),
+      }),
     })
 
-    if (insertErr) { setError("Failed to save activity."); return }
+    if (!res.ok) { setError("Failed to save activity."); return }
     reset()
     setShowForm(false)
     router.refresh()

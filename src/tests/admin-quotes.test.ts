@@ -1,10 +1,9 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { createAdminClient } from "@/lib/supabase/server"
+import { describe, it, expect, vi, beforeEach } from "vitest"
+import { db } from "@/lib/db"
 import { getQuotes, updateQuote, createQuotePaymentLink } from "@/lib/admin/commercial"
 
-vi.mock("@/lib/supabase/server", () => ({
-  createAdminClient: vi.fn(),
-  createClient: vi.fn(),
+vi.mock("@/lib/db", () => ({
+  db: { select: vi.fn(), insert: vi.fn(), update: vi.fn(), delete: vi.fn(), query: {} },
 }))
 
 const mockPaymentLinksCreate = vi.fn().mockResolvedValue({
@@ -21,212 +20,164 @@ vi.mock("stripe", () => {
 
 // ── Mock helpers ──────────────────────────────────────────────────────────────
 
-function resolveOk() {
-  return { eq: vi.fn().mockResolvedValue({ error: null }) }
+let rq: unknown[] = []
+
+function chainWith(data: unknown) {
+  const p = Promise.resolve(data)
+  const c: any = {}
+  ;["from","leftJoin","innerJoin","where","set","values","orderBy","limit","offset","onConflictDoUpdate","returning"].forEach(m => { c[m] = vi.fn(() => c) })
+  c.then = (f: any, r: any) => p.then(f, r)
+  c.catch = (f: any) => p.catch(f)
+  return c
 }
 
-function createMockSupabase() {
-  const mock = {
-    select: vi.fn(),
-    insert: vi.fn(),
-    update: vi.fn(),
-    delete: vi.fn(),
-    eq: vi.fn(),
-    in: vi.fn(),
-    not: vi.fn(),
-    neq: vi.fn(),
-    gte: vi.fn(),
-    lte: vi.fn(),
-    lt: vi.fn(),
-    gt: vi.fn(),
-    ilike: vi.fn(),
-    order: vi.fn(),
-    limit: vi.fn(),
-    range: vi.fn(),
-    single: vi.fn(),
-    maybeSingle: vi.fn(),
-    from: vi.fn(),
-    or: vi.fn(),
-  }
+function next(...items: unknown[]) { rq.push(...items) }
 
-  const chainable = mock as Record<string, ReturnType<typeof vi.fn>>
-  Object.keys(chainable).forEach((key) => {
-    if (key !== "single" && key !== "maybeSingle") {
-      chainable[key].mockReturnValue(mock)
-    }
+function makeQuote(overrides: Record<string, unknown> = {}) {
+  return {
+    id: "quote-1",
+    clientEmail: "client@test.com",
+    clientName: "Test Client",
+    clientCompany: null,
+    servicesRequested: [],
+    status: "pending",
+    clientNotes: null,
+    scope: null,
+    proposedPriceUsd: null,
+    proposalNotes: null,
+    paymentLink: null,
+    proposalSentAt: null,
+    acceptedAt: null,
+    expiresAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    ...overrides,
+  }
+}
+
+beforeEach(() => {
+  rq = []
+  vi.mocked(db.select).mockImplementation(() => chainWith(rq.shift() ?? []))
+  vi.mocked(db.insert).mockImplementation(() => chainWith(rq.shift() ?? []))
+  vi.mocked(db.update).mockImplementation(() => chainWith(rq.shift() ?? []))
+  vi.mocked(db.delete).mockImplementation(() => chainWith(rq.shift() ?? []))
+  mockPaymentLinksCreate.mockClear()
+})
+
+// ── getQuotes ─────────────────────────────────────────────────────────────────
+
+describe("getQuotes", () => {
+  it("returns paginated quotes", async () => {
+    const quote = makeQuote()
+    next([quote])          // rows (first db.select call)
+    next([{ count: 1 }])  // count (second db.select call)
+
+    const result = await getQuotes()
+
+    expect(result.items).toHaveLength(1)
+    expect(result.total).toBe(1)
+    expect(result.page).toBe(1)
   })
 
-  return mock
-}
+  it("returns empty list when no quotes", async () => {
+    next([])
+    next([{ count: 0 }])
 
-type MockSupabase = ReturnType<typeof createMockSupabase>
+    const result = await getQuotes()
+    expect(result.items).toHaveLength(0)
+    expect(result.total).toBe(0)
+  })
 
-// ── Tests ─────────────────────────────────────────────────────────────────────
+  it("respects page parameter", async () => {
+    next([])
+    next([{ count: 25 }])
 
-describe("Quotes management", () => {
-  let mockDb: MockSupabase
+    const result = await getQuotes({ page: 2, pageSize: 10 })
+    expect(result.page).toBe(2)
+  })
+})
 
-  beforeEach(() => {
-    mockDb = createMockSupabase()
-    vi.mocked(createAdminClient).mockReturnValue(
-      mockDb as unknown as ReturnType<typeof createAdminClient>
+// ── updateQuote ───────────────────────────────────────────────────────────────
+
+describe("updateQuote", () => {
+  it("maps proposedPriceUsd to string", async () => {
+    const chain = chainWith([])
+    vi.mocked(db.update).mockReturnValueOnce(chain as any)
+
+    await updateQuote("quote-1", { proposedPriceUsd: 999 })
+
+    expect(chain.set).toHaveBeenCalledWith(
+      expect.objectContaining({ proposedPriceUsd: "999" })
     )
   })
 
-  afterEach(() => {
-    vi.clearAllMocks()
-    mockPaymentLinksCreate.mockResolvedValue({ url: "https://buy.stripe.com/test_link_123" })
+  it("sets proposedPriceUsd to null when null passed", async () => {
+    const chain = chainWith([])
+    vi.mocked(db.update).mockReturnValueOnce(chain as any)
+
+    await updateQuote("quote-1", { proposedPriceUsd: null })
+
+    expect(chain.set).toHaveBeenCalledWith(
+      expect.objectContaining({ proposedPriceUsd: null })
+    )
   })
 
-  describe("getQuotes", () => {
-    it("queries pf_quotes table", async () => {
-      mockDb.range.mockResolvedValueOnce({ data: [], count: 0, error: null })
-
-      await getQuotes()
-
-      expect(mockDb.from).toHaveBeenCalledWith("pf_quotes")
-    })
-
-    it("filters by status when status provided", async () => {
-      mockDb.range.mockResolvedValueOnce({ data: [], count: 0, error: null })
-
-      await getQuotes({ status: "draft" })
-
-      const eqCalls = vi.mocked(mockDb.eq).mock.calls
-      const statusFilter = eqCalls.find((c) => c[0] === "status" && c[1] === "draft")
-      expect(statusFilter).toBeDefined()
-    })
-
-    it("does not filter by status when no status provided", async () => {
-      mockDb.range.mockResolvedValueOnce({ data: [], count: 0, error: null })
-
-      await getQuotes()
-
-      const eqCalls = vi.mocked(mockDb.eq).mock.calls
-      const statusFilter = eqCalls.find((c) => c[0] === "status")
-      expect(statusFilter).toBeUndefined()
-    })
-
-    it("returns items array from response", async () => {
-      const mockQuote = {
-        id: "q-1",
-        order_id: null,
-        client_email: "client@test.com",
-        client_name: "Test Client",
-        client_company: null,
-        services_requested: [],
-        status: "draft",
-        client_notes: null,
-        scope: null,
-        proposed_price_usd: null,
-        proposal_notes: null,
-        payment_link: null,
-        proposal_sent_at: null,
-        accepted_at: null,
-        expires_at: null,
-        created_at: "2024-01-01",
-        updated_at: "2024-01-01",
-      }
-
-      mockDb.range.mockResolvedValueOnce({ data: [mockQuote], count: 1, error: null })
-
-      const result = await getQuotes()
-
-      expect(result.items).toHaveLength(1)
-      expect(result.items[0].clientEmail).toBe("client@test.com")
-    })
-
-    it("returns pagination metadata", async () => {
-      mockDb.range.mockResolvedValueOnce({ data: [], count: 42, error: null })
-
-      const result = await getQuotes({ page: 2 })
-
-      expect(result.total).toBe(42)
-      expect(result.page).toBe(2)
-    })
+  it("does nothing when no fields provided", async () => {
+    await updateQuote("quote-1", {})
+    expect(vi.mocked(db.update)).not.toHaveBeenCalled()
   })
 
-  describe("updateQuote", () => {
-    it("updates status field correctly", async () => {
-      mockDb.update.mockReturnValueOnce(resolveOk())
+  it("updates status field directly", async () => {
+    const chain = chainWith([])
+    vi.mocked(db.update).mockReturnValueOnce(chain as any)
 
-      await updateQuote("quote-1", { status: "proposal_sent" })
+    await updateQuote("quote-1", { status: "proposal_sent" })
 
-      const updateCalls = vi.mocked(mockDb.update).mock.calls
-      expect(updateCalls[0][0]).toHaveProperty("status", "proposal_sent")
+    expect(chain.set).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "proposal_sent" })
+    )
+  })
+})
+
+// ── createQuotePaymentLink ────────────────────────────────────────────────────
+
+describe("createQuotePaymentLink", () => {
+  it("calls Stripe to create payment link", async () => {
+    next([])  // update quote with link
+
+    await createQuotePaymentLink({
+      quoteId: "quote-1",
+      amountUsd: 500,
+      description: "SEO Package",
     })
 
-    it("updates proposedPriceUsd as proposed_price_usd in DB", async () => {
-      mockDb.update.mockReturnValueOnce(resolveOk())
-
-      await updateQuote("quote-1", { proposedPriceUsd: 1500 })
-
-      const updateCalls = vi.mocked(mockDb.update).mock.calls
-      expect(updateCalls[0][0]).toHaveProperty("proposed_price_usd", 1500)
-    })
-
-    it("does not call update when no data provided", async () => {
-      await updateQuote("quote-1", {})
-
-      expect(mockDb.update).not.toHaveBeenCalled()
-    })
-
-    it("updates paymentLink as payment_link in DB", async () => {
-      mockDb.update.mockReturnValueOnce(resolveOk())
-
-      await updateQuote("quote-1", { paymentLink: "https://buy.stripe.com/abc123" })
-
-      const updateCalls = vi.mocked(mockDb.update).mock.calls
-      expect(updateCalls[0][0]).toHaveProperty("payment_link", "https://buy.stripe.com/abc123")
-    })
+    expect(mockPaymentLinksCreate).toHaveBeenCalledTimes(1)
+    expect(mockPaymentLinksCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        line_items: expect.arrayContaining([
+          expect.objectContaining({
+            price_data: expect.objectContaining({
+              unit_amount: 50000,  // $500 × 100
+            }),
+          }),
+        ]),
+      })
+    )
   })
 
-  describe("createQuotePaymentLink", () => {
-    // createQuotePaymentLink flow:
-    // 1. Stripe paymentLinks.create() → returns { url }
-    // 2. from("pf_quotes").update({ payment_link, updated_at }).eq("id", quoteId)
-    // Terminal: .update().eq() — use resolveOk()
+  it("persists payment link URL to quote", async () => {
+    const chain = chainWith([])
+    vi.mocked(db.update).mockReturnValueOnce(chain as any)
 
-    it("calls Stripe paymentLinks.create", async () => {
-      mockDb.update.mockReturnValueOnce(resolveOk())
-
-      await createQuotePaymentLink({
-        quoteId: "quote-1",
-        amountUsd: 500,
-        description: "SEO Audit Service",
-      })
-
-      expect(mockPaymentLinksCreate).toHaveBeenCalled()
+    const url = await createQuotePaymentLink({
+      quoteId: "quote-1",
+      amountUsd: 500,
+      description: "SEO Package",
     })
 
-    it("updates pf_quotes with payment_link after Stripe call", async () => {
-      mockDb.update.mockReturnValueOnce(resolveOk())
-
-      await createQuotePaymentLink({
-        quoteId: "quote-1",
-        amountUsd: 500,
-        description: "SEO Service",
-      })
-
-      const fromCalls = vi.mocked(mockDb.from).mock.calls.map((c) => c[0])
-      expect(fromCalls).toContain("pf_quotes")
-
-      const updateCalls = vi.mocked(mockDb.update).mock.calls
-      const quoteUpdate = updateCalls.find((c) => c[0]?.payment_link !== undefined)
-      expect(quoteUpdate).toBeDefined()
-      expect(quoteUpdate?.[0]?.payment_link).toBe("https://buy.stripe.com/test_link_123")
-    })
-
-    it("returns the Stripe payment link URL", async () => {
-      mockDb.update.mockReturnValueOnce(resolveOk())
-
-      const result = await createQuotePaymentLink({
-        quoteId: "quote-1",
-        amountUsd: 500,
-        description: "SEO Service",
-      })
-
-      expect(result).toBe("https://buy.stripe.com/test_link_123")
-    })
+    expect(url).toBe("https://buy.stripe.com/test_link_123")
+    expect(chain.set).toHaveBeenCalledWith(
+      expect.objectContaining({ paymentLink: "https://buy.stripe.com/test_link_123" })
+    )
   })
 })

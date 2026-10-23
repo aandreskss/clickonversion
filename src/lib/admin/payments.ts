@@ -1,4 +1,6 @@
-import { createAdminClient } from "@/lib/supabase/server"
+import { db } from "@/lib/db"
+import { pfPayments, pfOrders, pfPaymentReconciliation } from "@/lib/db/schema"
+import { eq, and, desc, asc, inArray, sql } from "drizzle-orm"
 import type { UnifiedPayment, ReconciliationRecord } from "@/types/admin"
 
 // ── Unified Payments ──────────────────────────────────────────────────────────
@@ -11,100 +13,128 @@ export async function getUnifiedPayments(filters?: {
   pageSize?: number
   sortDir?: "asc" | "desc"
 }): Promise<{ items: UnifiedPayment[]; total: number; page: number }> {
-  const supabase = createAdminClient()
-
   const page = filters?.page ?? 1
   const pageSize = filters?.pageSize ?? 20
   const offset = (page - 1) * pageSize
 
-  let query = supabase
-    .from("pf_payments")
-    .select(
-      `
-      *,
-      pf_orders ( id, order_number, client_email, client_name )
-    `,
-      { count: "exact" }
-    )
-    .order("created_at", { ascending: filters?.sortDir === "asc" })
+  const orderDir =
+    filters?.sortDir === "asc" ? asc(pfPayments.createdAt) : desc(pfPayments.createdAt)
 
-  if (filters?.provider) query = query.eq("provider", filters.provider)
-  if (filters?.status) query = query.eq("status", filters.status)
+  // Build where conditions
+  const conditions = []
+  if (filters?.provider) conditions.push(eq(pfPayments.provider, filters.provider))
+  if (filters?.status)
+    conditions.push(
+      eq(
+        pfPayments.status,
+        filters.status as
+          | "pending"
+          | "processing"
+          | "succeeded"
+          | "failed"
+          | "cancelled"
+          | "refunded"
+          | "partially_refunded"
+      )
+    )
+
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined
+
+  // Fetch payments with order join
+  const rows = await db
+    .select({
+      id: pfPayments.id,
+      orderId: pfPayments.orderId,
+      provider: pfPayments.provider,
+      providerPaymentId: pfPayments.providerPaymentId,
+      amountUsd: pfPayments.amountUsd,
+      currency: pfPayments.currency,
+      status: pfPayments.status,
+      paymentType: pfPayments.paymentType,
+      createdAt: pfPayments.createdAt,
+      updatedAt: pfPayments.updatedAt,
+      orderNumber: pfOrders.orderNumber,
+      clientEmail: pfOrders.clientEmail,
+      clientName: pfOrders.clientName,
+    })
+    .from(pfPayments)
+    .leftJoin(pfOrders, eq(pfPayments.orderId, pfOrders.id))
+    .where(whereClause)
+    .orderBy(orderDir)
+    .limit(pageSize)
+    .offset(offset)
+
+  // Count query
+  const countResult = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(pfPayments)
+    .where(whereClause)
+
+  let items: UnifiedPayment[] = rows.map((row) => ({
+    id: row.id,
+    orderId: row.orderId,
+    orderNumber: row.orderNumber ?? "",
+    provider: row.provider as "stripe" | "paypal",
+    providerPaymentId: row.providerPaymentId ?? null,
+    amountUsd: Number(row.amountUsd),
+    currency: row.currency,
+    status: row.status,
+    paymentType: row.paymentType,
+    clientEmail: row.clientEmail ?? "",
+    clientName: row.clientName ?? "",
+    createdAt: row.createdAt instanceof Date ? row.createdAt.toISOString() : String(row.createdAt),
+    updatedAt: row.updatedAt instanceof Date ? row.updatedAt.toISOString() : String(row.updatedAt),
+  }))
+
+  // Search filter applied in-memory (covers providerPaymentId and joined clientEmail)
   if (filters?.search) {
-    query = query.or(
-      `provider_payment_id.ilike.%${filters.search}%,pf_orders.client_email.ilike.%${filters.search}%`
+    const search = filters.search.toLowerCase()
+    items = items.filter(
+      (item) =>
+        (item.providerPaymentId ?? "").toLowerCase().includes(search) ||
+        item.clientEmail.toLowerCase().includes(search)
     )
   }
 
-  query = query.range(offset, offset + pageSize - 1)
-
-  const { data, count, error } = await query
-
-  if (error) throw new Error(error.message)
-
-  const items: UnifiedPayment[] = (data ?? []).map((row) => {
-    const rawOrder = (row as Record<string, unknown>).pf_orders
-    const order = Array.isArray(rawOrder) ? rawOrder[0] : rawOrder
-
-    return {
-      id: row.id as string,
-      orderId: row.order_id as string,
-      orderNumber: order ? (order as Record<string, unknown>).order_number as string : "",
-      provider: row.provider as "stripe" | "paypal",
-      providerPaymentId: (row.provider_payment_id as string | null) ?? null,
-      amountUsd: row.amount_usd as number,
-      currency: row.currency as string,
-      status: row.status as string,
-      paymentType: row.payment_type as string,
-      clientEmail: order
-        ? (order as Record<string, unknown>).client_email as string
-        : "",
-      clientName: order
-        ? (order as Record<string, unknown>).client_name as string
-        : "",
-      createdAt: row.created_at as string,
-      updatedAt: row.updated_at as string,
-    }
-  })
-
-  return { items, total: count ?? 0, page }
+  return { items, total: countResult[0]?.count ?? 0, page }
 }
 
 export async function getOrderPayments(orderId: string): Promise<UnifiedPayment[]> {
-  const supabase = createAdminClient()
+  const [payments, orderRows] = await Promise.all([
+    db
+      .select()
+      .from(pfPayments)
+      .where(eq(pfPayments.orderId, orderId))
+      .orderBy(desc(pfPayments.createdAt)),
 
-  const [paymentsResult, orderResult] = await Promise.all([
-    supabase
-      .from("pf_payments")
-      .select("*")
-      .eq("order_id", orderId)
-      .order("created_at", { ascending: false }),
-
-    supabase
-      .from("pf_orders")
-      .select("id, order_number, client_email, client_name")
-      .eq("id", orderId)
-      .single(),
+    db
+      .select({
+        id: pfOrders.id,
+        orderNumber: pfOrders.orderNumber,
+        clientEmail: pfOrders.clientEmail,
+        clientName: pfOrders.clientName,
+      })
+      .from(pfOrders)
+      .where(eq(pfOrders.id, orderId))
+      .limit(1),
   ])
 
-  if (paymentsResult.error) throw new Error(paymentsResult.error.message)
+  const order = orderRows[0] ?? null
 
-  const order = orderResult.data as Record<string, unknown> | null
-
-  return (paymentsResult.data ?? []).map((row) => ({
-    id: row.id as string,
-    orderId: row.order_id as string,
-    orderNumber: order ? (order.order_number as string) : "",
+  return payments.map((row) => ({
+    id: row.id,
+    orderId: row.orderId,
+    orderNumber: order ? order.orderNumber : "",
     provider: row.provider as "stripe" | "paypal",
-    providerPaymentId: (row.provider_payment_id as string | null) ?? null,
-    amountUsd: row.amount_usd as number,
-    currency: row.currency as string,
-    status: row.status as string,
-    paymentType: row.payment_type as string,
-    clientEmail: order ? (order.client_email as string) : "",
-    clientName: order ? (order.client_name as string) : "",
-    createdAt: row.created_at as string,
-    updatedAt: row.updated_at as string,
+    providerPaymentId: row.providerPaymentId ?? null,
+    amountUsd: Number(row.amountUsd),
+    currency: row.currency,
+    status: row.status,
+    paymentType: row.paymentType,
+    clientEmail: order ? order.clientEmail : "",
+    clientName: order ? order.clientName : "",
+    createdAt: row.createdAt instanceof Date ? row.createdAt.toISOString() : String(row.createdAt),
+    updatedAt: row.updatedAt instanceof Date ? row.updatedAt.toISOString() : String(row.updatedAt),
   }))
 }
 
@@ -119,8 +149,6 @@ export async function reconcilePayment(params: {
   currency: string
   notes?: string
 }): Promise<ReconciliationRecord> {
-  const supabase = createAdminClient()
-
   const discrepancy = Math.round((params.providerAmount - params.internalAmount) * 100) / 100
   const status: ReconciliationRecord["status"] =
     discrepancy === 0
@@ -129,50 +157,48 @@ export async function reconcilePayment(params: {
         ? "matched"
         : "discrepancy"
 
-  // Upsert reconciliation record — if one exists for this payment, update it
-  const { data: existing } = await supabase
-    .from("pf_payment_reconciliation")
-    .select("id")
-    .eq("payment_id", params.paymentId)
-    .maybeSingle()
+  // Check if a reconciliation record already exists for this payment
+  const existing = await db
+    .select({ id: pfPaymentReconciliation.id })
+    .from(pfPaymentReconciliation)
+    .where(eq(pfPaymentReconciliation.paymentId, params.paymentId))
+    .limit(1)
 
   let record: Record<string, unknown>
 
-  if (existing) {
-    const { data, error } = await supabase
-      .from("pf_payment_reconciliation")
-      .update({
-        provider_amount: params.providerAmount,
-        internal_amount: params.internalAmount,
+  if (existing.length > 0) {
+    const updated = await db
+      .update(pfPaymentReconciliation)
+      .set({
+        providerAmount: String(params.providerAmount),
+        internalAmount: String(params.internalAmount),
         currency: params.currency,
         status,
         notes: params.notes ?? null,
-        updated_at: new Date().toISOString(),
+        updatedAt: new Date(),
       })
-      .eq("id", (existing as Record<string, unknown>).id as string)
-      .select()
-      .single()
+      .where(eq(pfPaymentReconciliation.id, existing[0].id))
+      .returning()
 
-    if (error || !data) throw new Error(error?.message ?? "Failed to update reconciliation")
-    record = data as Record<string, unknown>
+    if (!updated[0]) throw new Error("Failed to update reconciliation")
+    record = updated[0] as Record<string, unknown>
   } else {
-    const { data, error } = await supabase
-      .from("pf_payment_reconciliation")
-      .insert({
-        order_id: params.orderId,
-        payment_id: params.paymentId,
-        provider: params.provider,
-        provider_amount: params.providerAmount,
-        internal_amount: params.internalAmount,
+    const inserted = await db
+      .insert(pfPaymentReconciliation)
+      .values({
+        orderId: params.orderId,
+        paymentId: params.paymentId,
+        provider: params.provider as "stripe" | "paypal",
+        providerAmount: String(params.providerAmount),
+        internalAmount: String(params.internalAmount),
         currency: params.currency,
         status,
         notes: params.notes ?? null,
       })
-      .select()
-      .single()
+      .returning()
 
-    if (error || !data) throw new Error(error?.message ?? "Failed to create reconciliation")
-    record = data as Record<string, unknown>
+    if (!inserted[0]) throw new Error("Failed to create reconciliation")
+    record = inserted[0] as Record<string, unknown>
   }
 
   return mapReconciliation(record)
@@ -183,33 +209,32 @@ export async function getDiscrepancies(filters?: {
   page?: number
   pageSize?: number
 }): Promise<{ items: ReconciliationRecord[]; total: number; page: number }> {
-  const supabase = createAdminClient()
-
   const page = filters?.page ?? 1
   const pageSize = filters?.pageSize ?? 20
   const offset = (page - 1) * pageSize
 
-  let query = supabase
-    .from("pf_payment_reconciliation")
-    .select("*", { count: "exact" })
-    .order("created_at", { ascending: false })
+  const whereClause = filters?.status
+    ? eq(pfPaymentReconciliation.status, filters.status)
+    : inArray(pfPaymentReconciliation.status, ["discrepancy", "manual_review"])
 
-  if (filters?.status) {
-    query = query.eq("status", filters.status)
-  } else {
-    // By default show non-resolved discrepancies
-    query = query.in("status", ["discrepancy", "manual_review"])
-  }
+  const [rows, countResult] = await Promise.all([
+    db
+      .select()
+      .from(pfPaymentReconciliation)
+      .where(whereClause)
+      .orderBy(desc(pfPaymentReconciliation.createdAt))
+      .limit(pageSize)
+      .offset(offset),
 
-  query = query.range(offset, offset + pageSize - 1)
-
-  const { data, count, error } = await query
-
-  if (error) throw new Error(error.message)
+    db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(pfPaymentReconciliation)
+      .where(whereClause),
+  ])
 
   return {
-    items: (data ?? []).map((row) => mapReconciliation(row as Record<string, unknown>)),
-    total: count ?? 0,
+    items: rows.map((row) => mapReconciliation(row as Record<string, unknown>)),
+    total: countResult[0]?.count ?? 0,
     page,
   }
 }
@@ -219,43 +244,47 @@ export async function resolveDiscrepancy(params: {
   resolvedBy: string
   notes?: string
 }): Promise<void> {
-  const supabase = createAdminClient()
-
-  const { error } = await supabase
-    .from("pf_payment_reconciliation")
-    .update({
+  await db
+    .update(pfPaymentReconciliation)
+    .set({
       status: "resolved",
-      resolved_by: params.resolvedBy,
-      resolved_at: new Date().toISOString(),
+      resolvedBy: params.resolvedBy,
+      resolvedAt: new Date(),
       notes: params.notes ?? null,
-      updated_at: new Date().toISOString(),
+      updatedAt: new Date(),
     })
-    .eq("id", params.reconciliationId)
-
-  if (error) throw new Error(error.message)
+    .where(eq(pfPaymentReconciliation.id, params.reconciliationId))
 }
 
 // ── Mapper ────────────────────────────────────────────────────────────────────
 
 function mapReconciliation(row: Record<string, unknown>): ReconciliationRecord {
+  const providerAmount = Number(row.providerAmount ?? row.provider_amount)
+  const internalAmount = Number(row.internalAmount ?? row.internal_amount)
+  const rawDiscrepancy = row.discrepancy
+
+  const toIso = (v: unknown): string | null => {
+    if (v == null) return null
+    return v instanceof Date ? v.toISOString() : String(v)
+  }
+
   return {
     id: row.id as string,
-    orderId: row.order_id as string,
-    paymentId: (row.payment_id as string | null) ?? null,
+    orderId: (row.orderId ?? row.order_id) as string,
+    paymentId: ((row.paymentId ?? row.payment_id) as string | null) ?? null,
     provider: row.provider as string,
-    providerAmount: row.provider_amount as number,
-    internalAmount: row.internal_amount as number,
+    providerAmount,
+    internalAmount,
     currency: row.currency as string,
     // discrepancy is a generated column in the DB; fall back to manual calc
     discrepancy:
-      (row.discrepancy as number | null) ??
-      Math.round(
-        ((row.provider_amount as number) - (row.internal_amount as number)) * 100
-      ) / 100,
+      rawDiscrepancy != null
+        ? Number(rawDiscrepancy)
+        : Math.round((providerAmount - internalAmount) * 100) / 100,
     status: row.status as ReconciliationRecord["status"],
     notes: (row.notes as string | null) ?? null,
-    resolvedBy: (row.resolved_by as string | null) ?? null,
-    resolvedAt: (row.resolved_at as string | null) ?? null,
-    createdAt: row.created_at as string,
+    resolvedBy: ((row.resolvedBy ?? row.resolved_by) as string | null) ?? null,
+    resolvedAt: toIso(row.resolvedAt ?? row.resolved_at),
+    createdAt: toIso(row.createdAt ?? row.created_at) ?? "",
   }
 }

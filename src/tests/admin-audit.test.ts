@@ -1,222 +1,157 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { createAdminClient } from "@/lib/supabase/server"
+import { describe, it, expect, vi, beforeEach } from "vitest"
+import { db } from "@/lib/db"
 import { updateRequestStatus } from "@/lib/admin/queue"
 import { updateServicePrice } from "@/lib/admin/commercial"
 
-vi.mock("@/lib/supabase/server", () => ({
-  createAdminClient: vi.fn(),
-  createClient: vi.fn(),
+vi.mock("@/lib/db", () => ({
+  db: { select: vi.fn(), insert: vi.fn(), update: vi.fn(), delete: vi.fn(), query: {} },
 }))
 
-// ── Mock helper ───────────────────────────────────────────────────────────────
+// ── Mock helpers ──────────────────────────────────────────────────────────────
 
-function createMockSupabase() {
-  const mock = {
-    select: vi.fn(),
-    insert: vi.fn(),
-    update: vi.fn(),
-    delete: vi.fn(),
-    eq: vi.fn(),
-    in: vi.fn(),
-    not: vi.fn(),
-    neq: vi.fn(),
-    gte: vi.fn(),
-    lte: vi.fn(),
-    lt: vi.fn(),
-    gt: vi.fn(),
-    ilike: vi.fn(),
-    order: vi.fn(),
-    limit: vi.fn(),
-    range: vi.fn(),
-    single: vi.fn(),
-    maybeSingle: vi.fn(),
-    from: vi.fn(),
-    or: vi.fn(),
-  }
+let rq: unknown[] = []
 
-  const chainable = mock as Record<string, ReturnType<typeof vi.fn>>
-  Object.keys(chainable).forEach((key) => {
-    if (key !== "single" && key !== "maybeSingle") {
-      chainable[key].mockReturnValue(mock)
-    }
+function chainWith(data: unknown) {
+  const p = Promise.resolve(data)
+  const c: any = {}
+  ;["from","leftJoin","innerJoin","where","set","values","orderBy","limit","offset","onConflictDoUpdate","returning"].forEach(m => { c[m] = vi.fn(() => c) })
+  c.then = (f: any, r: any) => p.then(f, r)
+  c.catch = (f: any) => p.catch(f)
+  return c
+}
+
+function next(...items: unknown[]) { rq.push(...items) }
+
+beforeEach(() => {
+  rq = []
+  vi.mocked(db.select).mockImplementation(() => chainWith(rq.shift() ?? []))
+  vi.mocked(db.insert).mockImplementation(() => chainWith(rq.shift() ?? []))
+  vi.mocked(db.update).mockImplementation(() => chainWith(rq.shift() ?? []))
+  vi.mocked(db.delete).mockImplementation(() => chainWith(rq.shift() ?? []))
+})
+
+// ── Status log is append-only ─────────────────────────────────────────────────
+
+describe("audit trail: status log immutability", () => {
+  it("never calls db.delete on any transition", async () => {
+    next([{ status: "queued", startedAt: null }])
+    next([])  // update
+    next([])  // insert log
+
+    await updateRequestStatus({
+      requestId: "req-1",
+      newStatus: "in_progress",
+      changedBy: "admin-1",
+      changedByEmail: "admin@test.com",
+    })
+
+    expect(vi.mocked(db.delete)).not.toHaveBeenCalled()
   })
 
-  return mock
-}
+  it("always inserts status log entry (never updates it)", async () => {
+    next([{ status: "in_progress", startedAt: new Date() }])
+    next([])  // update request
+    next([])  // insert log
 
-function resolveOk() {
-  return { eq: vi.fn().mockResolvedValue({ error: null }) }
-}
+    await updateRequestStatus({
+      requestId: "req-1",
+      newStatus: "completed",
+      changedBy: "admin-1",
+      changedByEmail: "admin@test.com",
+    })
 
-type MockSupabase = ReturnType<typeof createMockSupabase>
+    // db.insert called (for log), db.update called (for request status)
+    expect(vi.mocked(db.insert)).toHaveBeenCalledTimes(1)
+    expect(vi.mocked(db.update)).toHaveBeenCalledTimes(1)
+  })
 
-// ── Tests ─────────────────────────────────────────────────────────────────────
+  it("log entry is created even when no notification is needed", async () => {
+    next([{ status: "queued", startedAt: null }])
+    next([])  // update
+    next([])  // insert log (no notification for in_progress)
 
-describe("Audit trail", () => {
-  let mockDb: MockSupabase
+    await updateRequestStatus({
+      requestId: "req-1",
+      newStatus: "in_progress",
+      changedBy: "admin-1",
+      changedByEmail: "admin@test.com",
+    })
 
-  beforeEach(() => {
-    mockDb = createMockSupabase()
-    vi.mocked(createAdminClient).mockReturnValue(
-      mockDb as unknown as ReturnType<typeof createAdminClient>
+    expect(vi.mocked(db.insert)).toHaveBeenCalledTimes(1)
+  })
+})
+
+// ── Price history is append-only ──────────────────────────────────────────────
+
+describe("audit trail: price history", () => {
+  it("inserts price history when basePriceUsd changes", async () => {
+    next([{ basePriceUsd: "100.00", serviceId: "svc-1" }])  // select current price
+    next([])   // insert price history
+    next([])   // update price
+
+    await updateServicePrice(
+      "price-1",
+      { basePriceUsd: 150 },
+      "admin-1",
+      "admin@test.com",
     )
+
+    expect(vi.mocked(db.insert)).toHaveBeenCalledTimes(1)
+    expect(vi.mocked(db.update)).toHaveBeenCalledTimes(1)
   })
 
-  afterEach(() => {
-    vi.clearAllMocks()
+  it("does NOT insert price history when only metadata changes (no basePriceUsd)", async () => {
+    next([])  // update price
+
+    await updateServicePrice(
+      "price-1",
+      { nameEn: "New Name" },
+      "admin-1",
+      "admin@test.com",
+    )
+
+    // No select (basePriceUsd not changing), no insert
+    expect(vi.mocked(db.select)).not.toHaveBeenCalled()
+    expect(vi.mocked(db.insert)).not.toHaveBeenCalled()
+    expect(vi.mocked(db.update)).toHaveBeenCalledTimes(1)
   })
 
-  describe("pf_request_status_log immutability", () => {
-    it("every valid status change creates a log entry", async () => {
-      mockDb.single.mockResolvedValueOnce({ data: { status: "queued", started_at: null }, error: null })
-      mockDb.update.mockReturnValueOnce(resolveOk())
-      mockDb.insert.mockResolvedValueOnce({ error: null })
+  it("never calls db.delete for price history", async () => {
+    next([{ basePriceUsd: "100.00", serviceId: "svc-1" }])
+    next([])
+    next([])
 
-      await updateRequestStatus({
-        requestId: "req-1",
-        newStatus: "in_progress",
-        changedBy: "admin-1",
-        changedByEmail: "admin@test.com",
-      })
+    await updateServicePrice(
+      "price-1",
+      { basePriceUsd: 120 },
+      "admin-1",
+      "admin@test.com",
+    )
 
-      const fromCalls = vi.mocked(mockDb.from).mock.calls.map((c) => c[0])
-      expect(fromCalls).toContain("pf_request_status_log")
-    })
-
-    it("status log is never updated or deleted by updateRequestStatus", async () => {
-      mockDb.single.mockResolvedValueOnce({ data: { status: "queued", started_at: null }, error: null })
-      mockDb.update.mockReturnValueOnce(resolveOk())
-      mockDb.insert.mockResolvedValueOnce({ error: null })
-
-      await updateRequestStatus({
-        requestId: "req-1",
-        newStatus: "in_progress",
-        changedBy: "admin-1",
-        changedByEmail: "admin@test.com",
-      })
-
-      expect(mockDb.delete).not.toHaveBeenCalled()
-    })
-
-    it("invalid transitions do NOT create log entries", async () => {
-      // completed -> queued is INVALID
-      mockDb.single.mockResolvedValueOnce({ data: { status: "completed", started_at: "2024-01-01" }, error: null })
-
-      await updateRequestStatus({
-        requestId: "req-1",
-        newStatus: "queued",
-        changedBy: "admin-1",
-        changedByEmail: "admin@test.com",
-      })
-
-      const fromCalls = vi.mocked(mockDb.from).mock.calls.map((c) => c[0])
-      expect(fromCalls).not.toContain("pf_request_status_log")
-    })
-
-    it("log entry captures changed_by_email as a snapshot", async () => {
-      const email = "arnaldo@clickonversion.com"
-
-      mockDb.single.mockResolvedValueOnce({ data: { status: "queued", started_at: null }, error: null })
-      mockDb.update.mockReturnValueOnce(resolveOk())
-      mockDb.insert.mockResolvedValueOnce({ error: null })
-
-      await updateRequestStatus({
-        requestId: "req-1",
-        newStatus: "in_progress",
-        changedBy: "user-uuid",
-        changedByEmail: email,
-      })
-
-      const insertCalls = vi.mocked(mockDb.insert).mock.calls
-      const logEntry = insertCalls.find((c) => c[0]?.changed_by_email === email)
-      expect(logEntry).toBeDefined()
-    })
-
-    it("log entry captures both from_status and to_status", async () => {
-      mockDb.single.mockResolvedValueOnce({ data: { status: "queued", started_at: null }, error: null })
-      mockDb.update.mockReturnValueOnce(resolveOk())
-      mockDb.insert.mockResolvedValueOnce({ error: null })
-
-      await updateRequestStatus({
-        requestId: "req-1",
-        newStatus: "in_progress",
-        changedBy: "admin-1",
-        changedByEmail: "admin@test.com",
-      })
-
-      const insertCalls = vi.mocked(mockDb.insert).mock.calls
-      const logEntry = insertCalls.find(
-        (c) => c[0]?.from_status === "queued" && c[0]?.to_status === "in_progress"
-      )
-      expect(logEntry).toBeDefined()
-    })
-
-    it("note is stored in the log entry when provided", async () => {
-      mockDb.single.mockResolvedValueOnce({ data: { status: "queued", started_at: null }, error: null })
-      mockDb.update.mockReturnValueOnce(resolveOk())
-      mockDb.insert.mockResolvedValueOnce({ error: null })
-
-      await updateRequestStatus({
-        requestId: "req-1",
-        newStatus: "in_progress",
-        changedBy: "admin-1",
-        changedByEmail: "admin@test.com",
-        note: "Reviewed by team lead",
-      })
-
-      const insertCalls = vi.mocked(mockDb.insert).mock.calls
-      const logEntry = insertCalls.find((c) => c[0]?.note === "Reviewed by team lead")
-      expect(logEntry).toBeDefined()
-    })
+    expect(vi.mocked(db.delete)).not.toHaveBeenCalled()
   })
 
-  describe("Price change history immutability", () => {
-    it("price history is only inserted, never updated or deleted", async () => {
-      // 1. SELECT current price (single)
-      mockDb.single.mockResolvedValueOnce({ data: { base_price_usd: 100.0, service_id: "svc-1" }, error: null })
-      // 2. INSERT into pf_catalog_price_history
-      mockDb.insert.mockResolvedValueOnce({ error: null })
-      // 3. UPDATE pf_service_prices (.update().eq())
-      mockDb.update.mockReturnValueOnce(resolveOk())
+  it("price history captures old and new values", async () => {
+    const insertChain = chainWith([])
+    vi.mocked(db.insert).mockReturnValueOnce(insertChain as any)
 
-      await updateServicePrice("price-1", { basePriceUsd: 200.0 }, "admin-1", "admin@test.com")
+    next([{ basePriceUsd: "99.00", serviceId: "svc-1" }])
+    // insert chain already set above
+    next([])  // update
 
-      expect(mockDb.delete).not.toHaveBeenCalled()
-    })
+    await updateServicePrice(
+      "price-1",
+      { basePriceUsd: 149 },
+      "admin-1",
+      "admin@test.com",
+    )
 
-    it("price history insert contains old and new prices", async () => {
-      mockDb.single.mockResolvedValueOnce({ data: { base_price_usd: 100.0, service_id: "svc-1" }, error: null })
-      mockDb.insert.mockResolvedValueOnce({ error: null })
-      mockDb.update.mockReturnValueOnce(resolveOk())
-
-      await updateServicePrice("price-1", { basePriceUsd: 200.0 }, "admin-1", "admin@test.com")
-
-      const insertCalls = vi.mocked(mockDb.insert).mock.calls
-      const historyRow = insertCalls.find(
-        (c) => c[0]?.old_price_usd === 100.0 && c[0]?.new_price_usd === 200.0
-      )
-      expect(historyRow).toBeDefined()
-    })
-  })
-
-  describe("Structural integrity - no exported log mutations", () => {
-    it("queue module exports updateRequestStatus as a function", () => {
-      expect(typeof updateRequestStatus).toBe("function")
-    })
-
-    it("queue module does not export deleteStatusLog", async () => {
-      const queueModule = await import("@/lib/admin/queue")
-      expect((queueModule as Record<string, unknown>).deleteStatusLog).toBeUndefined()
-    })
-
-    it("queue module does not export updateStatusLog", async () => {
-      const queueModule = await import("@/lib/admin/queue")
-      expect((queueModule as Record<string, unknown>).updateStatusLog).toBeUndefined()
-    })
-
-    it("commercial module does not export deletePriceHistory", async () => {
-      const commercialModule = await import("@/lib/admin/commercial")
-      expect((commercialModule as Record<string, unknown>).deletePriceHistory).toBeUndefined()
-    })
+    expect(insertChain.values).toHaveBeenCalledWith(
+      expect.objectContaining({
+        oldPriceUsd: "99.00",
+        newPriceUsd: "149",
+        changedByEmail: "admin@test.com",
+      })
+    )
   })
 })

@@ -2,7 +2,6 @@
 
 import { useState }     from "react"
 import { useRouter }    from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
 import { Check, Loader2 } from "lucide-react"
 
 export function TaskActions({ taskId }: { taskId: string }) {
@@ -11,11 +10,9 @@ export function TaskActions({ taskId }: { taskId: string }) {
 
   async function complete() {
     setLoading(true)
-    const supabase = createClient()
-    await supabase
-      .from("tasks")
-      .update({ completed_at: new Date().toISOString() })
-      .eq("id", taskId)
+    await fetch(`/api/crm/tasks/${taskId}/complete`, {
+      method: "PATCH",
+    })
     setLoading(false)
     router.refresh()
   }

@@ -1,5 +1,7 @@
 import Link             from "next/link"
-import { createClient } from "@/lib/supabase/server"
+import { db }           from "@/lib/db"
+import { companies, opportunities, contacts } from "@/lib/db/schema"
+import { eq, desc, like, and, or, inArray, SQL } from "drizzle-orm"
 import { StageBadge }   from "@/components/ui/badge"
 import { formatRelativeDate, formatCurrency } from "@/lib/utils"
 import { Plus, Search, Download } from "lucide-react"
@@ -11,26 +13,82 @@ export default async function CompaniesPage({
   searchParams: Promise<{ q?: string; stage?: string; industry?: string }>
 }) {
   const { q, industry } = await searchParams
-  const supabase = await createClient()
 
-  let query = supabase
-    .from("companies")
-    .select(`
-      id, name, city, state, industry, website, source, lifecycle_status, created_at,
-      opportunities(id, stage, estimated_value, mrr_value, next_action, next_action_at),
-      contacts(id, first_name, last_name, email, is_primary)
-    `)
-    .order("created_at", { ascending: false })
-    .limit(100)
-
+  const filters: SQL[] = []
   if (q) {
-    query = query.or(`name.ilike.%${q}%,normalized_domain.ilike.%${q}%`)
+    filters.push(
+      or(
+        like(companies.name, `%${q}%`),
+        like(companies.normalizedDomain, `%${q}%`),
+      )!
+    )
   }
   if (industry) {
-    query = query.ilike("industry", `%${industry}%`)
+    filters.push(like(companies.industry, `%${industry}%`))
   }
 
-  const { data: companies } = await query
+  const whereClause = filters.length === 0
+    ? undefined
+    : filters.length === 1
+      ? filters[0]
+      : and(...(filters as [SQL, ...SQL[]]))
+
+  const rows = await db
+    .select({
+      id: companies.id,
+      name: companies.name,
+      city: companies.city,
+      state: companies.state,
+      industry: companies.industry,
+      website: companies.website,
+      source: companies.source,
+      lifecycleStatus: companies.lifecycleStatus,
+      createdAt: companies.createdAt,
+    })
+    .from(companies)
+    .where(whereClause)
+    .orderBy(desc(companies.createdAt))
+    .limit(100)
+
+  // Fetch related data for each company
+  const companyIds = rows.map((c) => c.id)
+
+  const [allOpps, allContacts] = companyIds.length > 0
+    ? await Promise.all([
+        db.select({
+          id: opportunities.id,
+          companyId: opportunities.companyId,
+          stage: opportunities.stage,
+          estimatedValue: opportunities.estimatedValue,
+          mrrValue: opportunities.mrrValue,
+          nextAction: opportunities.nextAction,
+          nextActionAt: opportunities.nextActionAt,
+        }).from(opportunities).where(inArray(opportunities.companyId, companyIds)),
+        db.select({
+          id: contacts.id,
+          companyId: contacts.companyId,
+          firstName: contacts.firstName,
+          lastName: contacts.lastName,
+          email: contacts.email,
+          isPrimary: contacts.isPrimary,
+        }).from(contacts).where(inArray(contacts.companyId, companyIds)),
+      ])
+    : [[], []]
+
+  const oppsByCompany = new Map<string, typeof allOpps[0]>()
+  for (const opp of allOpps) {
+    if (!oppsByCompany.has(opp.companyId)) {
+      oppsByCompany.set(opp.companyId, opp)
+    }
+  }
+
+  const contactsByCompany = new Map<string, typeof allContacts[0]>()
+  for (const contact of allContacts) {
+    if (!contact.companyId) continue
+    if (contact.isPrimary || !contactsByCompany.has(contact.companyId)) {
+      contactsByCompany.set(contact.companyId, contact)
+    }
+  }
 
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
@@ -38,7 +96,7 @@ export default async function CompaniesPage({
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Companies</h1>
-          <p className="text-sm text-slate-500 mt-1">{companies?.length ?? 0} prospects</p>
+          <p className="text-sm text-slate-500 mt-1">{rows.length} prospects</p>
         </div>
         <div className="flex items-center gap-2">
           <a
@@ -88,7 +146,7 @@ export default async function CompaniesPage({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {!companies?.length ? (
+              {!rows.length ? (
                 <tr>
                   <td colSpan={7} className="text-center py-12 text-slate-400">
                     No companies yet.{" "}
@@ -98,9 +156,9 @@ export default async function CompaniesPage({
                   </td>
                 </tr>
               ) : (
-                companies.map((company) => {
-                  const opp = company.opportunities?.[0]
-                  const contact = company.contacts?.find((c) => c.is_primary) ?? company.contacts?.[0]
+                rows.map((company) => {
+                  const opp = oppsByCompany.get(company.id)
+                  const contact = contactsByCompany.get(company.id)
 
                   return (
                     <tr key={company.id} className="hover:bg-slate-50 transition-colors">
@@ -108,7 +166,7 @@ export default async function CompaniesPage({
                         <Link href={`/app/companies/${company.id}`} className="hover:text-[#FF5A1F] transition-colors">
                           <p className="font-medium text-slate-900">{company.name}</p>
                           {contact && (
-                            <p className="text-xs text-slate-400">{contact.first_name} {contact.last_name}</p>
+                            <p className="text-xs text-slate-400">{contact.firstName} {contact.lastName}</p>
                           )}
                         </Link>
                       </td>
@@ -126,13 +184,13 @@ export default async function CompaniesPage({
                         )}
                       </td>
                       <td className="px-5 py-3 text-slate-700 font-medium hidden xl:table-cell">
-                        {opp?.estimated_value ? formatCurrency(opp.estimated_value) : "—"}
+                        {opp?.estimatedValue ? formatCurrency(Number(opp.estimatedValue)) : "—"}
                       </td>
                       <td className="px-5 py-3 text-slate-500 text-xs hidden xl:table-cell max-w-[200px] truncate">
-                        {opp?.next_action ?? <span className="text-amber-500">Not set</span>}
+                        {opp?.nextAction ?? <span className="text-amber-500">Not set</span>}
                       </td>
                       <td className="px-5 py-3 text-slate-400 text-xs hidden lg:table-cell">
-                        {formatRelativeDate(company.created_at)}
+                        {formatRelativeDate(company.createdAt.toISOString())}
                       </td>
                     </tr>
                   )

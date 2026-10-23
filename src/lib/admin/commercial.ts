@@ -1,4 +1,17 @@
-import { createAdminClient } from "@/lib/supabase/server"
+import { db } from "@/lib/db"
+import {
+  pfServiceCatalog,
+  pfServicePrices,
+  pfCatalogPriceHistory,
+  pfQuotes,
+  pfClientOrgs,
+  pfOrgMembers,
+  pfRequests,
+  pfSubscriptions,
+  pfOrders,
+  pfOrderItems,
+} from "@/lib/db/schema"
+import { eq, asc, desc, ilike, inArray, sql, and, isNotNull } from "drizzle-orm"
 import type {
   AdminService,
   AdminServicePrice,
@@ -11,30 +24,50 @@ import Stripe from "stripe"
 // ── Services ──────────────────────────────────────────────────────────────────
 
 export async function getServices(): Promise<AdminService[]> {
-  const supabase = createAdminClient()
+  const services = await db
+    .select()
+    .from(pfServiceCatalog)
+    .orderBy(asc(pfServiceCatalog.sortOrder))
 
-  const { data, error } = await supabase
-    .from("pf_service_catalog")
-    .select("*, pf_service_prices ( * )")
-    .order("sort_order", { ascending: true })
+  if (services.length === 0) return []
 
-  if (error) throw new Error(error.message)
+  const serviceIds = services.map((s) => s.id)
+  const prices = await db
+    .select()
+    .from(pfServicePrices)
+    .where(inArray(pfServicePrices.serviceId, serviceIds))
 
-  return (data ?? []).map((row) => mapService(row as Record<string, unknown>))
+  const pricesByServiceId = new Map<string, typeof prices>()
+  for (const price of prices) {
+    const list = pricesByServiceId.get(price.serviceId) ?? []
+    list.push(price)
+    pricesByServiceId.set(price.serviceId, list)
+  }
+
+  return services.map((service) => {
+    const servicePrices = pricesByServiceId.get(service.id) ?? []
+    return mapService(service as Record<string, unknown>, servicePrices as Record<string, unknown>[])
+  })
 }
 
 export async function getService(id: string): Promise<AdminService | null> {
-  const supabase = createAdminClient()
+  const serviceRows = await db
+    .select()
+    .from(pfServiceCatalog)
+    .where(eq(pfServiceCatalog.id, id))
+    .limit(1)
 
-  const { data, error } = await supabase
-    .from("pf_service_catalog")
-    .select("*, pf_service_prices ( * )")
-    .eq("id", id)
-    .single()
+  if (!serviceRows[0]) return null
 
-  if (error || !data) return null
+  const prices = await db
+    .select()
+    .from(pfServicePrices)
+    .where(eq(pfServicePrices.serviceId, id))
 
-  return mapService(data as Record<string, unknown>)
+  return mapService(
+    serviceRows[0] as Record<string, unknown>,
+    prices as Record<string, unknown>[]
+  )
 }
 
 export async function createService(data: {
@@ -47,26 +80,23 @@ export async function createService(data: {
   isPublished?: boolean
   sortOrder?: number
 }): Promise<AdminService> {
-  const supabase = createAdminClient()
-
-  const { data: service, error } = await supabase
-    .from("pf_service_catalog")
-    .insert({
+  const inserted = await db
+    .insert(pfServiceCatalog)
+    .values({
       slug: data.slug,
-      category: data.category,
-      name_en: data.nameEn,
-      name_es: data.nameEs,
-      description_en: data.descriptionEn,
-      description_es: data.descriptionEs,
-      is_published: data.isPublished ?? false,
-      sort_order: data.sortOrder ?? 0,
+      category: data.category as "seo" | "paid-media" | "automation" | "support",
+      nameEn: data.nameEn,
+      nameEs: data.nameEs,
+      descriptionEn: data.descriptionEn,
+      descriptionEs: data.descriptionEs,
+      isPublished: data.isPublished ?? false,
+      sortOrder: data.sortOrder ?? 0,
     })
-    .select("*, pf_service_prices ( * )")
-    .single()
+    .returning()
 
-  if (error || !service) throw new Error(error?.message ?? "Failed to create service")
+  if (!inserted[0]) throw new Error("Failed to create service")
 
-  return mapService(service as Record<string, unknown>)
+  return mapService(inserted[0] as Record<string, unknown>, [])
 }
 
 export async function updateService(
@@ -82,25 +112,24 @@ export async function updateService(
     sortOrder: number
   }>
 ): Promise<void> {
-  const supabase = createAdminClient()
-
   const update: Record<string, unknown> = {}
   if (data.slug !== undefined) update.slug = data.slug
   if (data.category !== undefined) update.category = data.category
-  if (data.nameEn !== undefined) update.name_en = data.nameEn
-  if (data.nameEs !== undefined) update.name_es = data.nameEs
-  if (data.descriptionEn !== undefined) update.description_en = data.descriptionEn
-  if (data.descriptionEs !== undefined) update.description_es = data.descriptionEs
-  if (data.isPublished !== undefined) update.is_published = data.isPublished
-  if (data.sortOrder !== undefined) update.sort_order = data.sortOrder
+  if (data.nameEn !== undefined) update.nameEn = data.nameEn
+  if (data.nameEs !== undefined) update.nameEs = data.nameEs
+  if (data.descriptionEn !== undefined) update.descriptionEn = data.descriptionEn
+  if (data.descriptionEs !== undefined) update.descriptionEs = data.descriptionEs
+  if (data.isPublished !== undefined) update.isPublished = data.isPublished
+  if (data.sortOrder !== undefined) update.sortOrder = data.sortOrder
 
   if (Object.keys(update).length === 0) return
 
-  update.updated_at = new Date().toISOString()
+  update.updatedAt = new Date()
 
-  const { error } = await supabase.from("pf_service_catalog").update(update).eq("id", id)
-
-  if (error) throw new Error(error.message)
+  await db
+    .update(pfServiceCatalog)
+    .set(update as Partial<typeof pfServiceCatalog.$inferInsert>)
+    .where(eq(pfServiceCatalog.id, id))
 }
 
 export async function createServicePrice(data: {
@@ -115,28 +144,27 @@ export async function createServicePrice(data: {
   isActive?: boolean
   sortOrder?: number
 }): Promise<AdminServicePrice> {
-  const supabase = createAdminClient()
-
-  const { data: price, error } = await supabase
-    .from("pf_service_prices")
-    .insert({
-      service_id: data.serviceId,
-      name_en: data.nameEn,
-      name_es: data.nameEs,
-      price_type: data.priceType,
-      base_price_usd: data.basePriceUsd ?? null,
-      billing_period_val: data.billingPeriodVal ?? null,
-      stripe_price_id: data.stripePriceId ?? null,
-      paypal_plan_id: data.paypalPlanId ?? null,
-      is_active: data.isActive ?? true,
-      sort_order: data.sortOrder ?? 0,
+  const inserted = await db
+    .insert(pfServicePrices)
+    .values({
+      serviceId: data.serviceId,
+      nameEn: data.nameEn,
+      nameEs: data.nameEs,
+      priceType: data.priceType as "ONE_TIME" | "RECURRING" | "STARTING_AT" | "CUSTOM_QUOTE",
+      basePriceUsd: data.basePriceUsd != null ? String(data.basePriceUsd) : null,
+      billingPeriodVal:
+        (data.billingPeriodVal as "monthly" | "quarterly" | "annual" | "one_time" | undefined) ??
+        null,
+      stripePriceId: data.stripePriceId ?? null,
+      paypalPlanId: data.paypalPlanId ?? null,
+      isActive: data.isActive ?? true,
+      sortOrder: data.sortOrder ?? 0,
     })
-    .select()
-    .single()
+    .returning()
 
-  if (error || !price) throw new Error(error?.message ?? "Failed to create price")
+  if (!inserted[0]) throw new Error("Failed to create price")
 
-  return mapServicePrice(price as Record<string, unknown>)
+  return mapServicePrice(inserted[0] as Record<string, unknown>)
 }
 
 export async function updateServicePrice(
@@ -151,52 +179,52 @@ export async function updateServicePrice(
   changedBy: string,
   changedByEmail: string
 ): Promise<void> {
-  const supabase = createAdminClient()
-
   // Record price history before changing basePriceUsd
   if (data.basePriceUsd !== undefined) {
-    const { data: current, error: fetchError } = await supabase
-      .from("pf_service_prices")
-      .select("base_price_usd, service_id")
-      .eq("id", priceId)
-      .single()
+    const currentRows = await db
+      .select({ basePriceUsd: pfServicePrices.basePriceUsd, serviceId: pfServicePrices.serviceId })
+      .from(pfServicePrices)
+      .where(eq(pfServicePrices.id, priceId))
+      .limit(1)
 
-    if (fetchError || !current) throw new Error("Price record not found")
+    if (!currentRows[0]) throw new Error("Price record not found")
 
-    const { error: historyError } = await supabase
-      .from("pf_catalog_price_history")
-      .insert({
-        price_id: priceId,
-        service_id: (current as Record<string, unknown>).service_id as string,
-        old_price_usd: (current as Record<string, unknown>).base_price_usd as number,
-        new_price_usd: data.basePriceUsd,
-        changed_by: changedBy,
-        changed_by_email: changedByEmail,
-        changed_at: new Date().toISOString(),
+    const current = currentRows[0]
+
+    // pfCatalogPriceHistory is append-only
+    const historyInsert = await db
+      .insert(pfCatalogPriceHistory)
+      .values({
+        priceId,
+        serviceId: current.serviceId,
+        oldPriceUsd: current.basePriceUsd ?? null,
+        newPriceUsd: String(data.basePriceUsd),
+        changedBy,
+        changedByEmail,
+      })
+      .catch((err: Error) => {
+        console.error("Failed to record price history:", err.message)
+        return null
       })
 
-    if (historyError) {
-      console.error("Failed to record price history:", historyError.message)
-    }
+    void historyInsert
   }
 
   const update: Record<string, unknown> = {}
-  if (data.nameEn !== undefined) update.name_en = data.nameEn
-  if (data.nameEs !== undefined) update.name_es = data.nameEs
-  if (data.basePriceUsd !== undefined) update.base_price_usd = data.basePriceUsd
-  if (data.isActive !== undefined) update.is_active = data.isActive
-  if (data.sortOrder !== undefined) update.sort_order = data.sortOrder
+  if (data.nameEn !== undefined) update.nameEn = data.nameEn
+  if (data.nameEs !== undefined) update.nameEs = data.nameEs
+  if (data.basePriceUsd !== undefined) update.basePriceUsd = String(data.basePriceUsd)
+  if (data.isActive !== undefined) update.isActive = data.isActive
+  if (data.sortOrder !== undefined) update.sortOrder = data.sortOrder
 
   if (Object.keys(update).length === 0) return
 
-  update.updated_at = new Date().toISOString()
+  update.updatedAt = new Date()
 
-  const { error } = await supabase
-    .from("pf_service_prices")
-    .update(update)
-    .eq("id", priceId)
-
-  if (error) throw new Error(error.message)
+  await db
+    .update(pfServicePrices)
+    .set(update as Partial<typeof pfServicePrices.$inferInsert>)
+    .where(eq(pfServicePrices.id, priceId))
 }
 
 // ── Quotes ────────────────────────────────────────────────────────────────────
@@ -206,40 +234,52 @@ export async function getQuotes(filters?: {
   page?: number
   pageSize?: number
 }): Promise<{ items: AdminQuote[]; total: number; page: number }> {
-  const supabase = createAdminClient()
-
   const page = filters?.page ?? 1
   const pageSize = filters?.pageSize ?? 20
   const offset = (page - 1) * pageSize
 
-  let query = supabase
-    .from("pf_quotes")
-    .select("*", { count: "exact" })
-    .order("created_at", { ascending: false })
+  const whereClause = filters?.status
+    ? eq(
+        pfQuotes.status,
+        filters.status as
+          | "pending"
+          | "in_review"
+          | "proposal_sent"
+          | "accepted"
+          | "declined"
+          | "expired"
+      )
+    : undefined
 
-  if (filters?.status) query = query.eq("status", filters.status)
+  const [rows, countResult] = await Promise.all([
+    db
+      .select()
+      .from(pfQuotes)
+      .where(whereClause)
+      .orderBy(desc(pfQuotes.createdAt))
+      .limit(pageSize)
+      .offset(offset),
 
-  query = query.range(offset, offset + pageSize - 1)
-
-  const { data, count, error } = await query
-
-  if (error) throw new Error(error.message)
+    db.select({ count: sql<number>`count(*)::int` }).from(pfQuotes).where(whereClause),
+  ])
 
   return {
-    items: (data ?? []).map((row) => mapQuote(row as Record<string, unknown>)),
-    total: count ?? 0,
+    items: rows.map((row) => mapQuote(row as Record<string, unknown>)),
+    total: countResult[0]?.count ?? 0,
     page,
   }
 }
 
 export async function getQuote(id: string): Promise<AdminQuote | null> {
-  const supabase = createAdminClient()
+  const rows = await db
+    .select()
+    .from(pfQuotes)
+    .where(eq(pfQuotes.id, id))
+    .limit(1)
 
-  const { data, error } = await supabase.from("pf_quotes").select("*").eq("id", id).single()
+  if (!rows[0]) return null
 
-  if (error || !data) return null
-
-  return mapQuote(data as Record<string, unknown>)
+  return mapQuote(rows[0] as Record<string, unknown>)
 }
 
 export async function createQuote(data: {
@@ -252,27 +292,24 @@ export async function createQuote(data: {
   proposedPriceUsd?: number
   expiresAt?: string
 }): Promise<AdminQuote> {
-  const supabase = createAdminClient()
-
-  const { data: quote, error } = await supabase
-    .from("pf_quotes")
-    .insert({
-      client_email: data.clientEmail,
-      client_name: data.clientName,
-      client_company: data.clientCompany ?? null,
-      services_requested: data.servicesRequested,
-      status: "draft",
-      client_notes: data.clientNotes ?? null,
+  const inserted = await db
+    .insert(pfQuotes)
+    .values({
+      clientEmail: data.clientEmail,
+      clientName: data.clientName,
+      clientCompany: data.clientCompany ?? null,
+      servicesRequested: data.servicesRequested,
+      status: "pending",
+      clientNotes: data.clientNotes ?? null,
       scope: data.scope ?? null,
-      proposed_price_usd: data.proposedPriceUsd ?? null,
-      expires_at: data.expiresAt ?? null,
+      proposedPriceUsd: data.proposedPriceUsd != null ? String(data.proposedPriceUsd) : null,
+      expiresAt: data.expiresAt ? new Date(data.expiresAt) : null,
     })
-    .select()
-    .single()
+    .returning()
 
-  if (error || !quote) throw new Error(error?.message ?? "Failed to create quote")
+  if (!inserted[0]) throw new Error("Failed to create quote")
 
-  return mapQuote(quote as Record<string, unknown>)
+  return mapQuote(inserted[0] as Record<string, unknown>)
 }
 
 export async function updateQuote(
@@ -288,25 +325,28 @@ export async function updateQuote(
     expiresAt: string | null
   }>
 ): Promise<void> {
-  const supabase = createAdminClient()
-
   const update: Record<string, unknown> = {}
   if (data.status !== undefined) update.status = data.status
   if (data.scope !== undefined) update.scope = data.scope
-  if (data.proposedPriceUsd !== undefined) update.proposed_price_usd = data.proposedPriceUsd
-  if (data.proposalNotes !== undefined) update.proposal_notes = data.proposalNotes
-  if (data.paymentLink !== undefined) update.payment_link = data.paymentLink
-  if (data.proposalSentAt !== undefined) update.proposal_sent_at = data.proposalSentAt
-  if (data.acceptedAt !== undefined) update.accepted_at = data.acceptedAt
-  if (data.expiresAt !== undefined) update.expires_at = data.expiresAt
+  if (data.proposedPriceUsd !== undefined)
+    update.proposedPriceUsd = data.proposedPriceUsd != null ? String(data.proposedPriceUsd) : null
+  if (data.proposalNotes !== undefined) update.proposalNotes = data.proposalNotes
+  if (data.paymentLink !== undefined) update.paymentLink = data.paymentLink
+  if (data.proposalSentAt !== undefined)
+    update.proposalSentAt = data.proposalSentAt ? new Date(data.proposalSentAt) : null
+  if (data.acceptedAt !== undefined)
+    update.acceptedAt = data.acceptedAt ? new Date(data.acceptedAt) : null
+  if (data.expiresAt !== undefined)
+    update.expiresAt = data.expiresAt ? new Date(data.expiresAt) : null
 
   if (Object.keys(update).length === 0) return
 
-  update.updated_at = new Date().toISOString()
+  update.updatedAt = new Date()
 
-  const { error } = await supabase.from("pf_quotes").update(update).eq("id", id)
-
-  if (error) throw new Error(error.message)
+  await db
+    .update(pfQuotes)
+    .set(update as Partial<typeof pfQuotes.$inferInsert>)
+    .where(eq(pfQuotes.id, id))
 }
 
 export async function createQuotePaymentLink(params: {
@@ -334,14 +374,13 @@ export async function createQuotePaymentLink(params: {
   })
 
   // Persist the payment link URL to the quote
-  const supabase = createAdminClient()
-  await supabase
-    .from("pf_quotes")
-    .update({
-      payment_link: link.url,
-      updated_at: new Date().toISOString(),
+  await db
+    .update(pfQuotes)
+    .set({
+      paymentLink: link.url,
+      updatedAt: new Date(),
     })
-    .eq("id", params.quoteId)
+    .where(eq(pfQuotes.id, params.quoteId))
 
   return link.url
 }
@@ -353,43 +392,51 @@ export async function getClients(filters?: {
   page?: number
   pageSize?: number
 }): Promise<{ items: AdminClient[]; total: number; page: number }> {
-  const supabase = createAdminClient()
-
   const page = filters?.page ?? 1
   const pageSize = filters?.pageSize ?? 20
   const offset = (page - 1) * pageSize
 
-  let query = supabase
-    .from("pf_client_orgs")
-    .select("*", { count: "exact" })
-    .order("created_at", { ascending: false })
+  const whereClause = filters?.search
+    ? ilike(pfClientOrgs.name, `%${filters.search}%`)
+    : undefined
 
-  if (filters?.search) query = query.ilike("name", `%${filters.search}%`)
+  const [orgs, countResult] = await Promise.all([
+    db
+      .select()
+      .from(pfClientOrgs)
+      .where(whereClause)
+      .orderBy(desc(pfClientOrgs.createdAt))
+      .limit(pageSize)
+      .offset(offset),
 
-  query = query.range(offset, offset + pageSize - 1)
+    db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(pfClientOrgs)
+      .where(whereClause),
+  ])
 
-  const { data, count, error } = await query
+  if (orgs.length === 0) {
+    return { items: [], total: countResult[0]?.count ?? 0, page }
+  }
 
-  if (error) throw new Error(error.message)
-
-  const orgs = data ?? []
+  const orgIds = orgs.map((o) => o.id)
 
   // Fetch member counts and request stats in parallel
   const [memberCountResults, requestResults] = await Promise.all([
     Promise.allSettled(
-      orgs.map((org) =>
-        supabase
-          .from("pf_org_members")
-          .select("id", { count: "exact", head: true })
-          .eq("org_id", org.id as string)
+      orgIds.map((orgId) =>
+        db
+          .select({ count: sql<number>`count(*)::int` })
+          .from(pfOrgMembers)
+          .where(eq(pfOrgMembers.orgId, orgId))
       )
     ),
     Promise.allSettled(
-      orgs.map((org) =>
-        supabase
-          .from("pf_requests")
-          .select("id, status")
-          .eq("org_id", org.id as string)
+      orgIds.map((orgId) =>
+        db
+          .select({ id: pfRequests.id, status: pfRequests.status })
+          .from(pfRequests)
+          .where(eq(pfRequests.orgId, orgId))
       )
     ),
   ])
@@ -397,14 +444,14 @@ export async function getClients(filters?: {
   const items: AdminClient[] = orgs.map((org, i) => {
     const memberResult = memberCountResults[i]
     const memberCount =
-      memberResult.status === "fulfilled" ? (memberResult.value.count ?? 0) : 0
+      memberResult.status === "fulfilled" ? (memberResult.value[0]?.count ?? 0) : 0
 
     const requestResult = requestResults[i]
     let requestCount = 0
     let activeRequests = 0
 
-    if (requestResult.status === "fulfilled" && requestResult.value.data) {
-      const requests = requestResult.value.data as Array<{ status: string }>
+    if (requestResult.status === "fulfilled") {
+      const requests = requestResult.value
       requestCount = requests.length
       activeRequests = requests.filter((r) =>
         ["in_progress", "active", "review", "waiting_client", "waiting_third_party"].includes(
@@ -414,51 +461,52 @@ export async function getClients(filters?: {
     }
 
     return {
-      id: org.id as string,
-      name: org.name as string,
-      slug: org.slug as string,
-      billingEmail: (org.billing_email as string | null) ?? null,
-      createdAt: org.created_at as string,
+      id: org.id,
+      name: org.name,
+      slug: org.slug,
+      billingEmail: org.billingEmail ?? null,
+      createdAt: org.createdAt instanceof Date ? org.createdAt.toISOString() : String(org.createdAt),
       memberCount,
       requestCount,
       activeRequests,
     }
   })
 
-  return { items, total: count ?? 0, page }
+  return { items, total: countResult[0]?.count ?? 0, page }
 }
 
 export async function getClient(orgId: string): Promise<AdminClient | null> {
-  const supabase = createAdminClient()
+  const [orgRows, memberCountResult, requestRows] = await Promise.all([
+    db.select().from(pfClientOrgs).where(eq(pfClientOrgs.id, orgId)).limit(1),
 
-  const [orgResult, memberResult, requestResult] = await Promise.all([
-    supabase.from("pf_client_orgs").select("*").eq("id", orgId).single(),
+    db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(pfOrgMembers)
+      .where(eq(pfOrgMembers.orgId, orgId)),
 
-    supabase
-      .from("pf_org_members")
-      .select("id", { count: "exact", head: true })
-      .eq("org_id", orgId),
-
-    supabase.from("pf_requests").select("id, status").eq("org_id", orgId),
+    db
+      .select({ id: pfRequests.id, status: pfRequests.status })
+      .from(pfRequests)
+      .where(eq(pfRequests.orgId, orgId)),
   ])
 
-  if (orgResult.error || !orgResult.data) return null
+  if (!orgRows[0]) return null
 
-  const org = orgResult.data as Record<string, unknown>
-  const memberCount = memberResult.count ?? 0
+  const org = orgRows[0]
+  const memberCount = memberCountResult[0]?.count ?? 0
 
-  const requests = (requestResult.data ?? []) as Array<{ status: string }>
+  const requests = requestRows
   const requestCount = requests.length
   const activeRequests = requests.filter((r) =>
     ["in_progress", "active", "review", "waiting_client", "waiting_third_party"].includes(r.status)
   ).length
 
   return {
-    id: org.id as string,
-    name: org.name as string,
-    slug: org.slug as string,
-    billingEmail: (org.billing_email as string | null) ?? null,
-    createdAt: org.created_at as string,
+    id: org.id,
+    name: org.name,
+    slug: org.slug,
+    billingEmail: org.billingEmail ?? null,
+    createdAt: org.createdAt instanceof Date ? org.createdAt.toISOString() : String(org.createdAt),
     memberCount,
     requestCount,
     activeRequests,
@@ -466,122 +514,141 @@ export async function getClient(orgId: string): Promise<AdminClient | null> {
 }
 
 export async function getClientSubscriptions(orgId: string): Promise<BillingSubscription[]> {
-  const supabase = createAdminClient()
-
   // Get all order_ids linked to this org via requests
-  const { data: requestRows, error: requestError } = await supabase
-    .from("pf_requests")
-    .select("order_id")
-    .eq("org_id", orgId)
-    .not("order_id", "is", null)
-
-  if (requestError) throw new Error(requestError.message)
+  const requestRows = await db
+    .select({ orderId: pfRequests.orderId })
+    .from(pfRequests)
+    .where(and(eq(pfRequests.orgId, orgId), isNotNull(pfRequests.orderId)))
 
   const orderIds = [
-    ...new Set(
-      (requestRows ?? [])
-        .map((r) => r.order_id as string)
-        .filter(Boolean)
-    ),
+    ...new Set(requestRows.map((r) => r.orderId as string).filter(Boolean)),
   ]
 
   if (!orderIds.length) return []
 
-  const { data: subscriptions, error: subError } = await supabase
-    .from("pf_subscriptions")
-    .select("*, pf_orders ( id, status, pf_order_items ( service_name ) )")
-    .in("order_id", orderIds)
+  const subscriptions = await db
+    .select()
+    .from(pfSubscriptions)
+    .where(inArray(pfSubscriptions.orderId, orderIds))
 
-  if (subError) throw new Error(subError.message)
+  if (subscriptions.length === 0) return []
 
-  return (subscriptions ?? []).map((sub) => {
-    const rawOrder = (sub as Record<string, unknown>).pf_orders
-    const order = Array.isArray(rawOrder) ? rawOrder[0] : rawOrder
+  // Fetch order items for service names
+  const subOrderIds = [...new Set(subscriptions.map((s) => s.orderId))]
+  const orderItemRows = await db
+    .select({
+      orderId: pfOrderItems.orderId,
+      serviceName: pfOrderItems.serviceName,
+    })
+    .from(pfOrderItems)
+    .where(inArray(pfOrderItems.orderId, subOrderIds))
 
-    const rawItems = order
-      ? (order as Record<string, unknown>).pf_order_items
-      : null
-    const items = Array.isArray(rawItems) ? rawItems : rawItems ? [rawItems] : []
-    const serviceName =
-      items.length > 0
-        ? (items[0] as Record<string, unknown>).service_name as string
-        : "Subscription"
-
-    return {
-      id: (sub as Record<string, unknown>).id as string,
-      provider: (sub as Record<string, unknown>).provider as string,
-      providerSubscriptionId: (sub as Record<string, unknown>).provider_subscription_id as string,
-      status: (sub as Record<string, unknown>).status as string,
-      currentPeriodStart:
-        ((sub as Record<string, unknown>).current_period_start as string | null) ?? null,
-      currentPeriodEnd:
-        ((sub as Record<string, unknown>).current_period_end as string | null) ?? null,
-      cancelledAt: ((sub as Record<string, unknown>).cancelled_at as string | null) ?? null,
-      serviceName,
+  const serviceNameByOrderId = new Map<string, string>()
+  for (const item of orderItemRows) {
+    if (!serviceNameByOrderId.has(item.orderId)) {
+      serviceNameByOrderId.set(item.orderId, item.serviceName)
     }
-  })
+  }
+
+  return subscriptions.map((sub) => ({
+    id: sub.id,
+    provider: sub.provider,
+    providerSubscriptionId: sub.providerSubscriptionId,
+    status: sub.status,
+    currentPeriodStart: sub.currentPeriodStart
+      ? (sub.currentPeriodStart instanceof Date
+          ? sub.currentPeriodStart.toISOString()
+          : String(sub.currentPeriodStart))
+      : null,
+    currentPeriodEnd: sub.currentPeriodEnd
+      ? (sub.currentPeriodEnd instanceof Date
+          ? sub.currentPeriodEnd.toISOString()
+          : String(sub.currentPeriodEnd))
+      : null,
+    cancelledAt: sub.cancelledAt
+      ? (sub.cancelledAt instanceof Date
+          ? sub.cancelledAt.toISOString()
+          : String(sub.cancelledAt))
+      : null,
+    serviceName: serviceNameByOrderId.get(sub.orderId) ?? "Subscription",
+  }))
 }
 
 // ── Mappers ───────────────────────────────────────────────────────────────────
 
-function mapService(row: Record<string, unknown>): AdminService {
-  const rawPrices = row.pf_service_prices
-  const prices = Array.isArray(rawPrices) ? rawPrices : rawPrices ? [rawPrices] : []
+function mapService(
+  row: Record<string, unknown>,
+  prices: Record<string, unknown>[]
+): AdminService {
+  const toIso = (v: unknown): string =>
+    v instanceof Date ? v.toISOString() : String(v)
 
   return {
     id: row.id as string,
     slug: row.slug as string,
     category: row.category as string,
-    nameEn: row.name_en as string,
-    nameEs: row.name_es as string,
-    descriptionEn: row.description_en as string,
-    descriptionEs: row.description_es as string,
-    isPublished: row.is_published as boolean,
-    sortOrder: (row.sort_order as number) ?? 0,
-    prices: (prices as Record<string, unknown>[]).map(mapServicePrice),
-    createdAt: row.created_at as string,
-    updatedAt: row.updated_at as string,
+    nameEn: (row.nameEn ?? row.name_en) as string,
+    nameEs: (row.nameEs ?? row.name_es) as string,
+    descriptionEn: (row.descriptionEn ?? row.description_en) as string,
+    descriptionEs: (row.descriptionEs ?? row.description_es) as string,
+    isPublished: (row.isPublished ?? row.is_published) as boolean,
+    sortOrder: ((row.sortOrder ?? row.sort_order) as number) ?? 0,
+    prices: prices.map(mapServicePrice),
+    createdAt: toIso(row.createdAt ?? row.created_at),
+    updatedAt: toIso(row.updatedAt ?? row.updated_at),
   }
 }
 
 function mapServicePrice(row: Record<string, unknown>): AdminServicePrice {
   return {
     id: row.id as string,
-    serviceId: row.service_id as string,
-    nameEn: row.name_en as string,
-    nameEs: row.name_es as string,
-    priceType: row.price_type as string,
-    basePriceUsd: (row.base_price_usd as number | null) ?? null,
-    billingPeriodVal: (row.billing_period_val as string | null) ?? null,
-    stripePriceId: (row.stripe_price_id as string | null) ?? null,
-    paypalPlanId: (row.paypal_plan_id as string | null) ?? null,
-    isActive: row.is_active as boolean,
-    sortOrder: (row.sort_order as number) ?? 0,
+    serviceId: (row.serviceId ?? row.service_id) as string,
+    nameEn: (row.nameEn ?? row.name_en) as string,
+    nameEs: (row.nameEs ?? row.name_es) as string,
+    priceType: (row.priceType ?? row.price_type) as string,
+    basePriceUsd:
+      (row.basePriceUsd ?? row.base_price_usd) != null
+        ? Number(row.basePriceUsd ?? row.base_price_usd)
+        : null,
+    billingPeriodVal: ((row.billingPeriodVal ?? row.billing_period_val) as string | null) ?? null,
+    stripePriceId: ((row.stripePriceId ?? row.stripe_price_id) as string | null) ?? null,
+    paypalPlanId: ((row.paypalPlanId ?? row.paypal_plan_id) as string | null) ?? null,
+    isActive: (row.isActive ?? row.is_active) as boolean,
+    sortOrder: ((row.sortOrder ?? row.sort_order) as number) ?? 0,
   }
 }
 
 function mapQuote(row: Record<string, unknown>): AdminQuote {
+  const toIso = (v: unknown): string | null => {
+    if (v == null) return null
+    return v instanceof Date ? v.toISOString() : String(v)
+  }
+
   return {
     id: row.id as string,
-    orderId: (row.order_id as string | null) ?? null,
-    clientEmail: row.client_email as string,
-    clientName: row.client_name as string,
-    clientCompany: (row.client_company as string | null) ?? null,
-    servicesRequested: (row.services_requested as Array<{
-      serviceId: string
-      priceId?: string
-      notes?: string
-    }>) ?? [],
+    orderId: ((row.orderId ?? row.order_id) as string | null) ?? null,
+    clientEmail: (row.clientEmail ?? row.client_email) as string,
+    clientName: (row.clientName ?? row.client_name) as string,
+    clientCompany: ((row.clientCompany ?? row.client_company) as string | null) ?? null,
+    servicesRequested:
+      ((row.servicesRequested ?? row.services_requested) as Array<{
+        serviceId: string
+        priceId?: string
+        notes?: string
+      }>) ?? [],
     status: row.status as string,
-    clientNotes: (row.client_notes as string | null) ?? null,
+    clientNotes: ((row.clientNotes ?? row.client_notes) as string | null) ?? null,
     scope: (row.scope as string | null) ?? null,
-    proposedPriceUsd: (row.proposed_price_usd as number | null) ?? null,
-    proposalNotes: (row.proposal_notes as string | null) ?? null,
-    paymentLink: (row.payment_link as string | null) ?? null,
-    proposalSentAt: (row.proposal_sent_at as string | null) ?? null,
-    acceptedAt: (row.accepted_at as string | null) ?? null,
-    expiresAt: (row.expires_at as string | null) ?? null,
-    createdAt: row.created_at as string,
-    updatedAt: row.updated_at as string,
+    proposedPriceUsd:
+      (row.proposedPriceUsd ?? row.proposed_price_usd) != null
+        ? Number(row.proposedPriceUsd ?? row.proposed_price_usd)
+        : null,
+    proposalNotes: ((row.proposalNotes ?? row.proposal_notes) as string | null) ?? null,
+    paymentLink: ((row.paymentLink ?? row.payment_link) as string | null) ?? null,
+    proposalSentAt: toIso(row.proposalSentAt ?? row.proposal_sent_at),
+    acceptedAt: toIso(row.acceptedAt ?? row.accepted_at),
+    expiresAt: toIso(row.expiresAt ?? row.expires_at),
+    createdAt: toIso(row.createdAt ?? row.created_at) ?? "",
+    updatedAt: toIso(row.updatedAt ?? row.updated_at) ?? "",
   }
 }

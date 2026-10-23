@@ -1,9 +1,9 @@
 "use client"
 
 import Link         from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
+import { signOut }  from "next-auth/react"
 import { Logo }     from "@/components/ui/logo"
-import { createClient } from "@/lib/supabase/client"
 import { cn }       from "@/lib/utils"
 import {
   LayoutDashboard, Building2, GitBranch, CheckSquare,
@@ -28,13 +28,9 @@ interface AppSidebarProps {
 
 export function AppSidebar({ userEmail }: AppSidebarProps) {
   const pathname = usePathname()
-  const router   = useRouter()
-  const supabase = createClient()
 
-  async function handleSignOut() {
-    await supabase.auth.signOut()
-    router.push("/login")
-    router.refresh()
+  function handleSignOut() {
+    signOut({ callbackUrl: "/" })
   }
 
   function isActive(href: string) {

@@ -1,35 +1,46 @@
-import { createClient }   from "@/lib/supabase/server"
-import { PriorityBadge }  from "@/components/ui/badge"
+import { db }              from "@/lib/db"
+import { tasks, companies } from "@/lib/db/schema"
+import { isNull, eq, asc }  from "drizzle-orm"
+import { PriorityBadge }    from "@/components/ui/badge"
 import { formatRelativeDate, isOverdue, isDueToday } from "@/lib/utils"
-import { TaskActions }    from "@/components/crm/task-actions"
+import { TaskActions }      from "@/components/crm/task-actions"
 
 export default async function TasksPage() {
-  const supabase = await createClient()
+  const rows = await db
+    .select({
+      id:          tasks.id,
+      title:       tasks.title,
+      description: tasks.description,
+      dueAt:       tasks.dueAt,
+      priority:    tasks.priority,
+      companyId:   tasks.companyId,
+      companyName: companies.name,
+    })
+    .from(tasks)
+    .leftJoin(companies, eq(tasks.companyId, companies.id))
+    .where(isNull(tasks.completedAt))
+    .orderBy(asc(tasks.dueAt))
 
-  const { data: tasks } = await supabase
-    .from("tasks")
-    .select(`
-      id, title, description, due_at, completed_at, priority, created_at,
-      company:companies(id, name)
-    `)
-    .is("completed_at", null)
-    .order("due_at", { ascending: true, nullsFirst: false })
-
-  // Normalize: Supabase returns joined company as array, flatten to single object
-  type RawTask = NonNullable<typeof tasks>[number]
   type NormalizedTask = {
-    id: string; title: string; description: string | null
-    due_at: string | null; priority: string
+    id: string
+    title: string
+    description: string | null
+    due_at: string | null
+    priority: string
     company: { id: string; name: string } | null
   }
 
-  function normalize(t: RawTask): NormalizedTask {
-    const rawCo = t.company
-    const co = Array.isArray(rawCo) ? (rawCo[0] ?? null) : rawCo
-    return { ...t, company: co as { id: string; name: string } | null }
-  }
+  const normalized: NormalizedTask[] = rows.map((t) => ({
+    id:          t.id,
+    title:       t.title,
+    description: t.description ?? null,
+    due_at:      t.dueAt?.toISOString() ?? null,
+    priority:    t.priority,
+    company:     t.companyId && t.companyName
+      ? { id: t.companyId, name: t.companyName }
+      : null,
+  }))
 
-  const normalized = (tasks ?? []).map(normalize)
   const overdue  = normalized.filter((t) => t.due_at && isOverdue(t.due_at))
   const today    = normalized.filter((t) => t.due_at && isDueToday(t.due_at))
   const upcoming = normalized.filter((t) => !t.due_at || (!isOverdue(t.due_at) && !isDueToday(t.due_at)))
@@ -38,10 +49,10 @@ export default async function TasksPage() {
     <div className="p-6 lg:p-8 max-w-3xl mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-900">Tasks</h1>
-        <p className="text-sm text-slate-500 mt-1">{tasks?.length ?? 0} open tasks</p>
+        <p className="text-sm text-slate-500 mt-1">{normalized.length} open tasks</p>
       </div>
 
-      {tasks?.length === 0 ? (
+      {normalized.length === 0 ? (
         <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
           <p className="text-slate-500">No open tasks. You&apos;re all caught up.</p>
         </div>

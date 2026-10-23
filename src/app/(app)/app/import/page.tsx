@@ -2,8 +2,8 @@
 
 import { useState, useRef }   from "react"
 import { useRouter }           from "next/navigation"
+import { useSession }          from "next-auth/react"
 import Papa                    from "papaparse"
-import { createClient }        from "@/lib/supabase/client"
 import { normalizeDomain, normalizeName, normalizeEmail } from "@/lib/normalize"
 import { Upload, Download, AlertTriangle, CheckCircle, Loader2, X } from "lucide-react"
 
@@ -38,6 +38,7 @@ interface PreviewRow {
 
 export default function ImportPage() {
   const router   = useRouter()
+  const { data: session } = useSession()
   const fileRef  = useRef<HTMLInputElement>(null)
   const [preview, setPreview]   = useState<PreviewRow[]>([])
   const [loading, setLoading]   = useState(false)
@@ -52,9 +53,8 @@ export default function ImportPage() {
         const rows = results.data
 
         // Load existing domains for duplicate detection
-        const supabase = createClient()
-        const { data: companies } = await supabase.from("companies").select("normalized_domain")
-        const domainSet = new Set(companies?.map((c) => c.normalized_domain).filter(Boolean) as string[])
+        const res = await fetch("/api/crm/companies/domains")
+        const domainSet = new Set<string>(res.ok ? await res.json() : [])
 
         const enriched: PreviewRow[] = rows.map((row) => {
           const domain = normalizeDomain(row.website ?? "")
@@ -90,14 +90,9 @@ export default function ImportPage() {
   }
 
   async function doImport() {
+    if (!session?.user) return
     setLoading(true)
     setErrors([])
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { setLoading(false); return }
-
-    const { data: membership } = await supabase.from("organization_members").select("organization_id").eq("user_id", user.id).single()
-    if (!membership) { setLoading(false); return }
 
     let count  = 0
     const errs: string[] = []
@@ -105,46 +100,28 @@ export default function ImportPage() {
     for (const row of preview.filter((r) => !r._duplicate)) {
       if (!row.company_name) { errs.push(`Row missing company_name`); continue }
 
-      const { data: company, error: cErr } = await supabase.from("companies").insert({
-        organization_id:  membership.organization_id,
-        name:             row.company_name,
-        normalized_name:  normalizeName(row.company_name),
-        website:          row.website ?? null,
-        normalized_domain: normalizeDomain(row.website ?? ""),
-        city:             row.city ?? null,
-        state:            row.state ?? null,
-        industry:         row.industry ?? null,
-        phone:            row.phone ?? null,
-        source:           row.source ?? null,
-        notes_summary:    row.notes ?? null,
-        lifecycle_status: "prospect",
-      }).select("id").single()
-
-      if (cErr || !company) { errs.push(`${row.company_name}: ${cErr?.message}`); continue }
-
-      // Contact
-      if (row.contact_name || row.email) {
-        const [firstName, ...lastParts] = (row.contact_name ?? "").split(" ")
-        await supabase.from("contacts").insert({
-          organization_id: membership.organization_id,
-          company_id:      company.id,
-          first_name:      firstName || row.email?.split("@")[0] || "Unknown",
-          last_name:       lastParts.join(" ") || null,
-          email:           row.email ?? null,
-          normalized_email: normalizeEmail(row.email ?? ""),
-          phone:           row.phone ?? null,
-          is_primary:      true,
-        })
-      }
-
-      // Opportunity
-      await supabase.from("opportunities").insert({
-        organization_id: membership.organization_id,
-        company_id:      company.id,
-        name:            `${row.company_name} — Growth`,
-        stage:           "NEW",
-        source:          row.source ?? null,
+      const res = await fetch("/api/crm/import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          company_name:     row.company_name,
+          website:          row.website ?? null,
+          city:             row.city ?? null,
+          state:            row.state ?? null,
+          industry:         row.industry ?? null,
+          contact_name:     row.contact_name ?? null,
+          email:            row.email ?? null,
+          phone:            row.phone ?? null,
+          source:           row.source ?? null,
+          notes:            row.notes ?? null,
+        }),
       })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        errs.push(`${row.company_name}: ${data?.error ?? "Unknown error"}`)
+        continue
+      }
 
       count++
     }

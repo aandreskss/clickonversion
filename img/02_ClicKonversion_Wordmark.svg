@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="180" viewBox="0 0 920 180">
+<defs>
+  <style>
+    .black{fill:#0B0D0F}
+    .dark{fill:#14171A}
+    .orange{fill:#FF5A1F}
+    .white{fill:#FFFFFF}
+    .muted{fill:#5D6368}
+    .title{font-family:Inter,Arial,sans-serif;font-weight:800}
+    .body{font-family:Inter,Arial,sans-serif;font-weight:400}
+    .caps{font-family:Inter,Arial,sans-serif;font-weight:700;letter-spacing:3px}
+  </style>
+</defs>
+<rect width="920" height="180" fill="none"/>
+<text x="0" y="78" font-size="92" class="title black">Clic</text>
+<text x="202" y="78" font-size="92" class="title orange">Konversion</text>
+<text x="2" y="145" font-size="28" class="caps black">STRATEGY</text>
+<circle cx="202" cy="137" r="4" class="orange"/>
+<text x="224" y="145" font-size="28" class="caps black">TECHNOLOGY</text>
+<circle cx="498" cy="137" r="4" class="orange"/>
+<text x="520" y="145" font-size="28" class="caps black">GROWTH</text>
+<circle cx="666" cy="137" r="4" class="orange"/>
+</svg>

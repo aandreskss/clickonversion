@@ -1,9 +1,9 @@
 "use client"
 
-import { useRouter, usePathname } from "next/navigation"
+import { usePathname } from "next/navigation"
 import Link from "next/link"
+import { signOut } from "next-auth/react"
 import { LogOut, ChevronRight } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
 import type { AdminSession, AdminRole } from "@/types/admin"
 
 interface AdminHeaderProps {
@@ -99,13 +99,10 @@ function Breadcrumbs({ pathname }: { pathname: string }) {
 }
 
 export function AdminHeader({ session }: AdminHeaderProps) {
-  const router = useRouter()
   const pathname = usePathname()
 
-  async function handleLogout() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push("/login")
+  function handleLogout() {
+    signOut({ callbackUrl: "/login" })
   }
 
   return (

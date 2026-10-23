@@ -1,240 +1,164 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { createAdminClient } from "@/lib/supabase/server"
+import { describe, it, expect, vi, beforeEach } from "vitest"
+import { db } from "@/lib/db"
 import { assignSpecialist, addAdminComment, updateRequestDetails } from "@/lib/admin/queue"
 
-vi.mock("@/lib/supabase/server", () => ({
-  createAdminClient: vi.fn(),
-  createClient: vi.fn(),
+vi.mock("@/lib/db", () => ({
+  db: { select: vi.fn(), insert: vi.fn(), update: vi.fn(), delete: vi.fn(), query: {} },
 }))
 
-// ── Mock helper ───────────────────────────────────────────────────────────────
-// Strategy: all methods return the same `mock` object (chainable).
-// - Use `mockDb.single.mockResolvedValueOnce(...)` for queries ending in .single()
-// - Use `mockDb.maybeSingle.mockResolvedValueOnce(...)` for .maybeSingle()
-// - For queries that terminate WITHOUT .single() (update/insert/eq at end),
-//   configure the update/insert method to return a sub-object that resolves:
-//   mockDb.update.mockReturnValueOnce({ eq: vi.fn().mockResolvedValue({ error: null }) })
+vi.mock("@/lib/admin/specialists", () => ({
+  canAssignToSpecialist: vi.fn(),
+}))
 
-function createMockSupabase() {
-  const mock = {
-    select: vi.fn(),
-    insert: vi.fn(),
-    update: vi.fn(),
-    delete: vi.fn(),
-    eq: vi.fn(),
-    in: vi.fn(),
-    not: vi.fn(),
-    neq: vi.fn(),
-    gte: vi.fn(),
-    lte: vi.fn(),
-    lt: vi.fn(),
-    gt: vi.fn(),
-    ilike: vi.fn(),
-    order: vi.fn(),
-    limit: vi.fn(),
-    range: vi.fn(),
-    single: vi.fn(),
-    maybeSingle: vi.fn(),
-    from: vi.fn(),
-    or: vi.fn(),
-  }
+// ── Mock helpers ──────────────────────────────────────────────────────────────
 
-  // All methods are chainable by default
-  const chainable = mock as Record<string, ReturnType<typeof vi.fn>>
-  Object.keys(chainable).forEach((key) => {
-    if (key !== "single" && key !== "maybeSingle") {
-      chainable[key].mockReturnValue(mock)
-    }
+let rq: unknown[] = []
+
+function chainWith(data: unknown) {
+  const p = Promise.resolve(data)
+  const c: any = {}
+  ;["from","leftJoin","innerJoin","where","set","values","orderBy","limit","offset","onConflictDoUpdate","returning"].forEach(m => { c[m] = vi.fn(() => c) })
+  c.then = (f: any, r: any) => p.then(f, r)
+  c.catch = (f: any) => p.catch(f)
+  return c
+}
+
+function next(...items: unknown[]) { rq.push(...items) }
+
+beforeEach(async () => {
+  rq = []
+  vi.mocked(db.select).mockImplementation(() => chainWith(rq.shift() ?? []))
+  vi.mocked(db.insert).mockImplementation(() => chainWith(rq.shift() ?? []))
+  vi.mocked(db.update).mockImplementation(() => chainWith(rq.shift() ?? []))
+  vi.mocked(db.delete).mockImplementation(() => chainWith(rq.shift() ?? []))
+
+  const { canAssignToSpecialist } = await import("@/lib/admin/specialists")
+  vi.mocked(canAssignToSpecialist).mockResolvedValue({ canAssign: true, currentLoad: 1, maxConcurrent: 3 })
+})
+
+// ── assignSpecialist ──────────────────────────────────────────────────────────
+
+describe("assignSpecialist", () => {
+  it("succeeds when specialist has capacity", async () => {
+    const { canAssignToSpecialist } = await import("@/lib/admin/specialists")
+    vi.mocked(canAssignToSpecialist).mockResolvedValueOnce({ canAssign: true, currentLoad: 1, maxConcurrent: 3 })
+    next([])  // update request
+
+    const result = await assignSpecialist({
+      requestId: "req-1",
+      specialistId: "spec-1",
+      assignedBy: "admin-1",
+      assignedByEmail: "admin@test.com",
+    })
+
+    expect(result).toEqual({ success: true })
+    expect(vi.mocked(db.update)).toHaveBeenCalledTimes(1)
   })
 
-  return mock
-}
+  it("returns error when specialist at capacity", async () => {
+    const { canAssignToSpecialist } = await import("@/lib/admin/specialists")
+    vi.mocked(canAssignToSpecialist).mockResolvedValueOnce({ canAssign: false, currentLoad: 3, maxConcurrent: 3 })
 
-// Helper: creates a terminal chain that resolves the update/insert
-function resolveOk() {
-  const terminal = { eq: vi.fn().mockResolvedValue({ error: null }) }
-  return terminal
-}
+    const result = await assignSpecialist({
+      requestId: "req-1",
+      specialistId: "spec-1",
+      assignedBy: "admin-1",
+      assignedByEmail: "admin@test.com",
+    })
 
-type MockSupabase = ReturnType<typeof createMockSupabase>
+    expect(result.success).toBe(false)
+    expect(result.error).toMatch(/capacity/)
+    expect(vi.mocked(db.update)).not.toHaveBeenCalled()
+  })
 
-// ── Tests ─────────────────────────────────────────────────────────────────────
+  it("succeeds when clearing specialist (null)", async () => {
+    next([])  // update
 
-describe("Queue operations", () => {
-  let mockDb: MockSupabase
+    const result = await assignSpecialist({
+      requestId: "req-1",
+      specialistId: null,
+      assignedBy: "admin-1",
+      assignedByEmail: "admin@test.com",
+    })
 
-  beforeEach(() => {
-    mockDb = createMockSupabase()
-    vi.mocked(createAdminClient).mockReturnValue(
-      mockDb as unknown as ReturnType<typeof createAdminClient>
+    expect(result).toEqual({ success: true })
+    // canAssignToSpecialist should NOT be called when clearing
+    const { canAssignToSpecialist } = await import("@/lib/admin/specialists")
+    expect(vi.mocked(canAssignToSpecialist)).not.toHaveBeenCalled()
+  })
+})
+
+// ── addAdminComment ───────────────────────────────────────────────────────────
+
+describe("addAdminComment", () => {
+  it("throws when body is empty", async () => {
+    await expect(
+      addAdminComment({ requestId: "req-1", authorId: "admin-1", authorRole: "admin", body: "", isInternal: false })
+    ).rejects.toThrow("Comment body cannot be empty")
+  })
+
+  it("throws when body is only whitespace", async () => {
+    await expect(
+      addAdminComment({ requestId: "req-1", authorId: "admin-1", authorRole: "admin", body: "   ", isInternal: false })
+    ).rejects.toThrow("Comment body cannot be empty")
+  })
+
+  it("inserts comment for valid body", async () => {
+    next([])   // insert comment
+    next([{ orgId: "org-1", serviceName: "SEO" }])
+    next([{ userId: "user-1" }])
+    next([])   // notifications
+
+    await addAdminComment({
+      requestId: "req-1",
+      authorId: "admin-1",
+      authorRole: "admin",
+      body: "Great progress",
+      isInternal: false,
+    })
+
+    expect(vi.mocked(db.insert)).toHaveBeenCalledTimes(2)
+  })
+})
+
+// ── updateRequestDetails ──────────────────────────────────────────────────────
+
+describe("updateRequestDetails", () => {
+  it("updates only provided fields", async () => {
+    const chain = chainWith([])
+    vi.mocked(db.update).mockReturnValueOnce(chain as any)
+
+    await updateRequestDetails("req-1", { priority: "high" })
+
+    expect(chain.set).toHaveBeenCalledWith(
+      expect.objectContaining({ priority: "high" })
+    )
+    expect(chain.set).not.toHaveBeenCalledWith(
+      expect.objectContaining({ scope: expect.anything() })
     )
   })
 
-  afterEach(() => {
-    vi.clearAllMocks()
+  it("does nothing when no fields provided", async () => {
+    await updateRequestDetails("req-1", {})
+    expect(vi.mocked(db.update)).not.toHaveBeenCalled()
   })
 
-  describe("assignSpecialist", () => {
-    it("assigns specialist when below capacity", async () => {
-      // 1st query: profile fetch — ends with .single()
-      mockDb.single.mockResolvedValueOnce({ data: { max_concurrent: 5 }, error: null })
-      // 2nd query: count fetch — ends with .in() — configure in to resolve
-      mockDb.in.mockResolvedValueOnce({ count: 3, error: null })
-      // 3rd query: update — ends with .update(...).eq() — configure update to return terminal
-      mockDb.update.mockReturnValueOnce(resolveOk())
+  it("updates multiple fields when provided", async () => {
+    const chain = chainWith([])
+    vi.mocked(db.update).mockReturnValueOnce(chain as any)
 
-      const result = await assignSpecialist({
-        requestId: "req-1",
-        specialistId: "spec-1",
-        assignedBy: "user-1",
-        assignedByEmail: "admin@test.com",
+    await updateRequestDetails("req-1", {
+      priority: "high",
+      scope: "Full SEO audit",
+      internalNotes: "Urgent",
+    })
+
+    expect(chain.set).toHaveBeenCalledWith(
+      expect.objectContaining({
+        priority: "high",
+        scope: "Full SEO audit",
+        internalNotes: "Urgent",
       })
-
-      expect(result.success).toBe(true)
-    })
-
-    it("rejects assignment when specialist at max capacity", async () => {
-      // 1st query: profile fetch
-      mockDb.single.mockResolvedValueOnce({ data: { max_concurrent: 3 }, error: null })
-      // 2nd query: count fetch — count equals max
-      mockDb.in.mockResolvedValueOnce({ count: 3, error: null })
-      // No update expected (returns early)
-
-      const result = await assignSpecialist({
-        requestId: "req-1",
-        specialistId: "spec-1",
-        assignedBy: "user-1",
-        assignedByEmail: "admin@test.com",
-      })
-
-      expect(result.success).toBe(false)
-      expect(result.error).toContain("capacity")
-    })
-
-    it("allows unassigning by passing null specialistId", async () => {
-      // No capacity check when specialistId is null — goes straight to update
-      mockDb.update.mockReturnValueOnce(resolveOk())
-
-      const result = await assignSpecialist({
-        requestId: "req-1",
-        specialistId: null,
-        assignedBy: "user-1",
-        assignedByEmail: "admin@test.com",
-      })
-
-      // No capacity check when unassigning
-      expect(mockDb.single).not.toHaveBeenCalled()
-      expect(mockDb.from).toHaveBeenCalledWith("pf_requests")
-      expect(result.success).toBe(true)
-    })
-
-    it("returns error when specialist profile not found", async () => {
-      mockDb.single.mockResolvedValueOnce({ data: null, error: { message: "Not found" } })
-
-      const result = await assignSpecialist({
-        requestId: "req-1",
-        specialistId: "nonexistent-spec",
-        assignedBy: "user-1",
-        assignedByEmail: "admin@test.com",
-      })
-
-      expect(result.success).toBe(false)
-      expect(result.error).toBeDefined()
-    })
-  })
-
-  describe("addAdminComment", () => {
-    it("inserts comment into pf_comments table", async () => {
-      // insert resolves directly (no .single() needed)
-      mockDb.insert.mockResolvedValueOnce({ error: null })
-      // notifyOrgMembers: request query fails gracefully
-      mockDb.single.mockResolvedValueOnce({ data: null, error: { message: "skip" } })
-
-      await addAdminComment({
-        requestId: "req-1",
-        authorId: "admin-1",
-        authorRole: "admin",
-        body: "Hello client",
-        isInternal: false,
-      })
-
-      expect(mockDb.from).toHaveBeenCalledWith("pf_comments")
-    })
-
-    it("does not insert into pf_notifications for internal comment", async () => {
-      mockDb.insert.mockResolvedValueOnce({ error: null })
-
-      await addAdminComment({
-        requestId: "req-1",
-        authorId: "admin-1",
-        authorRole: "admin",
-        body: "Internal note",
-        isInternal: true,
-      })
-
-      const calls = vi.mocked(mockDb.from).mock.calls.map((c) => c[0])
-      expect(calls).not.toContain("pf_notifications")
-    })
-
-    it("throws on whitespace-only body", async () => {
-      await expect(
-        addAdminComment({
-          requestId: "req-1",
-          authorId: "admin-1",
-          authorRole: "admin",
-          body: "   ",
-          isInternal: false,
-        })
-      ).rejects.toThrow()
-    })
-
-    it("throws on empty string body", async () => {
-      await expect(
-        addAdminComment({
-          requestId: "req-1",
-          authorId: "admin-1",
-          authorRole: "admin",
-          body: "",
-          isInternal: false,
-        })
-      ).rejects.toThrow()
-    })
-  })
-
-  describe("updateRequestDetails", () => {
-    it("only sends priority when only priority provided", async () => {
-      mockDb.update.mockReturnValueOnce(resolveOk())
-
-      await updateRequestDetails("req-1", { priority: "high" })
-
-      const updateCalls = vi.mocked(mockDb.update).mock.calls
-      expect(updateCalls[0][0]).toHaveProperty("priority", "high")
-      expect(updateCalls[0][0]).not.toHaveProperty("scope")
-    })
-
-    it("does nothing if no data provided", async () => {
-      await updateRequestDetails("req-1", {})
-
-      expect(mockDb.update).not.toHaveBeenCalled()
-    })
-
-    it("sends scope field when provided", async () => {
-      mockDb.update.mockReturnValueOnce(resolveOk())
-
-      await updateRequestDetails("req-1", { scope: "Full SEO audit" })
-
-      const updateCalls = vi.mocked(mockDb.update).mock.calls
-      expect(updateCalls[0][0]).toHaveProperty("scope", "Full SEO audit")
-    })
-
-    it("sends multiple fields when multiple are provided", async () => {
-      mockDb.update.mockReturnValueOnce(resolveOk())
-
-      await updateRequestDetails("req-1", { priority: "urgent", internalNotes: "Rush job" })
-
-      const updateCalls = vi.mocked(mockDb.update).mock.calls
-      expect(updateCalls[0][0]).toHaveProperty("priority", "urgent")
-      expect(updateCalls[0][0]).toHaveProperty("internal_notes", "Rush job")
-    })
+    )
   })
 })

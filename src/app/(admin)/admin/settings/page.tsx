@@ -51,17 +51,23 @@ const ENV_CHECKS: EnvCheck[] = [
     required: false,
   },
   {
-    key: "SUPABASE_SERVICE_ROLE_KEY",
-    label: "Supabase Service Role",
-    set: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    key: "DATABASE_URL",
+    label: "Neon Database URL",
+    set: !!process.env.DATABASE_URL,
+    required: true,
+  },
+  {
+    key: "AUTH_SECRET",
+    label: "Auth.js Secret",
+    set: !!process.env.AUTH_SECRET,
     required: true,
   },
 ]
 
 const STACK_INFO = [
   { label: "Framework", value: "Next.js 16 (App Router)" },
-  { label: "Base de datos", value: "Supabase (PostgreSQL)" },
-  { label: "Auth", value: "Supabase Auth + @supabase/ssr" },
+  { label: "Base de datos", value: "Neon (PostgreSQL) + Drizzle ORM" },
+  { label: "Auth", value: "Auth.js v5 (next-auth@beta)" },
   { label: "Pagos", value: "Stripe + PayPal" },
   { label: "Email", value: "Resend" },
   { label: "Reservas", value: "Cal.com" },

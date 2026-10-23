@@ -1,5 +1,7 @@
 import { getClient } from "@/lib/admin/commercial"
-import { createAdminClient } from "@/lib/supabase/server"
+import { db } from "@/lib/db"
+import { pfOrgMembers, pfPlatformUsers, pfRequests, pfSpecialistProfiles, users } from "@/lib/db/schema"
+import { eq, asc, desc } from "drizzle-orm"
 import { notFound } from "next/navigation"
 import { StatusBadge } from "@/components/admin/status-badge"
 import Link from "next/link"
@@ -23,63 +25,63 @@ interface OrgRequest {
 }
 
 async function getOrgMembers(orgId: string): Promise<OrgMember[]> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from("pf_org_members")
-    .select("*, pf_platform_users ( id, email, full_name, avatar_url )")
-    .eq("org_id", orgId)
-    .order("joined_at", { ascending: true })
+  const rows = await db
+    .select({
+      id: pfOrgMembers.id,
+      orgId: pfOrgMembers.orgId,
+      userId: pfOrgMembers.userId,
+      role: pfOrgMembers.role,
+      invitedBy: pfOrgMembers.invitedBy,
+      joinedAt: pfOrgMembers.joinedAt,
+      userEmail: users.email,
+      userDisplayName: pfPlatformUsers.displayName,
+    })
+    .from(pfOrgMembers)
+    .leftJoin(pfPlatformUsers, eq(pfOrgMembers.userId, pfPlatformUsers.id))
+    .leftJoin(users, eq(pfPlatformUsers.id, users.id))
+    .where(eq(pfOrgMembers.orgId, orgId))
+    .orderBy(asc(pfOrgMembers.joinedAt))
 
-  if (error || !data) return []
-
-  return (data as Record<string, unknown>[]).map((row) => {
-    const rawUser = row.pf_platform_users
-    const user = Array.isArray(rawUser) ? rawUser[0] : rawUser
-    return {
-      id: row.id as string,
-      orgId: row.org_id as string,
-      userId: row.user_id as string,
-      role: row.role as OrgMember["role"],
-      invitedBy: (row.invited_by as string | null) ?? null,
-      joinedAt: row.joined_at as string,
-      user: user
-        ? {
-            id: (user as Record<string, unknown>).id as string,
-            email: (user as Record<string, unknown>).email as string,
-            fullName:
-              ((user as Record<string, unknown>).full_name as string | null) ?? null,
-            avatarUrl:
-              ((user as Record<string, unknown>).avatar_url as string | null) ?? null,
-          }
-        : undefined,
-    }
-  })
+  return rows.map((row) => ({
+    id: row.id,
+    orgId: row.orgId,
+    userId: row.userId,
+    role: row.role as OrgMember["role"],
+    invitedBy: row.invitedBy ?? null,
+    joinedAt: row.joinedAt?.toISOString() ?? "",
+    user: row.userEmail
+      ? {
+          id: row.userId,
+          email: row.userEmail,
+          fullName: row.userDisplayName ?? null,
+          avatarUrl: null,
+        }
+      : undefined,
+  }))
 }
 
 async function getOrgRequests(orgId: string): Promise<OrgRequest[]> {
-  const supabase = createAdminClient()
-  const { data } = await supabase
-    .from("pf_requests")
-    .select(
-      "id, service_name, status, created_at, pf_specialist_profiles ( display_name )"
-    )
-    .eq("org_id", orgId)
-    .order("created_at", { ascending: false })
+  const rows = await db
+    .select({
+      id: pfRequests.id,
+      serviceName: pfRequests.serviceName,
+      status: pfRequests.status,
+      createdAt: pfRequests.createdAt,
+      specialistName: pfSpecialistProfiles.displayName,
+    })
+    .from(pfRequests)
+    .leftJoin(pfSpecialistProfiles, eq(pfRequests.assignedSpecialistId, pfSpecialistProfiles.id))
+    .where(eq(pfRequests.orgId, orgId))
+    .orderBy(desc(pfRequests.createdAt))
     .limit(30)
 
-  return (data ?? []).map((row: Record<string, unknown>) => {
-    const rawSpec = row.pf_specialist_profiles
-    const spec = Array.isArray(rawSpec) ? rawSpec[0] : rawSpec
-    return {
-      id: row.id as string,
-      serviceName: row.service_name as string,
-      status: row.status as AdminRequestStatus,
-      createdAt: row.created_at as string,
-      specialistName: spec
-        ? ((spec as Record<string, unknown>).display_name as string)
-        : null,
-    }
-  })
+  return rows.map((row) => ({
+    id: row.id,
+    serviceName: row.serviceName,
+    status: row.status as AdminRequestStatus,
+    createdAt: row.createdAt?.toISOString() ?? "",
+    specialistName: row.specialistName ?? null,
+  }))
 }
 
 const ACTIVE_STATUSES: AdminRequestStatus[] = [

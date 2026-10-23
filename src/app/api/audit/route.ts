@@ -2,7 +2,15 @@ import { NextRequest, NextResponse } from "next/server"
 import { auditFormSchema }          from "@/lib/validations"
 import { normalizeDomain, normalizeEmail } from "@/lib/normalize"
 import { getServerEnv }             from "@/lib/env"
-import { createAdminClient }        from "@/lib/supabase/server"
+import { db }                       from "@/lib/db"
+import {
+  auditRequests,
+  companies,
+  contacts,
+  opportunities,
+  activities,
+} from "@/lib/db/schema"
+import { eq } from "drizzle-orm"
 
 // Simple in-memory rate limiter (resets per serverless invocation)
 const submissionCount = new Map<string, { count: number; window: number }>()
@@ -76,41 +84,40 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // Persist to Supabase
+  // Persist to DB
   try {
-    const supabase = createAdminClient()
-
     const normalizedDomain = normalizeDomain(data.website_url)
     const normalizedEmail  = normalizeEmail(data.email)
 
     // 1. Insert audit request first (always succeeds — public form)
-    const { data: auditRecord, error: auditError } = await supabase
-      .from("audit_requests")
-      .insert({
-        first_name:          data.first_name,
-        work_email:          data.email,
-        company_name:        data.company_name,
-        website_url:         data.website_url,
-        main_service:        data.main_service,
-        city:                data.city,
-        primary_goal:        data.primary_goal,
-        phone:               data.phone ?? null,
-        budget_range:        data.budget_range ?? null,
-        current_challenge:   data.current_challenge ?? null,
-        utm_source:          data.utm_source ?? null,
-        utm_medium:          data.utm_medium ?? null,
-        utm_campaign:        data.utm_campaign ?? null,
-        utm_content:         data.utm_content ?? null,
-        utm_term:            data.utm_term ?? null,
-        landing_page:        data.landing_page ?? null,
-        referrer:            data.referrer ?? null,
-        honeypot_triggered:  false,
-      })
-      .select("id")
-      .single()
-
-    if (auditError) {
-      console.error("[audit] insert error:", auditError.message)
+    let auditRecordId: string | null = null
+    try {
+      const [auditRecord] = await db
+        .insert(auditRequests)
+        .values({
+          firstName:        data.first_name,
+          workEmail:        data.email,
+          companyName:      data.company_name,
+          websiteUrl:       data.website_url,
+          mainService:      data.main_service,
+          city:             data.city,
+          primaryGoal:      data.primary_goal,
+          phone:            data.phone ?? null,
+          budgetRange:      data.budget_range ?? null,
+          currentChallenge: data.current_challenge ?? null,
+          utmSource:        data.utm_source ?? null,
+          utmMedium:        data.utm_medium ?? null,
+          utmCampaign:      data.utm_campaign ?? null,
+          utmContent:       data.utm_content ?? null,
+          utmTerm:          data.utm_term ?? null,
+          landingPage:      data.landing_page ?? null,
+          referrer:         data.referrer ?? null,
+          honeypotTriggered: false,
+        })
+        .returning({ id: auditRequests.id })
+      auditRecordId = auditRecord.id
+    } catch (insertErr) {
+      console.error("[audit] insert error:", insertErr)
       // Still return success — persistence will be retried via monitoring
       return NextResponse.json({ ok: true })
     }
@@ -118,39 +125,37 @@ export async function POST(request: NextRequest) {
     // 2. Try to create CRM records (best-effort — audit_request is already saved)
     try {
       const { orgId } = getServerEnv()
-      if (!orgId) throw new Error("SUPABASE_ORG_ID not configured")
+      if (!orgId) throw new Error("ORG_ID not configured")
       console.log("[audit] orgId:", orgId)
 
       // Find or create company based on normalized domain
       let companyId: string | null = null
 
       if (normalizedDomain) {
-        const { data: existing } = await supabase
-          .from("companies")
-          .select("id")
-          .eq("normalized_domain", normalizedDomain)
-          .maybeSingle()
+        const [existing] = await db
+          .select({ id: companies.id })
+          .from(companies)
+          .where(eq(companies.normalizedDomain, normalizedDomain))
+          .limit(1)
 
         if (existing) {
           companyId = existing.id
           console.log("[audit] existing company:", companyId)
         } else {
-          const { data: newCompany, error: companyError } = await supabase
-            .from("companies")
-            .insert({
-              organization_id:  orgId,
+          const [newCompany] = await db
+            .insert(companies)
+            .values({
+              organizationId:   orgId,
               name:             data.company_name,
-              normalized_name:  data.company_name.toLowerCase().trim(),
+              normalizedName:   data.company_name.toLowerCase().trim(),
               website:          data.website_url,
-              normalized_domain: normalizedDomain,
+              normalizedDomain,
               city:             data.city,
               industry:         data.main_service,
               source:           "growth_audit",
-              lifecycle_status: "prospect",
+              lifecycleStatus:  "prospect",
             })
-            .select("id")
-            .single()
-          if (companyError) console.error("[audit] company insert error:", companyError.message)
+            .returning({ id: companies.id })
           if (newCompany) companyId = newCompany.id
           console.log("[audit] new companyId:", companyId)
         }
@@ -161,20 +166,18 @@ export async function POST(request: NextRequest) {
       // Create contact
       let contactId: string | null = null
       if (companyId) {
-        const { data: contact, error: contactError } = await supabase
-          .from("contacts")
-          .insert({
-            organization_id: orgId,
-            company_id:      companyId,
-            first_name:      data.first_name,
+        const [contact] = await db
+          .insert(contacts)
+          .values({
+            organizationId:  orgId,
+            companyId,
+            firstName:       data.first_name,
             email:           data.email,
-            normalized_email: normalizedEmail,
+            normalizedEmail,
             phone:           data.phone ?? null,
-            is_primary:      true,
+            isPrimary:       true,
           })
-          .select("id")
-          .single()
-        if (contactError) console.error("[audit] contact insert error:", contactError.message)
+          .returning({ id: contacts.id })
         if (contact) contactId = contact.id
         console.log("[audit] contactId:", contactId)
       }
@@ -182,42 +185,40 @@ export async function POST(request: NextRequest) {
       // Create opportunity
       let opportunityId: string | null = null
       if (companyId) {
-        const { data: opp, error: oppError } = await supabase
-          .from("opportunities")
-          .insert({
-            organization_id:    orgId,
-            company_id:         companyId,
-            primary_contact_id: contactId,
-            name:               `${data.company_name} — Growth Audit`,
-            service:            data.main_service,
-            stage:              "NEW",
-            source:             "growth_audit",
+        const [opp] = await db
+          .insert(opportunities)
+          .values({
+            organizationId:   orgId,
+            companyId,
+            primaryContactId: contactId,
+            name:             `${data.company_name} — Growth Audit`,
+            service:          data.main_service,
+            stage:            "NEW",
+            source:           "growth_audit",
           })
-          .select("id")
-          .single()
-        if (oppError) console.error("[audit] opportunity insert error:", oppError.message)
+          .returning({ id: opportunities.id })
         if (opp) opportunityId = opp.id
         console.log("[audit] opportunityId:", opportunityId)
       }
 
       // Update audit request with CRM links
-      if (companyId || contactId || opportunityId) {
-        await supabase
-          .from("audit_requests")
-          .update({ company_id: companyId, contact_id: contactId, opportunity_id: opportunityId })
-          .eq("id", auditRecord.id)
+      if (auditRecordId && (companyId || contactId || opportunityId)) {
+        await db
+          .update(auditRequests)
+          .set({ companyId, contactId, opportunityId })
+          .where(eq(auditRequests.id, auditRecordId))
       }
 
       // Log activity
       if (companyId) {
-        await supabase.from("activities").insert({
-          organization_id: orgId,
-          company_id:      companyId,
-          contact_id:      contactId,
-          opportunity_id:  opportunityId,
-          activity_type:   "audit",
-          title:           "Growth Audit Requested",
-          body:            `Goal: ${data.primary_goal}${data.current_challenge ? `\n\nChallenge: ${data.current_challenge}` : ""}`,
+        await db.insert(activities).values({
+          organizationId: orgId,
+          companyId,
+          contactId,
+          opportunityId,
+          activityType:   "audit",
+          title:          "Growth Audit Requested",
+          body:           `Goal: ${data.primary_goal}${data.current_challenge ? `\n\nChallenge: ${data.current_challenge}` : ""}`,
         })
       }
     } catch (crmErr) {

@@ -29,9 +29,25 @@ export function getServerEnv() {
     resendApiKey:      optionalEnv("RESEND_API_KEY"),
     emailFrom:         optionalEnv("EMAIL_FROM", "ClicKonversion <notifications@clickonversion.com>"),
     notificationEmail: optionalEnv("NOTIFICATION_EMAIL", "arnaldo@clickonversion.com"),
-    orgId:             optionalEnv("SUPABASE_ORG_ID"),
+    orgId:             optionalEnv("ORG_ID") ?? optionalEnv("SUPABASE_ORG_ID"),
+    // Payment providers (server-only)
+    stripeSecretKey:         optionalEnv("STRIPE_SECRET_KEY"),
+    stripeWebhookSecret:     optionalEnv("STRIPE_WEBHOOK_SECRET"),
+    paypalClientId:          optionalEnv("PAYPAL_CLIENT_ID"),
+    paypalClientSecret:      optionalEnv("PAYPAL_CLIENT_SECRET"),
+    paypalWebhookId:         optionalEnv("PAYPAL_WEBHOOK_ID"),
+    paypalMode:              (optionalEnv("PAYPAL_MODE", "sandbox") as "sandbox" | "live"),
+    // Cal.com integration (server-only)
+    calApiKey:               optionalEnv("CAL_API_KEY"),
+    calcomWebhookSecret:     optionalEnv("CALCOM_WEBHOOK_SECRET"),
   }
 }
+
+/** Cal.com username — used to build embed links. Safe for browser. */
+export const CAL_USERNAME = optionalEnv("NEXT_PUBLIC_CAL_USERNAME", "")
+
+/** Stripe publishable key — safe for browser */
+export const STRIPE_PK = optionalEnv("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY")
 
 export function warnMissingIntegrations() {
   const warnings: string[] = []

@@ -1,4 +1,6 @@
-import { createClient }    from "@/lib/supabase/server"
+import { db }             from "@/lib/db"
+import { companies, opportunities, tasks } from "@/lib/db/schema"
+import { eq, ne, inArray, not, or, and, isNull, lt, asc, sql } from "drizzle-orm"
 import { formatCurrency }  from "@/lib/utils"
 import { StageBadge }      from "@/components/ui/badge"
 import { GoalProgress }    from "@/components/crm/goal-progress"
@@ -8,48 +10,80 @@ import type { Opportunity } from "@/types/database"
 const MRR_GOAL = 2000
 
 export default async function DashboardPage() {
-  const supabase = await createClient()
+  const today = new Date()
 
   const [
-    { data: wonOpps },
-    { data: allOpps },
-    { data: companies },
-    { count: newCount },
-    { count: contactedCount },
-    { count: callCount },
-    { count: proposalCount },
+    wonOpps,
+    allOpps,
+    allCompanies,
+    [{ count: newCount }],
+    [{ count: contactedCount }],
+    [{ count: callCount }],
+    [{ count: proposalCount }],
+    overdueOpps,
+    overdueTasks,
   ] = await Promise.all([
-    supabase.from("opportunities").select("mrr_value, won_at").eq("stage", "WON"),
-    supabase.from("opportunities").select("id, stage, company_id, name, next_action, next_action_at, estimated_value, mrr_value").neq("stage", "LOST"),
-    supabase.from("companies").select("id, name, lifecycle_status").limit(1000),
-    supabase.from("opportunities").select("id", { count: "exact", head: true }).eq("stage", "NEW"),
-    supabase.from("opportunities").select("id", { count: "exact", head: true }).in("stage", ["CONTACTED","REPLIED"]),
-    supabase.from("opportunities").select("id", { count: "exact", head: true }).eq("stage", "CALL_BOOKED"),
-    supabase.from("opportunities").select("id", { count: "exact", head: true }).eq("stage", "PROPOSAL"),
+    db.select({ mrrValue: opportunities.mrrValue, wonAt: opportunities.wonAt })
+      .from(opportunities)
+      .where(eq(opportunities.stage, "WON")),
+
+    db.select({
+      id: opportunities.id,
+      stage: opportunities.stage,
+      companyId: opportunities.companyId,
+      name: opportunities.name,
+      nextAction: opportunities.nextAction,
+      nextActionAt: opportunities.nextActionAt,
+      estimatedValue: opportunities.estimatedValue,
+      mrrValue: opportunities.mrrValue,
+    })
+      .from(opportunities)
+      .where(ne(opportunities.stage, "LOST")),
+
+    db.select({ id: companies.id, name: companies.name, lifecycleStatus: companies.lifecycleStatus })
+      .from(companies)
+      .limit(1000),
+
+    db.select({ count: sql<number>`count(*)::int` }).from(opportunities).where(eq(opportunities.stage, "NEW")),
+    db.select({ count: sql<number>`count(*)::int` }).from(opportunities).where(inArray(opportunities.stage, ["CONTACTED", "REPLIED"])),
+    db.select({ count: sql<number>`count(*)::int` }).from(opportunities).where(eq(opportunities.stage, "CALL_BOOKED")),
+    db.select({ count: sql<number>`count(*)::int` }).from(opportunities).where(eq(opportunities.stage, "PROPOSAL")),
+
+    db.select({
+      id: opportunities.id,
+      name: opportunities.name,
+      next_action: opportunities.nextAction,
+      next_action_at: sql<string | null>`${opportunities.nextActionAt}::text`,
+      stage: opportunities.stage,
+      company_id: opportunities.companyId,
+    })
+      .from(opportunities)
+      .where(
+        and(
+          not(inArray(opportunities.stage, ["WON", "LOST"])),
+          or(lt(opportunities.nextActionAt, today), isNull(opportunities.nextAction)),
+        )
+      )
+      .orderBy(asc(opportunities.nextActionAt))
+      .limit(10),
+
+    db.select({
+      id: tasks.id,
+      title: tasks.title,
+      due_at: sql<string | null>`${tasks.dueAt}::text`,
+      priority: tasks.priority,
+      company_id: tasks.companyId,
+    })
+      .from(tasks)
+      .where(and(isNull(tasks.completedAt), lt(tasks.dueAt, today)))
+      .orderBy(asc(tasks.dueAt))
+      .limit(10),
   ])
 
-  const currentMRR = wonOpps?.reduce((sum, o) => sum + (o.mrr_value ?? 0), 0) ?? 0
-  const pipelineValue = allOpps?.reduce((sum, o) => sum + (o.estimated_value ?? 0), 0) ?? 0
-  const wonCount = wonOpps?.length ?? 0
-  const totalProspects = companies?.length ?? 0
-
-  const today    = new Date()
-
-  const { data: overdueOpps } = await supabase
-    .from("opportunities")
-    .select("id, name, next_action, next_action_at, stage, company_id")
-    .not("stage", "in", '("WON","LOST")')
-    .or(`next_action_at.lt.${today.toISOString()},next_action.is.null`)
-    .order("next_action_at", { ascending: true })
-    .limit(10)
-
-  const { data: overdueTasks } = await supabase
-    .from("tasks")
-    .select("id, title, due_at, priority, company_id")
-    .is("completed_at", null)
-    .lt("due_at", today.toISOString())
-    .order("due_at", { ascending: true })
-    .limit(10)
+  const currentMRR = wonOpps.reduce((sum, o) => sum + Number(o.mrrValue ?? 0), 0)
+  const pipelineValue = allOpps.reduce((sum, o) => sum + Number(o.estimatedValue ?? 0), 0)
+  const wonCount = wonOpps.length
+  const totalProspects = allCompanies.length
 
   const KPI_CARDS = [
     { label: "Total Prospects",  value: String(totalProspects),         sub: "companies" },
@@ -62,7 +96,7 @@ export default async function DashboardPage() {
     { label: "Current MRR",      value: formatCurrency(currentMRR),      sub: "won" },
   ]
 
-  const recentOpps = (allOpps ?? []).slice(0, 5)
+  const recentOpps = allOpps.slice(0, 5)
 
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
@@ -94,8 +128,8 @@ export default async function DashboardPage() {
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Today */}
         <TodayView
-          overdueOpps={overdueOpps ?? []}
-          overdueTasks={overdueTasks ?? []}
+          overdueOpps={overdueOpps}
+          overdueTasks={overdueTasks}
         />
 
         {/* Active pipeline */}
@@ -110,12 +144,12 @@ export default async function DashboardPage() {
                   <div>
                     <p className="text-sm font-medium text-slate-900 truncate max-w-[180px]">{opp.name}</p>
                     <p className="text-xs text-slate-500">
-                      {opp.next_action ?? <span className="text-amber-500 font-medium">No next action</span>}
+                      {opp.nextAction ?? <span className="text-amber-500 font-medium">No next action</span>}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0 ml-2">
-                    {opp.estimated_value ? (
-                      <span className="text-xs font-semibold text-slate-700">{formatCurrency(opp.estimated_value)}</span>
+                    {opp.estimatedValue ? (
+                      <span className="text-xs font-semibold text-slate-700">{formatCurrency(Number(opp.estimatedValue))}</span>
                     ) : null}
                     <StageBadge stage={opp.stage as Opportunity["stage"]} />
                   </div>

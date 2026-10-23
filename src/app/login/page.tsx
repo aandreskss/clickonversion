@@ -1,34 +1,33 @@
 "use client"
 
-import { useState, Suspense }  from "react"
+import { useState, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Logo }                from "@/components/ui/logo"
-import { Loader2 }             from "lucide-react"
-import { createClient }        from "@/lib/supabase/client"
+import { Logo } from "@/components/ui/logo"
+import { Loader2 } from "lucide-react"
+import { signIn } from "next-auth/react"
 
 function LoginForm() {
-  const router       = useRouter()
+  const router = useRouter()
   const searchParams = useSearchParams()
-  const nextPath     = searchParams.get("next") ?? "/app"
+  const nextPath = searchParams.get("next") ?? "/app"
 
-  const [email,    setEmail]    = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [error,    setError]    = useState<string | null>(null)
-  const [loading,  setLoading]  = useState(false)
-
-  const supabase = createClient()
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
     setLoading(true)
 
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email:    email.trim().toLowerCase(),
+    const result = await signIn("credentials", {
+      email: email.trim().toLowerCase(),
       password,
+      redirect: false,
     })
 
-    if (authError) {
+    if (result?.error) {
       setError("Invalid email or password.")
       setLoading(false)
       return
@@ -48,33 +47,21 @@ function LoginForm() {
   return (
     <form onSubmit={handleLogin} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="email" className="text-sm font-medium text-[#B0B8C1]">
-          Email
-        </label>
+        <label htmlFor="email" className="text-sm font-medium text-[#B0B8C1]">Email</label>
         <input
-          id="email"
-          type="email"
-          className={inputClass}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="hello@clicKonversion.com"
-          autoComplete="email"
-          required
+          id="email" type="email" className={inputClass}
+          value={email} onChange={(e) => setEmail(e.target.value)}
+          placeholder="hello@clickonversion.com"
+          autoComplete="email" required
         />
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="password" className="text-sm font-medium text-[#B0B8C1]">
-          Password
-        </label>
+        <label htmlFor="password" className="text-sm font-medium text-[#B0B8C1]">Password</label>
         <input
-          id="password"
-          type="password"
-          className={inputClass}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          id="password" type="password" className={inputClass}
+          value={password} onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••"
-          autoComplete="current-password"
-          required
+          autoComplete="current-password" required
         />
       </div>
 
@@ -85,8 +72,7 @@ function LoginForm() {
       )}
 
       <button
-        type="submit"
-        disabled={loading}
+        type="submit" disabled={loading}
         className="mt-2 w-full inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#FF5A1F] text-white font-semibold rounded-lg hover:bg-[#E54A15] transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {loading ? <Loader2 size={18} className="animate-spin" /> : null}
@@ -103,16 +89,13 @@ export default function LoginPage() {
         <div className="flex justify-center mb-10">
           <Logo size="md" />
         </div>
-
         <div className="rounded-2xl border border-white/8 bg-[#14171A] p-8">
           <h1 className="text-xl font-bold text-white mb-1">Sign in</h1>
           <p className="text-sm text-[#546072] mb-6">Internal CRM access</p>
-
           <Suspense fallback={<div className="h-40 animate-pulse rounded-lg bg-white/5" />}>
             <LoginForm />
           </Suspense>
         </div>
-
         <p className="text-center text-xs text-[#3D4A5C] mt-6">
           Account access is by invitation only.
         </p>

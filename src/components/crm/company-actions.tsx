@@ -2,31 +2,32 @@
 
 import { useState }     from "react"
 import { useRouter }    from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
 import { MoreHorizontal, CheckCircle, XCircle, Edit2, Loader2 } from "lucide-react"
-import type { Company } from "@/types/database"
 
 interface Props {
-  company:       Company
+  companyId:      string
   opportunityId?: string
 }
 
-export function CompanyActions({ company, opportunityId }: Props) {
+export function CompanyActions({ companyId, opportunityId }: Props) {
   const [open,    setOpen]    = useState(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   async function markWon() {
     if (!opportunityId) return
     setLoading(true)
-    await supabase.from("opportunities").update({ stage: "WON", won_at: new Date().toISOString() }).eq("id", opportunityId)
-    await supabase.from("companies").update({ lifecycle_status: "active_client" }).eq("id", company.id)
-    await supabase.from("activities").insert({
-      company_id:    company.id,
-      opportunity_id: opportunityId,
-      activity_type: "system",
-      title:         "Opportunity marked Won",
+    await fetch("/api/crm/opportunities/stage", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        opportunity_id: opportunityId,
+        company_id:     companyId,
+        stage:          "WON",
+        won_at:         new Date().toISOString(),
+        lifecycle_status: "active_client",
+        activity_title: "Opportunity marked Won",
+      }),
     })
     setLoading(false)
     setOpen(false)
@@ -36,12 +37,16 @@ export function CompanyActions({ company, opportunityId }: Props) {
   async function markLost() {
     if (!opportunityId) return
     setLoading(true)
-    await supabase.from("opportunities").update({ stage: "LOST", lost_at: new Date().toISOString() }).eq("id", opportunityId)
-    await supabase.from("activities").insert({
-      company_id:    company.id,
-      opportunity_id: opportunityId,
-      activity_type: "system",
-      title:         "Opportunity marked Lost",
+    await fetch("/api/crm/opportunities/stage", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        opportunity_id: opportunityId,
+        company_id:     companyId,
+        stage:          "LOST",
+        lost_at:        new Date().toISOString(),
+        activity_title: "Opportunity marked Lost",
+      }),
     })
     setLoading(false)
     setOpen(false)

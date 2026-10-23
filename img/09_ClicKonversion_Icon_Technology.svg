@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="140" viewBox="0 0 460 140">
+<defs>
+  <style>
+    .black{fill:#0B0D0F}
+    .dark{fill:#14171A}
+    .orange{fill:#FF5A1F}
+    .white{fill:#FFFFFF}
+    .muted{fill:#5D6368}
+    .title{font-family:Inter,Arial,sans-serif;font-weight:800}
+    .body{font-family:Inter,Arial,sans-serif;font-weight:400}
+    .caps{font-family:Inter,Arial,sans-serif;font-weight:700;letter-spacing:3px}
+  </style>
+</defs>
+<rect width="460" height="140" fill="none"/>
+<g transform="translate(0,4)">
+  <circle cx="42" cy="50" r="8" class="orange"/>
+  <circle cx="42" cy="10" r="7" class="black"/>
+  <circle cx="42" cy="90" r="7" class="black"/>
+  <circle cx="2" cy="50" r="7" class="black"/>
+  <circle cx="82" cy="50" r="7" class="black"/>
+  <circle cx="14" cy="18" r="7" class="orange"/>
+  <circle cx="70" cy="18" r="7" class="orange"/>
+  <circle cx="14" cy="82" r="7" class="orange"/>
+  <circle cx="70" cy="82" r="7" class="orange"/>
+  <g stroke="#0B0D0F" stroke-width="5">
+    <line x1="42" y1="18" x2="42" y2="42"/>
+    <line x1="42" y1="58" x2="42" y2="82"/>
+    <line x1="10" y1="50" x2="34" y2="50"/>
+    <line x1="50" y1="50" x2="74" y2="50"/>
+    <line x1="19" y1="23" x2="36" y2="42"/>
+    <line x1="65" y1="23" x2="48" y2="42"/>
+    <line x1="19" y1="77" x2="36" y2="58"/>
+    <line x1="65" y1="77" x2="48" y2="58"/>
+  </g>
+</g>
+<text x="110" y="34" font-size="22" class="title black">TECHNOLOGY</text>
+<text x="110" y="68" font-size="17" class="body black">Intelligent systems</text>
+<text x="110" y="92" font-size="17" class="body black">that perform.</text>
+</svg>

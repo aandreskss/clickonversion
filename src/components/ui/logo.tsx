@@ -29,10 +29,10 @@ export function Logo({
         ? "/logos/02_logo_compacto_claro.png"
         : "/logos/06_logo_compacto_oscuro.png"
     }
-    // horizontal (default)
+    // horizontal (default) — transparent SVG versions
     return variant === "light"
-      ? "/logos/01_logo_horizontal_claro.png"
-      : "/logos/05_logo_horizontal_oscuro.png"
+      ? "/logos/logo-transparent-light.svg"
+      : "/logos/logo-transparent-dark.svg"
   })()
 
   const aspectRatios: Record<string, number> = {

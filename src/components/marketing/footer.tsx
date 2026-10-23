@@ -93,15 +93,6 @@ export function Footer() {
               </a>
             </div>
 
-            <div className="flex items-center gap-2 mt-6">
-              <span className="text-xs font-semibold text-[#78E6B3] bg-[#78E6B3]/10 px-2.5 py-1 rounded-md">EN</span>
-              <Link
-                href="/es"
-                className="text-xs font-medium text-[#4E5D6E] hover:text-[#A8B3C0] px-2.5 py-1 rounded-md transition-colors"
-              >
-                ES
-              </Link>
-            </div>
           </div>
 
           {/* Service columns */}

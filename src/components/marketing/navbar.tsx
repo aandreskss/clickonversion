@@ -140,13 +140,6 @@ export function Navbar() {
         {/* Desktop CTAs */}
         <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
           <Link
-            href="/es"
-            className="text-xs font-medium text-[#4E5D6E] hover:text-[#A8B3C0] transition-colors px-2"
-            aria-label="Español"
-          >
-            ES
-          </Link>
-          <Link
             href="/audit"
             className="px-5 py-2.5 bg-[#FF5A1F] text-white text-sm font-semibold rounded-xl hover:bg-[#E54A15] transition-colors duration-150 active:scale-[0.98]"
           >
@@ -234,13 +227,6 @@ export function Navbar() {
               className="px-5 py-3.5 bg-[#FF5A1F] text-white text-sm font-semibold rounded-xl hover:bg-[#E54A15] transition-colors text-center"
             >
               Get a Free Audit
-            </Link>
-            <Link
-              href="/es"
-              onClick={() => setOpen(false)}
-              className="py-2 text-xs font-medium text-[#4E5D6E] hover:text-[#A8B3C0] text-center transition-colors"
-            >
-              Ver en Español
             </Link>
           </div>
         </nav>

@@ -29,16 +29,56 @@ export async function proxy(request: NextRequest) {
 
   const path = request.nextUrl.pathname
 
-  // Protect all /app routes
+  // ── Admin panel — /admin ──────────────────────────────────────────────────
+  // Role check (admin/staff only) is done in the layout via getAdminSession()
+
+  if (path.startsWith("/admin") && !user) {
+    const loginUrl = new URL("/login", request.url)
+    loginUrl.searchParams.set("next", path)
+    return NextResponse.redirect(loginUrl)
+  }
+
+  // ── Admin CRM — /app ─────────────────────────────────────────────────────
+
   if (path.startsWith("/app") && !user) {
     const loginUrl = new URL("/login", request.url)
     loginUrl.searchParams.set("next", path)
     return NextResponse.redirect(loginUrl)
   }
 
-  // Redirect authenticated users away from /login
   if (path === "/login" && user) {
     return NextResponse.redirect(new URL("/app", request.url))
+  }
+
+  // ── Client portal — /portal ──────────────────────────────────────────────
+
+  // Auth pages that do NOT require a session
+  const portalAuthPaths = [
+    "/portal/login",
+    "/portal/register",
+    "/portal/forgot-password",
+    "/portal/reset-password",
+    "/portal/verify-email",
+  ]
+  const isPortalAuthPage   = portalAuthPaths.some((p) => path.startsWith(p))
+  const isPortalAcceptPage = path.startsWith("/portal/accept-invite")
+
+  // Protected portal routes
+  if (
+    path.startsWith("/portal") &&
+    !isPortalAuthPage &&
+    !isPortalAcceptPage &&
+    !user
+  ) {
+    const loginUrl = new URL("/portal/login", request.url)
+    loginUrl.searchParams.set("next", path)
+    return NextResponse.redirect(loginUrl)
+  }
+
+  // Redirect authenticated users away from portal auth pages
+  if (isPortalAuthPage && user) {
+    const next = request.nextUrl.searchParams.get("next") ?? "/portal/dashboard"
+    return NextResponse.redirect(new URL(next, request.url))
   }
 
   return supabaseResponse
@@ -46,7 +86,9 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/admin/:path*",
     "/app/:path*",
+    "/portal/:path*",
     "/login",
     "/((?!_next/static|_next/image|favicon|api/audit|sitemap|robots).*)",
   ],

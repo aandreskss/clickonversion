@@ -6,14 +6,154 @@
 Build a growth operating system to help ClicKonversion acquire its first 3 clients and reach $2,000 MRR.
 
 ## Current Phase
-**Phase 0 — Marketing site live. CRM lead capture wired, pending final verification.**
+**Phase 7 — Apps, QA Integral y Lanzamiento**
 
-The marketing site is live on www.clickonversion.com (Cloudflare DNS + Vercel). `audit_requests` saves correctly. CRM creation (companies/contacts/opportunities) uses `SUPABASE_ORG_ID` env var — needs verification after Vercel redeploy. Current priorities:
-1. Confirm CRM lead flow end-to-end (audit form → companies → pipeline)
-2. Support outbound sales to cleaning companies and other service verticals
-3. Acquire first 1–3 paying clients
+Fase 6 (Panel Administrativo) completada. Build limpio. 179 tests pasan. El panel admin está funcional con dashboard de métricas, cola de trabajo, gestión de especialistas, comercial, pagos unificados y analítica interna.
 
-SEO content expansion (blog, city pages, industry clusters) starts **after the first paying client is acquired**.
+---
+
+## Build Roadmap
+
+| Fase | Nombre | Estado | Descripción |
+|------|--------|--------|-------------|
+| 0 | Marketing + CRM | ✅ Completa | Site live, CRM lead capture, audit form, pipeline |
+| 2 | Homepage | ✅ Completa | 10 secciones, design system, logos, servicios EN+ES |
+| 3 | Catálogo + Pagos | ✅ Completa | Stripe + PayPal, carrito, checkout, webhooks idempotentes |
+| 4 | Reservas y Onboarding | ✅ Completa | Cal.com, booking rights, formularios pre-brief, email bilingüe |
+| 5 | Portal de Clientes | ✅ Completa | Auth, dashboard, requests, documentos, billing, settings, RLS |
+| 6 | Panel Administrativo | ✅ Completa | Dashboard métricas, cola de trabajo, especialistas, comercial, pagos, analítica |
+| 7 | Apps, QA y Lanzamiento | ⏳ Pendiente | QA integral, apps móviles/PWA, hardening, launch checklist |
+
+---
+
+## Fase 5 — Portal de Clientes ✅
+
+Completada. Build limpio. 81/81 tests.
+
+**Migraciones:** `010_platform_users.sql`, `011_client_orgs.sql`, `012_requests.sql`, `013_documents.sql`, `014_notifications.sql`, `015_rls_portal.sql`
+
+**Rutas portal:** `/portal/login`, `/portal/register`, `/portal/forgot-password`, `/portal/reset-password`, `/portal/accept-invite/[token]`, `/portal/dashboard`, `/portal/requests`, `/portal/requests/[id]`, `/portal/documents`, `/portal/billing`, `/portal/settings`
+
+**API portal:** `/api/portal/notifications`, `/api/portal/requests`, `/api/portal/requests/[id]`, `/api/portal/requests/[id]/comments`, `/api/portal/documents`, `/api/portal/documents/[id]`, `/api/portal/org`, `/api/portal/org/members`, `/api/portal/org/invite`, `/api/portal/org/accept-invite`
+
+**Seguridad:** RLS en 7 tablas `pf_*`. Org isolation doble capa (app + DB). `internal_notes` e `is_internal` nunca expuestos al cliente. Signed URLs server-side (1hr TTL). 404 indistinguible para not-found vs wrong-org. Storage path opaco: `{orgId}/{uuid}/{filename}`.
+
+**Lib:** `src/lib/portal/auth.ts`, `requests.ts`, `documents.ts`, `notifications.ts`
+
+---
+
+## Fase 6 — Panel Administrativo y Operaciones ✅
+
+Completada. Build limpio. 179/179 tests (81 prev + 98 nuevos).
+
+**Migraciones:** `016_admin_roles.sql`, `017_requests_enhancements.sql`, `018_payment_reconciliation.sql`, `019_analytics_internal.sql`, `020_catalog_price_history.sql`, `021_rls_admin.sql`
+
+**Roles internos (`admin_role` enum en `pf_platform_users`):** `owner | admin | manager | specialist`
+- Owner y Admin: acceso total
+- Manager: dashboard, cola, view comercial, analytics (sin write)
+- Specialist: solo sus solicitudes asignadas
+
+**Permisos:** Sistema de permissions granular en `src/lib/admin/permissions.ts`. Verificación en cada API route con `requirePermission(session, permission)`.
+
+**Rutas admin (`/admin/**`, protegidas por proxy.ts + layout):**
+- `/admin` — Dashboard con métricas (ingresos cobrados, recurrentes, pedidos, solicitudes, asesorías)
+- `/admin/queue` — Cola de trabajo con filtros, pills de estado, paginación
+- `/admin/queue/[id]` — Detalle: tabs Actividad/Hitos/Historial, panel de detalles, cambio de estado
+- `/admin/team` — Equipo interno con carga de especialistas
+- `/admin/team/[id]` — Perfil especialista: capacidad, servicios, requests asignadas
+- `/admin/commercial` — Hub: catálogo, cotizaciones, clientes
+- `/admin/commercial/catalog` — CRUD servicios con toggle publicación
+- `/admin/commercial/quotes` — Cotizaciones con drawer de propuesta y link Stripe
+- `/admin/commercial/clients` — Organizaciones clientes con búsqueda
+- `/admin/commercial/clients/[id]` — Detalle cliente: miembros y solicitudes
+- `/admin/payments` — Vista unificada Stripe+PayPal con discrepancias
+- `/admin/analytics` — Funnel interno + tabla eventos (GA4 para frontend)
+- `/admin/settings` — Verificación env vars + info stack
+
+**API routes (`/api/admin/**`):**
+- `GET /api/admin/queue` — cola con filtros (status, priority, search, page)
+- `GET|PATCH /api/admin/queue/[id]` — detalle y actualización de request
+- `POST /api/admin/queue/[id]/status` — transición de estado con log inmutable
+- `POST /api/admin/queue/[id]/assign` — asignar especialista (valida capacidad)
+- `POST /api/admin/queue/[id]/comments` — comentario público o interno
+- `POST /api/admin/queue/[id]/milestones` — crear hito
+- `PATCH /api/admin/milestones/[id]` — actualizar hito (estado, visibilidad)
+- `GET|POST /api/admin/specialists` — lista y creación
+- `GET|PATCH /api/admin/specialists/[id]` — detalle y edición
+- `PATCH /api/admin/commercial/catalog/[id]` — editar servicio
+- `GET|POST /api/admin/commercial/quotes` — lista y creación
+- `GET|PATCH /api/admin/commercial/quotes/[id]` — detalle y propuesta
+- `POST /api/admin/commercial/quotes/[id]/payment-link` — link Stripe
+- `GET /api/admin/payments` — pagos unificados
+- `GET /api/admin/payments/discrepancies` — discrepancias pendientes
+- `POST /api/admin/payments/discrepancies/[id]/resolve` — marcar resuelto
+
+**Lib (`src/lib/admin/`):**
+- `permissions.ts` — Matriz de permisos por rol
+- `auth.ts` — `getAdminSession()`, `requireAdminSession()`, `requirePermission()`
+- `queue.ts` — Cola, transiciones de estado, asignaciones, milestones, comentarios, notificaciones
+- `dashboard.ts` — Métricas con Promise.allSettled (fallback 0 si falla alguna query)
+- `specialists.ts` — Perfiles, capacidad, servicios habilitados
+- `commercial.ts` — Catálogo, precios con historial, cotizaciones, clientes, suscripciones
+- `payments.ts` — Vista unificada, conciliación, discrepancias
+- `analytics-admin.ts` — Eventos internos, funnel, time series
+
+**Componentes (`src/components/admin/`):**
+`StatusBadge`, `PriorityBadge`, `MetricCard`, `SpecialistLoadBar`, `QueueTable`, `PaymentTable`, `StatusTransitionDialog`, `AdminSidebar`, `AdminHeader`
+
+**Tablas nuevas:**
+- `pf_specialist_profiles` — perfil, bio, timezone, max_concurrent
+- `pf_specialist_services` — servicios habilitados por especialista
+- `pf_request_status_log` — log inmutable de transiciones (trigger deniega UPDATE/DELETE)
+- `pf_payment_reconciliation` — conciliación Stripe+PayPal con discrepancy generado
+- `pf_analytics_events` — eventos internos del servidor
+- `pf_catalog_price_history` — historial de cambios de precio (inmutable)
+
+**Estado de solicitudes (10 estados + 3 legacy):**
+`pending_payment → queued → in_progress → review → completed → refunded`
+`in_progress → waiting_client | waiting_third_party | cancelled`
+`consultation_scheduled` entre queued e in_progress
+
+**Decisiones críticas:**
+- Cambiar precio en `pf_service_prices` NUNCA modifica `pf_order_items` (snapshots inmutables)
+- `pf_request_status_log` es append-only — trigger previene UPDATE/DELETE en DB
+- Specialists ven solo sus requests asignadas (filtro a nivel de API, no solo RLS)
+- Notificaciones automáticas al cliente en: `waiting_client`, `completed`, `review`, nuevo comentario público
+
+**Tests:** `admin-roles`, `admin-queue`, `admin-status-transitions`, `admin-quotes`, `admin-price-changes`, `admin-payments`, `admin-notifications`, `admin-audit`
+
+---
+
+## Fase 7 — Apps, QA Integral y Lanzamiento
+
+**Objetivo:** Hardening completo de la plataforma, cobertura de pruebas E2E, apps móviles (o PWA), y checklist de lanzamiento a producción para el primer cliente pagador.
+
+**Scope:**
+
+### QA Integral
+- Pruebas E2E con Playwright: flujos críticos (registro → portal → request → comentario → descarga)
+- Pruebas de aislamiento multi-tenant: verificar que org A no puede leer datos de org B manipulando URLs o requests HTTP
+- Pruebas de pagos: Stripe + PayPal en modo sandbox, webhooks con ngrok
+- Pruebas de seguridad: fuzzing de IDs, manipulación de orgId en payloads, tokens expirados
+- Auditoría de performance: Core Web Vitals, bundle size, TTFB en rutas críticas
+
+### Apps / PWA
+- Progressive Web App: manifest, service worker, instalable en iOS y Android
+- O Capacitor wrapper si se requiere distribución nativa (App Store / Play Store)
+- Push notifications para eventos del portal (nuevo comentario, hito completado, entregable subido)
+
+### Hardening y Observabilidad
+- Rate limiting en todas las rutas `/api/portal/**` (no solo audit form)
+- Logging estructurado de errores en API routes (Sentry o similar)
+- Monitoreo de uptime y alertas
+- Revisión final de políticas RLS — confirmar que ninguna tabla `pf_*` es accesible sin auth
+- Variables de entorno auditadas: ningún secreto expuesto en `NEXT_PUBLIC_`
+
+### Lanzamiento
+- Checklist de deploy: migraciones aplicadas, bucket privado verificado, webhooks en producción
+- Seed de datos de prueba para demos a clientes potenciales
+- Documentación de onboarding para primer cliente: cómo registrarse, cómo acceder al portal, cómo interpretar el dashboard
+- Primer cliente activado manualmente: org creada, request vinculado a orden pagada, especialista asignado
 
 ---
 
@@ -345,19 +485,21 @@ Future content will be close to money: high-intent queries from service business
 
 ---
 
-## What NOT to Build in Phase 0
+## What NOT to Build (yet)
 
-| Category | Examples |
-|---|---|
-| Billing / payments | Stripe, subscription management |
-| AI features | GPT drafts, lead scoring, enrichment |
-| Email automation | Sequences, drip campaigns |
-| Social scheduler | Instagram, LinkedIn, GMB posting |
-| Client portal | Client-facing dashboard, report sharing |
-| Complex permissions | Multi-role RBAC, team management |
-| Custom CMS | Blog editor, content management |
-| Native mobile app | iOS/Android, Capacitor, React Native |
-| SEO content expansion | Blog, city pages, programmatic SEO |
+Items marcados ✅ ya están construidos. Los demás siguen fuera de scope hasta la fase indicada.
+
+| Category | Status | Fase |
+|---|---|---|
+| Billing / payments (Stripe + PayPal) | ✅ Fase 3 | — |
+| Client portal (auth, requests, docs, billing) | ✅ Fase 5 | — |
+| Booking rights + Cal.com | ✅ Fase 4 | — |
+| AI features (lead scoring, drafts, enrichment) | ❌ fuera de scope | — |
+| Email automation (sequences, drip) | ❌ fuera de scope | — |
+| Social scheduler (Instagram, LinkedIn, GMB) | ❌ fuera de scope | — |
+| Custom CMS (Sanity blog, content editor) | ❌ pendiente | post-Fase 7 |
+| SEO content expansion (blog, city pages) | ❌ pendiente | post-Fase 7 |
+| Native mobile app (App Store / Play Store) | ❌ pendiente | Fase 7 (Capacitor / PWA) |
 
 ---
 

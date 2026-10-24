@@ -1,10 +1,12 @@
+import { Suspense } from "react"
 import Link from "next/link"
-import { ArrowLeft, FileText } from "lucide-react"
+import { ArrowLeft, FileText, Loader2 } from "lucide-react"
 import { CreateInvoiceForm } from "./create-invoice"
+import { InvoicesList } from "./invoices-list"
 
 export default function InvoicesPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div>
         <Link
@@ -14,30 +16,35 @@ export default function InvoicesPage() {
           <ArrowLeft className="w-4 h-4" />
           Gestión comercial
         </Link>
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-[#F7F7F3]">Facturas</h1>
-            <p className="text-[#8A9099] text-sm mt-0.5">
-              Genera facturas PayPal y envíalas directamente al cliente
-            </p>
-          </div>
-        </div>
+        <h1 className="text-2xl font-bold text-[#F7F7F3]">Facturas PayPal</h1>
+        <p className="text-[#8A9099] text-sm mt-0.5">
+          Crea y envía facturas. El cliente las recibe por email y paga desde PayPal.
+        </p>
       </div>
 
-      {/* Info banner */}
-      <div className="flex items-start gap-3 p-4 bg-[#FF5A1F]/10 border border-[#FF5A1F]/20 rounded-xl">
-        <FileText className="w-5 h-5 text-[#FF5A1F] flex-shrink-0 mt-0.5" />
-        <div>
-          <p className="text-sm font-medium text-[#F7F7F3]">Integración PayPal Invoicing</p>
-          <p className="text-xs text-[#8A9099] mt-0.5">
-            Las facturas se crean vía PayPal Invoicing API y se envían automáticamente al email del
-            cliente. El cliente puede pagar directamente desde el link de PayPal.
-          </p>
-        </div>
+      {/* Invoice list */}
+      <div className="bg-[#14171A] border border-[#3D4A5C] rounded-xl p-6 space-y-4">
+        <h2 className="text-sm font-semibold text-[#F7F7F3] flex items-center gap-2">
+          <FileText className="w-4 h-4 text-[#FF5A1F]" />
+          Facturas enviadas
+        </h2>
+        <Suspense
+          fallback={
+            <div className="flex items-center gap-2 py-8 justify-center text-[#546072]">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span className="text-sm">Cargando facturas…</span>
+            </div>
+          }
+        >
+          <InvoicesList />
+        </Suspense>
       </div>
 
-      {/* Create invoice form */}
-      <CreateInvoiceForm />
+      {/* Create form */}
+      <div className="space-y-4">
+        <h2 className="text-sm font-semibold text-[#F7F7F3]">Nueva factura</h2>
+        <CreateInvoiceForm />
+      </div>
     </div>
   )
 }

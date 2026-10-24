@@ -1,130 +1,294 @@
-"use client"
-
-import { useEffect, useState, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { CheckCircle, Clock, ArrowRight } from "lucide-react"
-import { MarketingLayout } from "@/components/marketing/marketing-layout"
+import { Check, AlertTriangle } from "lucide-react"
+import { LogoWordmark } from "@/components/ui/logo-wordmark"
+import { capturePayPalOrderAction } from "../actions"
+import { CartCleaner } from "./cart-cleaner"
 
-interface OrderStatus {
-  orderNumber: string
-  status:      string
-  totalUsd:    number
-}
+// ── Header ───────────────────────────────────────────────────────────────────
 
-function SuccessContent() {
-  const params   = useSearchParams()
-  const orderId  = params.get("orderId")
-  const isQuote  = params.get("quote") === "true"
-  const sessionId = params.get("session_id")  // Stripe
-  const ppOrderId = params.get("paypal_order_id") // PayPal
-  const ppSubId   = params.get("subscription_id")  // PayPal subscription
-
-  const [order, setOrder]     = useState<OrderStatus | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    if (!orderId) { setLoading(false); return }
-
-    // For PayPal one-time orders, capture first
-    const capture = async () => {
-      if (ppOrderId && ppOrderId !== "PAYPAL_ORDER_ID") {
-        await fetch("/api/payments/paypal/capture", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ paypalOrderId: ppOrderId, orderId }),
-        })
-      }
-    }
-
-    capture()
-      .then(() => fetch(`/api/payments/status/${orderId}`))
-      .then((r) => r.json())
-      .then((data: { orderNumber: string; status: string; totalUsd: number }) => {
-        setOrder(data)
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false))
-  }, [orderId, ppOrderId])
-
-  const isPaid = order?.status === "paid" || !!sessionId || !!ppSubId
-
+function CheckoutHeader() {
   return (
-    <div className="min-h-screen bg-[#101827] flex items-center justify-center py-24">
-      <div className="container-wide max-w-lg text-center">
-        <div
-          className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
-          style={{ background: isQuote ? "rgba(255,203,134,0.15)" : "rgba(120,230,179,0.15)" }}
+    <header
+      style={{
+        background: "#fff",
+        borderBottom: "1px solid #E2DED3",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 1120,
+          margin: "0 auto",
+          padding: "16px 24px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <LogoWordmark size="sm" />
+        <span
+          style={{
+            fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
+            fontSize: 12,
+            color: "#5F6168",
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+          }}
         >
-          {isQuote
-            ? <Clock size={28} className="text-[#FFCB86]" />
-            : <CheckCircle size={28} className="text-[#78E6B3]" />
-          }
-        </div>
-
-        <h1 className="font-display text-3xl font-extrabold text-white mb-3">
-          {isQuote
-            ? "Quote submitted!"
-            : isPaid || loading
-            ? "Payment received!"
-            : "Almost there…"}
-        </h1>
-
-        <p className="text-[#7A8799] mb-8">
-          {isQuote
-            ? "We've received your request. You'll receive a custom proposal at your email within 24 hours."
-            : isPaid
-            ? "Your payment has been confirmed. Check your email for a receipt and next steps."
-            : "Your payment is being confirmed. This may take a moment — you'll receive a confirmation email shortly."}
-        </p>
-
-        {order && (
-          <div className="card-midnight rounded-2xl p-5 text-left mb-8">
-            <div className="flex justify-between text-sm">
-              <span className="text-[#7A8799]">Order</span>
-              <span className="text-white font-medium">{order.orderNumber}</span>
-            </div>
-            {order.totalUsd > 0 && (
-              <div className="flex justify-between text-sm mt-2">
-                <span className="text-[#7A8799]">Total charged today</span>
-                <span className="text-[#78E6B3] font-semibold">${order.totalUsd}</span>
-              </div>
-            )}
-          </div>
-        )}
-
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          {orderId && isPaid && (
-            <Link
-              href={`/onboarding/${orderId}`}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#FF5A1F] text-white font-semibold rounded-xl hover:bg-[#E54A15] transition-colors text-sm"
-            >
-              Complete onboarding
-              <ArrowRight size={14} />
-            </Link>
-          )}
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 text-[#A8B3C0] font-semibold rounded-xl border border-white/10 hover:text-white hover:border-white/20 hover:bg-white/5 transition-colors text-sm"
-          >
-            Back to home
-          </Link>
-        </div>
+          <span
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              background: "#22C55E",
+              display: "inline-block",
+            }}
+          />
+          Pago seguro · cifrado SSL
+        </span>
       </div>
-    </div>
+    </header>
   )
 }
 
-export default function CheckoutSuccessPage() {
+// ── Page ─────────────────────────────────────────────────────────────────────
+
+interface SuccessPageProps {
+  searchParams: Promise<{
+    token?: string      // PayPal order ID
+    PayerID?: string    // PayPal payer ID
+  }>
+}
+
+export default async function CheckoutSuccessPage({ searchParams }: SuccessPageProps) {
+  const params = await searchParams
+  const token = params.token
+  const PayerID = params.PayerID
+
+  let captureError: string | undefined
+  let payerEmail: string | undefined
+  let totalAmount: string | undefined
+  let orderId: string | undefined
+
+  // Only attempt capture when PayPal redirects with both params
+  if (token && PayerID) {
+    const result = await capturePayPalOrderAction(token)
+
+    if (result.error && !result.success) {
+      captureError = result.error
+    } else {
+      payerEmail = result.payerEmail
+      totalAmount = result.totalAmount
+      orderId = result.orderId
+    }
+  }
+
+  const isError = !!captureError
+
   return (
-    <MarketingLayout>
-      <Suspense fallback={
-        <div className="min-h-screen bg-[#101827] flex items-center justify-center">
-          <div className="text-[#4E5D6E]">Loading…</div>
+    <div style={{ minHeight: "100dvh", background: "var(--color-cream, #F7F5EF)" }}>
+      <CheckoutHeader />
+
+      {/* Clear cart client-side after successful redirect */}
+      {!isError && <CartCleaner />}
+
+      <main
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "calc(100dvh - 57px)",
+          padding: "48px 24px",
+        }}
+      >
+        <div
+          style={{
+            background: "#fff",
+            border: "1px solid #E2DED3",
+            borderRadius: 20,
+            padding: "40px 32px",
+            maxWidth: 480,
+            width: "100%",
+            textAlign: "center",
+          }}
+        >
+          {isError ? (
+            <>
+              {/* Error state */}
+              <div
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: "50%",
+                  background: "rgba(245,158,11,0.12)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 20px",
+                }}
+              >
+                <AlertTriangle size={24} color="#F59E0B" />
+              </div>
+
+              <h1
+                style={{
+                  fontFamily: "var(--font-mk-sans)",
+                  fontSize: 24,
+                  fontWeight: 700,
+                  color: "var(--color-ink, #202124)",
+                  margin: "0 0 8px",
+                }}
+              >
+                Algo salió mal
+              </h1>
+              <p
+                style={{
+                  fontFamily: "var(--font-mk-sans)",
+                  fontSize: 14,
+                  color: "var(--color-muted-ink, #5F6168)",
+                  margin: "0 0 24px",
+                  lineHeight: 1.6,
+                }}
+              >
+                No pudimos confirmar tu pago. Si el cargo aparece en tu cuenta, escríbenos a{" "}
+                <a href="mailto:arnaldo@clickonversion.com" style={{ color: "#345CFF" }}>
+                  arnaldo@clickonversion.com
+                </a>{" "}
+                y lo resolvemos de inmediato.
+              </p>
+
+              <Link
+                href="/checkout"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: 54,
+                  borderRadius: 12,
+                  background: "var(--color-cobalt, #345CFF)",
+                  color: "#fff",
+                  fontFamily: "var(--font-mk-sans)",
+                  fontSize: 15,
+                  fontWeight: 600,
+                  textDecoration: "none",
+                }}
+              >
+                Volver al checkout
+              </Link>
+            </>
+          ) : (
+            <>
+              {/* Success state */}
+              <div
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: "50%",
+                  background: "var(--color-lime, #D9FA62)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 20px",
+                }}
+              >
+                <Check size={24} color="#202124" strokeWidth={2.5} />
+              </div>
+
+              <h1
+                style={{
+                  fontFamily: "var(--font-mk-sans)",
+                  fontSize: 26,
+                  fontWeight: 700,
+                  color: "var(--color-ink, #202124)",
+                  margin: "0 0 8px",
+                }}
+              >
+                Pedido confirmado
+              </h1>
+
+              <p
+                style={{
+                  fontFamily: "var(--font-mk-sans)",
+                  fontSize: 14,
+                  color: "var(--color-muted-ink, #5F6168)",
+                  margin: "0 0 24px",
+                  lineHeight: 1.6,
+                }}
+              >
+                {payerEmail ? (
+                  <>
+                    Te enviamos el recibo a <strong>{payerEmail}</strong>. En menos de 24 h
+                    hábiles te escribimos para agendar el inicio.
+                  </>
+                ) : (
+                  "Hemos recibido tu pedido. En menos de 24 h hábiles te contactamos para agendar el inicio."
+                )}
+              </p>
+
+              {/* Order detail pill */}
+              {(orderId || totalAmount) && (
+                <div
+                  style={{
+                    background: "var(--color-cream, #F7F5EF)",
+                    borderRadius: 10,
+                    padding: "12px 16px",
+                    marginBottom: 24,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
+                  {orderId && (
+                    <span
+                      style={{
+                        fontFamily: "var(--font-mk-mono, monospace)",
+                        fontSize: 12,
+                        color: "var(--color-muted-ink, #5F6168)",
+                      }}
+                    >
+                      N.º {orderId.slice(0, 12).toUpperCase()}
+                    </span>
+                  )}
+                  {totalAmount && (
+                    <span
+                      style={{
+                        fontFamily: "var(--font-mk-sans)",
+                        fontSize: 15,
+                        fontWeight: 700,
+                        color: "var(--color-ink, #202124)",
+                      }}
+                    >
+                      ${totalAmount} USD
+                    </span>
+                  )}
+                </div>
+              )}
+
+              <Link
+                href="/portal/dashboard"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: 54,
+                  borderRadius: 12,
+                  background: "var(--color-cobalt, #345CFF)",
+                  color: "#fff",
+                  fontFamily: "var(--font-mk-sans)",
+                  fontSize: 15,
+                  fontWeight: 600,
+                  textDecoration: "none",
+                }}
+              >
+                Ir a mi panel →
+              </Link>
+            </>
+          )}
         </div>
-      }>
-        <SuccessContent />
-      </Suspense>
-    </MarketingLayout>
+      </main>
+    </div>
   )
 }

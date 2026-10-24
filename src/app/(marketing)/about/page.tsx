@@ -1,286 +1,374 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
 import { MarketingLayout } from "@/components/marketing/marketing-layout"
-import { HomepageCta } from "@/components/sections/homepage-cta"
+import { ContactForm } from "@/components/marketing/contact-form"
 
 export const metadata: Metadata = {
-  title: "About ClicKonversion — Growth Marketing Agency",
+  title: "Nosotros — El equipo detrás del clic | ClicKonversion",
   description:
-    "ClicKonversion is a growth marketing agency combining SEO, paid media, AI automation, and WhatsApp Business to help businesses get more customers across the US, Latin America, and Spain.",
+    "ClicKonversion es una agencia de growth marketing que combina SEO, publicidad digital, IA y automatización en un solo sistema conectado.",
   alternates: {
     canonical: "https://www.clickonversion.com/about",
   },
   openGraph: {
-    title: "About ClicKonversion — Growth Marketing Agency",
+    title: "Nosotros — El equipo detrás del clic | ClicKonversion",
     description:
-      "We build growth systems, not campaigns. SEO, paid media, AI automation, and WhatsApp — one connected system.",
+      "Conoce el equipo y la filosofía detrás de ClicKonversion. Estrategia, tecnología y crecimiento honesto.",
     url: "https://www.clickonversion.com/about",
     siteName: "ClicKonversion",
-    locale: "en_US",
+    locale: "es_ES",
     type: "website",
   },
 }
 
-const PILLARS = [
+const VALUES = [
   {
-    icon: "📈",
-    title: "SEO & SEM",
-    description:
-      "Organic search visibility that compounds over time, plus paid search campaigns built to convert — not just drive clicks.",
-    accent: "#78E6B3",
+    num: "01",
+    name: "Estrategia",
+    desc: "Primero entendemos tu negocio. Después elegimos los canales.",
+    bg: "#345CFF",
+    text: "#fff",
   },
   {
-    icon: "📱",
-    title: "Meta Ads",
-    description:
-      "Full-funnel Facebook and Instagram campaigns built around your audience, your offer, and your actual business outcomes.",
-    accent: "#FFCB86",
+    num: "02",
+    name: "Tecnología",
+    desc: "IA y automatización donde ahorran tiempo de verdad, no por moda.",
+    bg: "#E9E4FF",
+    text: "#202124",
   },
   {
-    icon: "🤖",
-    title: "AI & WhatsApp",
-    description:
-      "AI agents, chatbots, and WhatsApp Business API setup that automate conversations and qualification without adding headcount.",
-    accent: "#7885FF",
+    num: "03",
+    name: "Crecimiento",
+    desc: "Medimos lo que importa y te lo contamos con honestidad.",
+    bg: "#D9FA62",
+    text: "#202124",
   },
-  {
-    icon: "⚡",
-    title: "Automation",
-    description:
-      "Make, n8n, Zapier, and CRM integrations that connect your tools, eliminate manual work, and keep your pipeline clean.",
-    accent: "#FF5A1F",
-  },
-]
-
-const MARKETS = [
-  { name: "United States", flag: "🇺🇸" },
-  { name: "Spain", flag: "🇪🇸" },
-  { name: "Mexico", flag: "🇲🇽" },
-  { name: "Colombia", flag: "🇨🇴" },
-  { name: "Venezuela", flag: "🇻🇪" },
-  { name: "Latin America", flag: "🌎" },
 ]
 
 export default function AboutPage() {
   return (
-    <MarketingLayout>
-      {/* ── Hero ── */}
-      <section className="pt-32 pb-20 bg-[#101827]" aria-label="About ClicKonversion">
-        <div className="container-wide">
-          <div className="max-w-3xl">
-            <p className="eyebrow text-[#4E5D6E] mb-5">About</p>
-            <h1 className="font-display text-[clamp(2.5rem,5vw,3.75rem)] font-extrabold text-white leading-tight mb-6">
-              We build growth systems,{" "}
-              <span
+    <MarketingLayout active="about">
+      <div
+        style={{
+          background: "#F7F5EF",
+          fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
+        }}
+      >
+        {/* Hero */}
+        <section
+          style={{
+            padding: "clamp(120px, 15vw, 180px) clamp(16px, 5vw, 80px) clamp(64px, 8vw, 96px)",
+            maxWidth: "88rem",
+            margin: "0 auto",
+          }}
+          aria-label="Nosotros"
+        >
+          <div
+            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(32px, 5vw, 80px)", alignItems: "end" }}
+            className="about-hero-grid"
+          >
+            <div>
+              <p
                 style={{
-                  background: "linear-gradient(135deg, #78E6B3 0%, #7885FF 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
+                  fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "#5F6168",
+                  marginBottom: 24,
                 }}
               >
-                not campaigns.
-              </span>
-            </h1>
-            <p className="text-[#A8B3C0] text-lg leading-relaxed max-w-2xl">
-              ClicKonversion is a growth marketing agency that combines SEO, paid media,
-              AI automation, and WhatsApp Business into one connected system — built to
-              turn your digital presence into a consistent, measurable source of customers.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Mission ── */}
-      <section className="py-20 bg-[#151E2D]" aria-label="Our mission">
-        <div className="container-wide">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div>
-              <p className="eyebrow text-[#78E6B3] mb-4">Why we exist</p>
-              <h2 className="font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-bold text-white mb-6">
-                Most businesses deserve better.
-              </h2>
-              <div className="space-y-4 text-[#A8B3C0] leading-relaxed">
-                <p>
-                  We started ClicKonversion because most businesses deserve better than
-                  disconnected tools and agencies that can&apos;t explain what they&apos;re doing.
-                </p>
-                <p>
-                  Too many teams are paying for SEO they can&apos;t measure, Meta Ads that burn
-                  budget without clear attribution, and CRM tools nobody uses. Each vendor
-                  operates in a silo, nobody owns the full picture, and the business owner
-                  is left wondering why growth isn&apos;t happening.
-                </p>
-                <p>
-                  We built ClicKonversion to be the agency we wished existed —
-                  one that speaks plainly, shows its work, and builds systems
-                  that keep working even after the engagement ends.
-                </p>
-              </div>
-            </div>
-            <div className="space-y-4">
-              {[
-                { label: "Transparent reporting", description: "You see the same data we see. No vanity metrics, no hiding underperformance." },
-                { label: "Clear scope always", description: "Every engagement starts with a written scope. No ambiguity about what's included." },
-                { label: "One integrated system", description: "SEO, ads, automation, and CRM designed to work together — not as separate silos." },
-                { label: "Bilingual delivery", description: "We serve clients in English and Spanish without losing nuance in either." },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="flex gap-4 p-5 rounded-xl border border-white/[0.07] bg-white/[0.02]"
-                >
-                  <div
-                    className="flex-shrink-0 w-2 h-2 rounded-full mt-2"
-                    style={{ background: "#78E6B3" }}
-                  />
-                  <div>
-                    <p className="font-semibold text-white text-sm mb-1">{item.label}</p>
-                    <p className="text-sm text-[#7A8799] leading-relaxed">{item.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── What we do ── */}
-      <section className="py-20 bg-[#101827]" aria-label="What we do">
-        <div className="container-wide">
-          <p className="eyebrow text-[#4E5D6E] mb-4">What we do</p>
-          <h2 className="font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-bold text-white mb-4">
-            Four disciplines, one system.
-          </h2>
-          <p className="text-[#7A8799] text-lg mb-12 max-w-xl leading-relaxed">
-            Each practice reinforces the others — your SEO generates awareness, your ads capture
-            demand, your automation qualifies leads, and your CRM closes them.
-          </p>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {PILLARS.map((pillar) => (
-              <div
-                key={pillar.title}
-                className="rounded-2xl p-6 border border-white/[0.07] bg-white/[0.02]"
+                NOSOTROS
+              </p>
+              <h1
+                style={{
+                  fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
+                  fontSize: "clamp(60px, 8.5vw, 132px)",
+                  fontWeight: 400,
+                  lineHeight: 0.9,
+                  color: "#202124",
+                  letterSpacing: "-0.02em",
+                  margin: 0,
+                }}
               >
-                <div className="text-3xl mb-5">{pillar.icon}</div>
-                <h3
-                  className="font-display text-lg font-bold mb-3"
-                  style={{ color: pillar.accent }}
+                El equipo<br />
+                detrás del{" "}
+                <em style={{ fontStyle: "italic" }}>clic.</em>
+              </h1>
+            </div>
+            <div>
+              <p
+                style={{
+                  fontSize: 21,
+                  lineHeight: 1.6,
+                  color: "#5F6168",
+                  maxWidth: 440,
+                }}
+              >
+                Somos el equipo que buscabas: expertos en SEO, publicidad, IA y automatización que hablan claro, muestran su trabajo y construyen sistemas que siguen funcionando.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Values */}
+        <section
+          style={{
+            padding: "0 clamp(16px, 5vw, 80px) clamp(80px, 10vw, 120px)",
+            maxWidth: "88rem",
+            margin: "0 auto",
+          }}
+          aria-label="Nuestros valores"
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+              gap: 20,
+            }}
+          >
+            {VALUES.map((v) => (
+              <div
+                key={v.num}
+                style={{
+                  background: v.bg,
+                  color: v.text,
+                  borderRadius: 28,
+                  padding: 28,
+                  minHeight: 300,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "var(--font-mk-mono, monospace)",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    opacity: 0.6,
+                    color: v.text,
+                  }}
                 >
-                  {pillar.title}
-                </h3>
-                <p className="text-sm text-[#7A8799] leading-relaxed">{pillar.description}</p>
+                  {v.num}
+                </p>
+                <div>
+                  <p
+                    style={{
+                      fontSize: 40,
+                      fontWeight: 700,
+                      color: v.text,
+                      lineHeight: 1,
+                      marginBottom: 12,
+                    }}
+                  >
+                    {v.name}
+                  </p>
+                  <p style={{ fontSize: 16, color: v.text, opacity: 0.75, lineHeight: 1.5 }}>
+                    {v.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
+        </section>
 
-          <div className="mt-10 text-center">
-            <Link
-              href="/services"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-[#78E6B3] hover:text-white transition-colors"
-            >
-              See all services
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Markets ── */}
-      <section className="py-20 bg-[#151E2D]" aria-label="Markets we serve">
-        <div className="container-wide">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="eyebrow text-[#FFCB86] mb-4">Markets</p>
-              <h2 className="font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-bold text-white mb-5">
-                We operate in English and Spanish.
-              </h2>
-              <p className="text-[#A8B3C0] leading-relaxed mb-6">
-                Our team delivers across North America, Spain, and Latin America — with the same
-                strategic depth in both languages. We understand the nuances of each market:
-                search behavior, platform dynamics, and what drives conversions locally.
-              </p>
-              <p className="text-[#7A8799] text-sm leading-relaxed">
-                Whether you&apos;re a US-based service business, a Spanish e-commerce brand,
-                or a SaaS company expanding into LATAM — we adapt our approach to your market.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {MARKETS.map((market) => (
-                <div
-                  key={market.name}
-                  className="flex items-center gap-3 p-4 rounded-xl border border-white/[0.07] bg-white/[0.02]"
-                >
-                  <span className="text-2xl">{market.flag}</span>
-                  <span className="text-sm font-medium text-[#A8B3C0]">{market.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Founder ── */}
-      <section className="py-20 bg-[#101827]" aria-label="Founder">
-        <div className="container-wide">
-          <div className="max-w-3xl">
-            <p className="eyebrow text-[#7885FF] mb-4">The team</p>
-            <h2 className="font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-bold text-white mb-8">
-              Led by someone who&apos;s done the work.
-            </h2>
-
-            <div className="flex flex-col sm:flex-row gap-8 items-start">
-              {/* Monogram */}
+        {/* Team */}
+        <section
+          style={{
+            padding: "0 clamp(16px, 5vw, 80px) clamp(80px, 10vw, 120px)",
+            maxWidth: "88rem",
+            margin: "0 auto",
+          }}
+          aria-label="Quiénes somos"
+        >
+          <h2
+            style={{
+              fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
+              fontSize: "clamp(40px, 5vw, 72px)",
+              fontWeight: 400,
+              color: "#202124",
+              lineHeight: 1,
+              marginBottom: 40,
+            }}
+          >
+            Quiénes{" "}
+            <em style={{ fontStyle: "italic" }}>somos.</em>
+          </h2>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+              gap: 16,
+            }}
+          >
+            {[1, 2, 3, 4].map((i) => (
               <div
-                className="flex-shrink-0 w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-extrabold font-display"
+                key={i}
                 style={{
-                  background: "linear-gradient(135deg, rgba(120,133,255,0.15) 0%, rgba(120,230,179,0.10) 100%)",
-                  border: "1px solid rgba(120,133,255,0.25)",
-                  color: "#7885FF",
+                  aspectRatio: "1",
+                  background: "#fff",
+                  border: "1.5px dashed #E2DED3",
+                  borderRadius: 28,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                A
+                <span
+                  style={{
+                    fontFamily: "var(--font-mk-mono, monospace)",
+                    fontSize: 13,
+                    color: "#5F6168",
+                    opacity: 0.5,
+                  }}
+                >
+                  [foto]
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Contact section */}
+        <section
+          id="contacto"
+          style={{
+            padding: "0 16px clamp(64px, 8vw, 96px)",
+          }}
+          aria-label="Contacto"
+        >
+          <div
+            style={{
+              background: "#fff",
+              borderRadius: 40,
+              padding: "clamp(48px, 6vw, 80px) clamp(32px, 5vw, 64px)",
+              maxWidth: "88rem",
+              margin: "0 auto",
+            }}
+          >
+            <div
+              style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(48px, 6vw, 80px)" }}
+              className="contact-grid"
+            >
+              {/* Left: info */}
+              <div>
+                <p
+                  style={{
+                    fontFamily: "var(--font-mk-mono, monospace)",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    color: "#5F6168",
+                    marginBottom: 16,
+                  }}
+                >
+                  CONTACTO
+                </p>
+                <h2
+                  style={{
+                    fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
+                    fontSize: "clamp(40px, 5vw, 72px)",
+                    fontWeight: 400,
+                    color: "#202124",
+                    lineHeight: 1,
+                    marginBottom: 20,
+                  }}
+                >
+                  Hagámoslo{" "}
+                  <em style={{ fontStyle: "italic" }}>realidad.</em>
+                </h2>
+                <p style={{ fontSize: 18, color: "#5F6168", lineHeight: 1.6, marginBottom: 32 }}>
+                  ¿Listo para dar el siguiente paso? Cuéntanos qué necesitas y te respondemos antes de 24 horas.
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  <div>
+                    <p
+                      style={{
+                        fontFamily: "var(--font-mk-mono, monospace)",
+                        fontSize: 11,
+                        fontWeight: 700,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "#5F6168",
+                        opacity: 0.6,
+                        marginBottom: 4,
+                      }}
+                    >
+                      Email
+                    </p>
+                    <a
+                      href="mailto:hello@clickonversion.com"
+                      style={{ fontSize: 16, color: "#345CFF", fontWeight: 600, textDecoration: "none" }}
+                    >
+                      hello@clickonversion.com
+                    </a>
+                  </div>
+                  <div>
+                    <p
+                      style={{
+                        fontFamily: "var(--font-mk-mono, monospace)",
+                        fontSize: 11,
+                        fontWeight: 700,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "#5F6168",
+                        opacity: 0.6,
+                        marginBottom: 4,
+                      }}
+                    >
+                      WhatsApp
+                    </p>
+                    <a
+                      href="https://wa.me/1234567890"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ fontSize: 16, color: "#345CFF", fontWeight: 600, textDecoration: "none" }}
+                    >
+                      Escribir por WhatsApp →
+                    </a>
+                  </div>
+                  <div>
+                    <p
+                      style={{
+                        fontFamily: "var(--font-mk-mono, monospace)",
+                        fontSize: 11,
+                        fontWeight: 700,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "#5F6168",
+                        opacity: 0.6,
+                        marginBottom: 4,
+                      }}
+                    >
+                      Horario
+                    </p>
+                    <p style={{ fontSize: 15, color: "#5F6168" }}>Lun–Vie · 9:00–18:00 GMT-5</p>
+                  </div>
+                </div>
               </div>
 
+              {/* Right: form */}
               <div>
-                <p className="font-display text-xl font-bold text-white mb-1">Arnaldo</p>
-                <p className="text-sm text-[#7885FF] mb-4">Founder &amp; Growth Strategist</p>
-                <div className="space-y-3 text-[#A8B3C0] text-sm leading-relaxed">
-                  <p>
-                    Arnaldo built ClicKonversion around a rare combination: deep technical SEO knowledge,
-                    hands-on paid media management, and a genuine understanding of AI and automation tools
-                    as they apply to real business workflows.
-                  </p>
-                  <p>
-                    Before starting ClicKonversion, he helped businesses across multiple markets — from
-                    local service businesses in the US to SaaS companies in Latin America — get visible,
-                    generate leads, and build the systems to handle that growth.
-                  </p>
-                  <p>
-                    He works directly with every client. No handoffs to junior staff,
-                    no account managers between you and strategy.
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mt-5">
-                  {["Technical SEO", "Meta Ads", "Google Ads", "AI Agents", "WhatsApp Business", "CRM Setup"].map((skill) => (
-                    <span
-                      key={skill}
-                      className="text-xs px-2.5 py-1 rounded-full border border-white/[0.08] text-[#7A8799] bg-white/[0.02]"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+                <ContactForm />
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      {/* Bottom CTA */}
-      <HomepageCta />
+      <style>{`
+        @media (max-width: 768px) {
+          .about-hero-grid,
+          .contact-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </MarketingLayout>
   )
 }

@@ -23,7 +23,27 @@ function formatUsd(value: number): string {
 }
 
 export default async function AdminDashboardPage() {
-  const metrics = await getDashboardMetrics()
+  let metrics
+  try {
+    metrics = await getDashboardMetrics()
+  } catch {
+    metrics = null
+  }
+
+  if (!metrics) {
+    return (
+      <div className="space-y-4">
+        <h1 className="text-2xl font-bold text-[#F7F7F3]">Panel Administrativo</h1>
+        <div className="rounded-xl border border-[#F59E0B]/30 bg-[#F59E0B]/10 p-6">
+          <p className="text-sm text-[#F59E0B] font-medium mb-1">No se pudo cargar el dashboard</p>
+          <p className="text-xs text-[#8A9099]">
+            Verifica que las variables de entorno DATABASE_URL y AUTH_SECRET estén correctamente
+            configuradas en Vercel y que la base de datos Neon sea accesible.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-8">

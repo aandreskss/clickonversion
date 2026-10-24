@@ -9,7 +9,12 @@ export const metadata = {
 }
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const session = await getAdminSession()
+  let session
+  try {
+    session = await getAdminSession()
+  } catch {
+    redirect("/login?next=/admin")
+  }
 
   if (!session) redirect("/login?next=/admin")
   if (!session.permissions.includes("dashboard:read")) redirect("/app")

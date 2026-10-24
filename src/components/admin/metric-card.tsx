@@ -1,5 +1,3 @@
-"use client"
-
 import type { ComponentType } from "react"
 import { TrendingUp, TrendingDown } from "lucide-react"
 

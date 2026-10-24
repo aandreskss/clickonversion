@@ -1,157 +1,172 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState } from "react"
 import Link from "next/link"
-import { Logo } from "@/components/ui/logo"
-import { Menu, X, ChevronDown, ArrowRight } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { NAV_SERVICES } from "@/data/services"
+import { LogoWordmark } from "@/components/ui/logo-wordmark"
+import { useCart } from "@/components/shop/cart-provider"
+import { Menu, X } from "lucide-react"
 
-const MAIN_NAV = [
-  { href: "/services", label: "Services" },
-  { href: "/apps",     label: "Apps" },
-  { href: "/pricing",  label: "Pricing" },
-  { href: "/about",    label: "About" },
+const NAV_LINKS = [
+  { href: "/services",  label: "Servicios" },
+  { href: "/pricing",   label: "Precios" },
+  { href: "/projects",  label: "Proyectos" },
+  { href: "/apps",      label: "Apps" },
+  { href: "/about",     label: "Nosotros" },
+  { href: "/resources", label: "Recursos" },
 ]
 
-const CATEGORY_META: Record<string, { label: string; color: string; bg: string }> = {
-  seo:          { label: "SEO",              color: "text-[#78E6B3]", bg: "bg-[#78E6B3]/10" },
-  "paid-media": { label: "Paid Media",       color: "text-[#FFCB86]", bg: "bg-[#FFCB86]/10" },
-  automation:   { label: "AI & Automation",  color: "text-[#7885FF]", bg: "bg-[#7885FF]/10" },
-  support:      { label: "Support",          color: "text-[#FF5A1F]", bg: "bg-[#FF5A1F]/10" },
+interface NavbarProps {
+  active?: string
 }
 
-export function Navbar() {
-  const [open, setOpen]         = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [dropdown, setDropdown] = useState(false)
-  const [mobileServices, setMobileServices] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+export function Navbar({ active }: NavbarProps) {
+  const [open, setOpen] = useState(false)
+  const { items, count } = useCart()
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
-
-  useEffect(() => {
-    function onOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdown(false)
-      }
-    }
-    document.addEventListener("mousedown", onOutside)
-    return () => document.removeEventListener("mousedown", onOutside)
-  }, [])
+  const cartTotal = items.reduce(
+    (sum, item) => sum + item.displayPrice * item.quantity,
+    0
+  )
 
   return (
     <header
-      className={cn(
-        "fixed top-0 inset-x-0 z-50 transition-all duration-300",
-        scrolled
-          ? "bg-[#101827]/96 backdrop-blur-xl border-b border-white/[0.07] py-3"
-          : "bg-transparent py-5"
-      )}
+      style={{
+        fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+        background: "#F7F5EF",
+        borderBottom: "1px solid #E2DED3",
+      }}
       role="banner"
     >
-      <div className="container-wide flex items-center justify-between gap-8">
+      <div
+        className="mk-container"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "12px 32px",
+          gap: 16,
+        }}
+      >
         {/* Logo */}
-        <Link href="/" aria-label="ClicKonversion home" className="flex-shrink-0">
-          <Logo size="sm" variant="light" />
+        <Link
+          href="/"
+          aria-label="ClicKonversion home"
+          style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, textDecoration: "none" }}
+        >
+          <LogoWordmark size="sm" />
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary navigation">
-          {/* Services megamenu trigger */}
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={() => setDropdown(!dropdown)}
-              onMouseEnter={() => setDropdown(true)}
-              className={cn(
-                "flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150",
-                dropdown
-                  ? "text-white bg-white/8"
-                  : "text-[#A8B3C0] hover:text-white hover:bg-white/5"
-              )}
-              aria-expanded={dropdown}
-              aria-haspopup="true"
-            >
-              Services
-              <ChevronDown
-                size={14}
-                className={cn("transition-transform duration-200", dropdown && "rotate-180")}
-              />
-            </button>
-
-            {/* Megamenu */}
-            {dropdown && (
-              <div
-                className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[720px] rounded-2xl border border-white/[0.07] bg-[#151E2D]/98 backdrop-blur-xl shadow-2xl overflow-hidden"
-                onMouseLeave={() => setDropdown(false)}
+        <nav
+          className="hidden lg:flex"
+          style={{ alignItems: "center", gap: 2 }}
+          aria-label="Navegación principal"
+        >
+          {NAV_LINKS.map((link) => {
+            const isActive = active === link.href
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: "999px",
+                  fontSize: 15,
+                  fontWeight: 500,
+                  color: "#202124",
+                  background: isActive ? "#E9E4FF" : "transparent",
+                  textDecoration: "none",
+                  transition: "background .15s",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) (e.currentTarget as HTMLElement).style.background = "#E9E4FF"
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent"
+                }}
               >
-                <div className="grid grid-cols-2 gap-0 p-6">
-                  {(Object.entries(NAV_SERVICES) as [string, typeof NAV_SERVICES.seo][]).map(([cat, items]) => {
-                    const meta = CATEGORY_META[cat]
-                    return (
-                      <div key={cat} className="space-y-1">
-                        <p className={cn("eyebrow px-3 py-1.5 mb-2 rounded-md w-fit", meta.color, meta.bg)}>
-                          {meta.label}
-                        </p>
-                        {items.map((item) => (
-                          <Link
-                            key={item.slug}
-                            href={`/services/${item.slug}`}
-                            onClick={() => setDropdown(false)}
-                            className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-[#A8B3C0] hover:text-white hover:bg-white/5 transition-all duration-100 group"
-                          >
-                            {item.label}
-                            <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                          </Link>
-                        ))}
-                      </div>
-                    )
-                  })}
-                </div>
-                <div className="border-t border-white/[0.06] px-6 py-4 bg-white/[0.02] flex items-center justify-between">
-                  <p className="text-xs text-[#4E5D6E]">Not sure where to start?</p>
-                  <Link
-                    href="/audit"
-                    onClick={() => setDropdown(false)}
-                    className="text-xs font-semibold text-[#78E6B3] hover:text-white transition-colors flex items-center gap-1"
-                  >
-                    Get a free audit <ArrowRight size={11} />
-                  </Link>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {MAIN_NAV.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="px-4 py-2 rounded-lg text-sm font-medium text-[#A8B3C0] hover:text-white hover:bg-white/5 transition-all duration-150"
-            >
-              {link.label}
-            </Link>
-          ))}
+                {link.label}
+              </Link>
+            )
+          })}
         </nav>
 
-        {/* Desktop CTAs */}
-        <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
+        {/* Desktop right */}
+        <div
+          className="hidden lg:flex"
+          style={{ alignItems: "center", gap: 10, flexShrink: 0 }}
+        >
+          {/* Cart pill */}
+          {count > 0 && (
+            <Link
+              href="/checkout"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "8px 14px",
+                borderRadius: "999px",
+                border: "1.5px solid #202124",
+                background: "#D9FA62",
+                fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#202124",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Carrito {count} · ${cartTotal.toLocaleString("es-VE", { minimumFractionDigits: 0 })}
+            </Link>
+          )}
+
           <Link
-            href="/audit"
-            className="px-5 py-2.5 bg-[#FF5A1F] text-white text-sm font-semibold rounded-xl hover:bg-[#E54A15] transition-colors duration-150 active:scale-[0.98]"
+            href="/portal/dashboard"
+            style={{
+              padding: "8px 14px",
+              borderRadius: "999px",
+              fontSize: 15,
+              fontWeight: 500,
+              color: "#202124",
+              textDecoration: "none",
+              transition: "background .15s",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#E9E4FF" }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent" }}
           >
-            Get a Free Audit
+            Mi cuenta
+          </Link>
+
+          <Link
+            href="/about#contacto"
+            style={{
+              padding: "12px 20px",
+              borderRadius: "999px",
+              fontSize: 15,
+              fontWeight: 600,
+              color: "#F7F5EF",
+              background: "#202124",
+              textDecoration: "none",
+              transition: "background .15s",
+              whiteSpace: "nowrap",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#345CFF" }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#202124" }}
+          >
+            Hablemos →
           </Link>
         </div>
 
         {/* Mobile toggle */}
         <button
+          className="lg:hidden"
           onClick={() => setOpen(!open)}
-          className="lg:hidden text-[#A8B3C0] hover:text-white p-2 -mr-2 rounded-xl transition-colors"
-          aria-label={open ? "Close navigation" : "Open navigation"}
+          style={{ background: "none", border: "none", cursor: "pointer", padding: 8, color: "#202124" }}
+          aria-label={open ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={open}
           aria-controls="mobile-nav"
         >
@@ -162,71 +177,91 @@ export function Navbar() {
       {/* Mobile nav */}
       <div
         id="mobile-nav"
-        className={cn(
-          "lg:hidden transition-all duration-300 overflow-hidden",
-          open ? "max-h-[85vh] opacity-100" : "max-h-0 opacity-0"
-        )}
+        className="lg:hidden"
+        style={{
+          maxHeight: open ? "85vh" : 0,
+          overflow: "hidden",
+          transition: "max-height .3s ease",
+          borderTop: open ? "1px solid #E2DED3" : "none",
+        }}
         aria-hidden={!open}
       >
         <nav
-          className="container-wide flex flex-col gap-1 pb-6 pt-3 border-t border-white/[0.07]"
-          aria-label="Mobile navigation"
+          style={{ padding: "12px 24px 24px", display: "flex", flexDirection: "column", gap: 4 }}
+          aria-label="Menú móvil"
         >
-          {/* Services accordion */}
-          <button
-            onClick={() => setMobileServices(!mobileServices)}
-            className="flex items-center justify-between px-3 py-3 text-sm font-medium text-[#A8B3C0] hover:text-white transition-colors"
-          >
-            Services
-            <ChevronDown
-              size={14}
-              className={cn("transition-transform duration-200", mobileServices && "rotate-180")}
-            />
-          </button>
-
-          {mobileServices && (
-            <div className="ml-3 mb-2 space-y-4 pl-3 border-l border-white/[0.07]">
-              {(Object.entries(NAV_SERVICES) as [string, typeof NAV_SERVICES.seo][]).map(([cat, items]) => {
-                const meta = CATEGORY_META[cat]
-                return (
-                  <div key={cat}>
-                    <p className={cn("eyebrow mb-2", meta.color)}>{meta.label}</p>
-                    <div className="space-y-0.5">
-                      {items.map((item) => (
-                        <Link
-                          key={item.slug}
-                          href={`/services/${item.slug}`}
-                          onClick={() => setOpen(false)}
-                          className="block py-1.5 text-sm text-[#7A8799] hover:text-white transition-colors"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          )}
-
-          {MAIN_NAV.map((link) => (
+          {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="px-3 py-3 text-sm font-medium text-[#A8B3C0] hover:text-white transition-colors"
+              style={{
+                padding: "12px 16px",
+                borderRadius: 12,
+                fontSize: 16,
+                fontWeight: 500,
+                color: "#202124",
+                textDecoration: "none",
+                background: active === link.href ? "#E9E4FF" : "transparent",
+              }}
             >
               {link.label}
             </Link>
           ))}
 
-          <div className="mt-4 flex flex-col gap-2">
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+            {count > 0 && (
+              <Link
+                href="/checkout"
+                onClick={() => setOpen(false)}
+                style={{
+                  padding: "12px 20px",
+                  borderRadius: "999px",
+                  fontSize: 15,
+                  fontWeight: 500,
+                  color: "#202124",
+                  background: "#D9FA62",
+                  border: "1.5px solid #202124",
+                  textDecoration: "none",
+                  textAlign: "center",
+                  fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
+                }}
+              >
+                Carrito {count} · ${cartTotal.toLocaleString("es-VE", { minimumFractionDigits: 0 })}
+              </Link>
+            )}
             <Link
-              href="/audit"
+              href="/portal/dashboard"
               onClick={() => setOpen(false)}
-              className="px-5 py-3.5 bg-[#FF5A1F] text-white text-sm font-semibold rounded-xl hover:bg-[#E54A15] transition-colors text-center"
+              style={{
+                padding: "12px 20px",
+                borderRadius: "999px",
+                fontSize: 15,
+                fontWeight: 500,
+                color: "#202124",
+                background: "transparent",
+                border: "1.5px solid #E2DED3",
+                textDecoration: "none",
+                textAlign: "center",
+              }}
             >
-              Get a Free Audit
+              Mi cuenta
+            </Link>
+            <Link
+              href="/about#contacto"
+              onClick={() => setOpen(false)}
+              style={{
+                padding: "14px 20px",
+                borderRadius: "999px",
+                fontSize: 15,
+                fontWeight: 600,
+                color: "#F7F5EF",
+                background: "#202124",
+                textDecoration: "none",
+                textAlign: "center",
+              }}
+            >
+              Hablemos →
             </Link>
           </div>
         </nav>

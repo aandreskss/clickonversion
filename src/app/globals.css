@@ -1,3 +1,4 @@
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap");
 @import "tailwindcss";
 
 /* ============================================================
@@ -86,6 +87,21 @@
   /* ── Typography ─────────────────────────────────────── */
   --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-sans:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* ── Marketing design system v3 ── */
+  --color-cream:        #F7F5EF;
+  --color-ink:          #202124;
+  --color-muted-ink:    #5F6168;
+  --color-body-2:       #3A3B40;
+  --color-cobalt:       #345CFF;
+  --color-lime:         #D9FA62;
+  --color-lavender:     #E9E4FF;
+  --color-spark:        #FF6B2C;
+  --color-line:         #E2DED3;
+  --color-line-2:       #D6D2C6;
+  --font-mk-sans:       'General Sans', system-ui, sans-serif;
+  --font-mk-mono:       var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  --font-mk-serif:      var(--font-instrument-serif), 'Instrument Serif', serif;
 
   /* ── Radius ─────────────────────────────────────────── */
   --radius-sm:   0.25rem;
@@ -369,4 +385,60 @@ p { color: var(--color-muted-light); line-height: 1.75; }
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+/* ============================================================
+   Marketing helpers
+   ============================================================ */
+
+.mk-container { max-width: 1360px; margin: 0 auto; padding: 0 32px; }
+.mk-section { padding: 100px 0; }
+.mk-card { border-radius: 24px; }
+
+/* Marketing hover utilities */
+.mk-btn-cobalt { background: #345CFF; color: white; transition: background .15s; }
+.mk-btn-cobalt:hover { background: #202124; }
+
+.mk-btn-outline { background: transparent; border: 1.5px solid #202124; color: #202124; transition: background .15s; }
+.mk-btn-outline:hover { background: #D9FA62; }
+
+.mk-btn-ink { background: #202124; color: #F7F5EF; transition: background .15s; }
+.mk-btn-ink:hover { background: #345CFF; }
+
+.mk-btn-lime { background: #D9FA62; color: #202124; transition: background .15s; }
+.mk-btn-lime:hover { background: #FFFFFF; }
+
+.mk-btn-outline-lime { background: transparent; border: 1.5px solid #202124; color: #202124; transition: background .15s; }
+.mk-btn-outline-lime:hover { background: white; }
+
+.mk-nav-link { padding: 8px 12px; border-radius: 999px; font-size: 15px; font-weight: 500; color: #202124; text-decoration: none; transition: background .15s; }
+.mk-nav-link:hover { background: #E9E4FF; }
+.mk-nav-link--active { background: #E9E4FF; }
+
+.mk-footer-link { color: white; text-decoration: none; font-size: 15px; transition: color .15s; }
+.mk-footer-link:hover { color: #D9FA62; }
+
+.mk-expertise-row { display: flex; align-items: center; justify-content: space-between; padding: 20px 16px; border-radius: 16px; gap: 16px; transition: background .25s, padding-left .25s; cursor: default; }
+.mk-expertise-row:hover { background: #D9FA62; padding-left: 28px; }
+
+.mk-service-card { background: white; border-radius: 24px; border: 1.5px solid transparent; padding: 28px 24px; display: flex; flex-direction: column; gap: 12px; transition: transform .25s ease, border-color .2s; cursor: default; position: relative; }
+.mk-service-card:hover { transform: translateY(-4px); }
+
+.mk-color-card { border-radius: 32px; padding: 40px 32px; transition: transform .35s cubic-bezier(.3,1.4,.5,1); cursor: default; overflow: hidden; }
+.mk-color-card--tilt-left:hover { transform: rotate(-1.5deg) translateY(-6px); }
+.mk-color-card--tilt-right:hover { transform: rotate(1.5deg) translateY(-6px); }
+
+/* Marquee animation */
+@keyframes mk-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.mk-marquee-track {
+  animation: mk-marquee 28s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-marquee-track { animation: none; }
 }

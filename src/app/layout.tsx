@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Inter, Plus_Jakarta_Sans } from "next/font/google"
+import { Inter, Plus_Jakarta_Sans, Instrument_Serif, JetBrains_Mono } from "next/font/google"
 import Script from "next/script"
 import { CartProvider } from "@/components/shop/cart-provider"
 import { Providers } from "@/components/providers"
@@ -12,6 +12,21 @@ const plusJakarta = Plus_Jakarta_Sans({
   display: "swap",
   variable: "--font-display",
   weight: ["400", "500", "600", "700", "800"],
+})
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-instrument-serif",
+  style: ["normal", "italic"],
+  weight: "400",
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains-mono",
+  weight: ["400", "500"],
 })
 
 const siteUrl   = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.clickonversion.com"
@@ -106,7 +121,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${plusJakarta.variable}`}>
+    <html lang="en" className={`${inter.variable} ${plusJakarta.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}>
       <head>
         <script
           type="application/ld+json"

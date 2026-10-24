@@ -6,9 +6,9 @@
 Build a growth operating system to help ClicKonversion acquire its first 3 clients and reach $2,000 MRR.
 
 ## Current Phase
-**Phase 7 — Apps, QA Integral y Lanzamiento** ✅ Completada
+**Phase 8 — Rediseño Marketing v3 + Checkout + Mejoras Admin** ✅ Completada
 
-Build limpio. 179 tests unitarios pasan. 5 suites E2E implementadas con Playwright. Catálogo /apps live. SyncLead landing con waitlist. SEO actualizado. Documentación ops completa. Launch checklist listo.
+Design system v3 aplicado a todas las páginas de marketing. Checkout con PayPal Orders, transferencia y USDT. Admin: lista de facturas, fix perfil empresa en invoices PayPal. Build limpio, 101 páginas estáticas.
 
 ---
 
@@ -17,12 +17,152 @@ Build limpio. 179 tests unitarios pasan. 5 suites E2E implementadas con Playwrig
 | Fase | Nombre | Estado | Descripción |
 |------|--------|--------|-------------|
 | 0 | Marketing + CRM | ✅ Completa | Site live, CRM lead capture, audit form, pipeline |
-| 2 | Homepage | ✅ Completa | 10 secciones, design system, logos, servicios EN+ES |
+| 2 | Homepage | ✅ Completa | 10 secciones, design system, logos, servicios |
 | 3 | Catálogo + Pagos | ✅ Completa | Stripe + PayPal, carrito, checkout, webhooks idempotentes |
 | 4 | Reservas y Onboarding | ✅ Completa | Cal.com, booking rights, formularios pre-brief, email bilingüe |
 | 5 | Portal de Clientes | ✅ Completa | Auth, dashboard, requests, documentos, billing, settings, RLS |
 | 6 | Panel Administrativo | ✅ Completa | Dashboard métricas, cola de trabajo, especialistas, comercial, pagos, analítica |
-| 7 | Apps, QA y Lanzamiento | ✅ Completa | /apps catálogo, SyncLead landing+waitlist, Playwright E2E, SEO, rate-limit portal, docs ops, launch checklist |
+| 7 | Apps, QA y Lanzamiento | ✅ Completa | /apps catálogo, SyncLead landing+waitlist, Playwright E2E, SEO, docs ops |
+| 8 | Rediseño Marketing v3 + Checkout + Admin | ✅ Completa | Design system v3, 6 páginas rediseñadas, checkout PayPal Orders, lista facturas admin |
+
+---
+
+## Fase 8 — Rediseño Marketing v3 + Checkout + Mejoras Admin ✅
+
+### Design System v3 (Marketing)
+
+**Paleta marketing (tokens en `@theme` de `globals.css`):**
+| Token | Valor | Uso |
+|-------|-------|-----|
+| `--color-cream` | `#F7F5EF` | Background marketing |
+| `--color-ink` | `#202124` | Texto principal |
+| `--color-muted-ink` | `#5F6368` | Texto secundario |
+| `--color-cobalt` | `#345CFF` | Acento primario, hovers, footer bg |
+| `--color-lime` | `#D9FA62` | Accent de alto contraste, pill ON, carrito |
+| `--color-lavender` | `#E9E4FF` | Hover nav, pills activos |
+| `--color-spark` | `#FF6B2C` | Chispas del logo, highlights cálidos |
+| `--color-line` | `#E2DED3` | Bordes suaves en fondo cream |
+
+**Tipografía marketing:**
+- General Sans — via `@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap")` en `globals.css` ANTES de `@import "tailwindcss"`. Var: `--font-mk-sans`
+- Instrument Serif — via `next/font/google` en `layout.tsx`. Var: `--font-mk-serif` (alias `--font-instrument-serif`)
+- JetBrains Mono — via `next/font/google` en `layout.tsx`. Var: `--font-mk-mono` (alias `--font-jetbrains-mono`)
+
+**IMPORTANTE:** Fontshare no es compatible con `next/font`. Se carga siempre vía CSS `@import` en `globals.css`.
+
+### Logos
+
+**`src/components/ui/logo-wordmark.tsx`** — Wordmark CSS puro "clickONversion":
+- Píldora lime `#D9FA62` con texto "ON" + 3 barras spark `#FF6B2C` rotadas -35°/0°/35° encima
+- Prop `size`: `sm`(22px) | `md`(28px) | `lg`(36px) | `xl`(48px)
+- NO usa imagen — solo JSX + inline styles
+
+**`src/components/ui/logo-key.tsx`** — Isotipo interactivo "c!" (tecla):
+- Estado rest: fondo blanco, sombra `0 14px 0 #202124`
+- Estado pressed: fondo lime, sombra `0 3px 0`, translateY 11px
+- Chispas aparecen al presionar (opacity fade-in)
+
+### Componentes marketing nuevos/actualizados
+
+**`src/components/marketing/navbar.tsx`** — Reescrito:
+- Sticky, cream bg, border-bottom `#E2DED3`
+- LogoWordmark + desktop nav (lavender hover pill) + cart pill (lime, JetBrains Mono)
+- Cart pill solo visible cuando `useCart().count > 0`
+- CTA "Hablemos →" (ink bg → cobalt hover)
+- Hamburger mobile con animación max-height
+
+**`src/components/marketing/footer.tsx`** — Reescrito:
+- Cobalt bg (#345CFF), margin 16px, border-radius 40px (floating footer)
+- Giant Instrument Serif italic "clic." en lime
+- 4 columnas: NAVEGA / SERVICIOS / APPS Y CUENTA / SALUDA
+- Wordmark grande al fondo, legal en JetBrains Mono
+
+**`src/components/marketing/cart-bar.tsx`** — Barra sticky inferior:
+- `position: fixed` bottom, ink bg
+- Muestra cantidad y total del carrito
+- Botón "Ir al pago →" en lime → `/checkout`
+
+**`src/components/marketing/services-tabs.tsx`** — 4 tabs de área:
+- SEO / Ads / CRO & Web / Data & Analítica
+- Panel de color por área, cards de servicio con botón Agregar al carrito
+- Integra `useCart()`, hash nav (#seo, #ads, etc.)
+
+**`src/components/marketing/pricing-grid.tsx`** — Grid de precios filtrable:
+- 5 pills de categoría + segmentado tipo (Proyecto/Mensual)
+- 13+ servicios con precio, descripción, botón agregar
+- Integra `useCart()`
+
+**`src/components/marketing/contact-form.tsx`** — Formulario de contacto:
+- Multi-select chips de interés
+- Llama `sendContactAction` Server Action → Resend
+
+**`src/components/marketing/contact-actions.ts`** — `"use server"`:
+- `sendContactAction` — envía email vía Resend a `arnaldo@clickonversion.com`
+
+**`src/components/marketing/apps-waitlist-form.tsx`** — Waitlist apps:
+- POST a `/api/apps/synclead/waitlist`
+
+**`src/components/marketing/resources-newsletter-form.tsx`** — Newsletter recursos
+
+### Páginas marketing rediseñadas
+
+| Ruta | Estado |
+|------|--------|
+| `/services` | ✅ Rediseñada con ServicesTabs + CartBar |
+| `/pricing` | ✅ Rediseñada con PricingGrid filtrable + CartBar |
+| `/projects` | ✅ Nueva (antes no existía) |
+| `/apps` | ✅ Rediseñada con catálogo apps + WaitlistForm |
+| `/about` | ✅ Rediseñada con historia, equipo, ContactForm |
+| `/resources` | ✅ Nueva con newsletter + recursos descargables |
+
+### Checkout con PayPal Orders
+
+**`src/app/(marketing)/checkout/page.tsx`** — `"use client"`:
+- 3 métodos de pago: PayPal Orders, Transferencia bancaria, USDT
+- Estado: idle → pending → success/error
+- Resumen de carrito con items, subtotal, total
+
+**`src/app/(marketing)/checkout/actions.ts`** — `"use server"`:
+- `createPayPalOrderAction(items)` — POST /v2/checkout/orders → retorna `approveUrl` para redirect
+- `capturePayPalOrderAction(orderId)` — POST /v2/checkout/orders/{id}/capture
+- `sendTransferConfirmationAction(data)` — Resend email para confirmación de transferencia
+
+**`src/app/(marketing)/checkout/success/page.tsx`** — Server Component:
+- Captura automáticamente el pago de PayPal (token del querystring)
+- Muestra confirmación con detalles del pago
+
+**`src/app/(marketing)/checkout/success/cart-cleaner.tsx`** — `"use client"`:
+- Limpia el carrito en localStorage vía `useEffect` al llegar a la página de éxito
+
+**`src/app/(marketing)/checkout/cancel/page.tsx`** — Página de cancelación PayPal
+
+### Admin: Mejoras facturas PayPal
+
+**`src/app/(admin)/admin/commercial/invoices/actions.ts`** — Fixes críticos:
+- `invoicer.business_name` (antes usaba `name.full_name` que es para cuentas personales — no mostraba perfil empresa)
+- `send_to_invoicer: true` añadido — admin también recibe copia por email
+- Nueva env var: `PAYPAL_BUSINESS_NAME` (fallback `"ClicKonversion"`)
+- Nueva acción: `listPayPalInvoicesAction(page, pageSize)` → GET /v2/invoicing/invoices
+
+**`src/app/(admin)/admin/commercial/invoices/invoices-list.tsx`** — Server Component:
+- Tabla de todas las facturas creadas: N°, Cliente, Fecha, Vence, Monto, Estado
+- Status pills con colores: SENT (azul), PAID (verde), CANCELLED (gris), etc.
+- Link a PayPal dashboard por factura
+- Se muestra arriba del formulario de creación vía `<Suspense>`
+
+**`src/app/(admin)/admin/commercial/invoices/page.tsx`** — Actualizado:
+- Layout: lista de facturas (con Suspense) + formulario nueva factura
+
+### Variables de entorno PayPal
+
+| Variable | Propósito |
+|----------|-----------|
+| `PAYPAL_CLIENT_ID` | Client ID de la app PayPal |
+| `PAYPAL_CLIENT_SECRET` | Secret de la app PayPal |
+| `PAYPAL_INVOICER_EMAIL` | Email del invoicer (default: `arnaldo@clickonversion.com`) |
+| `PAYPAL_BUSINESS_NAME` | Nombre empresa en facturas (default: `ClicKonversion`) |
+
+**NOTA SANDBOX:** En modo desarrollo (`NODE_ENV !== "production"`), PayPal usa `api-m.sandbox.paypal.com`. Los emails de sandbox NO se entregan en buzones reales — esto es comportamiento esperado. En producción el envío al cliente funciona correctamente.
 
 ---
 
@@ -66,6 +206,7 @@ Completada. Build limpio. 179/179 tests (81 prev + 98 nuevos).
 - `/admin/commercial/quotes` — Cotizaciones con drawer de propuesta y link Stripe
 - `/admin/commercial/clients` — Organizaciones clientes con búsqueda
 - `/admin/commercial/clients/[id]` — Detalle cliente: miembros y solicitudes
+- `/admin/commercial/invoices` — Lista facturas PayPal + crear nueva factura
 - `/admin/payments` — Vista unificada Stripe+PayPal con discrepancias
 - `/admin/analytics` — Funnel interno + tabla eventos (GA4 para frontend)
 - `/admin/settings` — Verificación env vars + info stack
@@ -101,14 +242,6 @@ Completada. Build limpio. 179/179 tests (81 prev + 98 nuevos).
 **Componentes (`src/components/admin/`):**
 `StatusBadge`, `PriorityBadge`, `MetricCard`, `SpecialistLoadBar`, `QueueTable`, `PaymentTable`, `StatusTransitionDialog`, `AdminSidebar`, `AdminHeader`
 
-**Tablas nuevas:**
-- `pf_specialist_profiles` — perfil, bio, timezone, max_concurrent
-- `pf_specialist_services` — servicios habilitados por especialista
-- `pf_request_status_log` — log inmutable de transiciones (trigger deniega UPDATE/DELETE)
-- `pf_payment_reconciliation` — conciliación Stripe+PayPal con discrepancy generado
-- `pf_analytics_events` — eventos internos del servidor
-- `pf_catalog_price_history` — historial de cambios de precio (inmutable)
-
 **Estado de solicitudes (10 estados + 3 legacy):**
 `pending_payment → queued → in_progress → review → completed → refunded`
 `in_progress → waiting_client | waiting_third_party | cancelled`
@@ -130,7 +263,7 @@ Build limpio. 179 tests unitarios pasan. Playwright instalado, 5 suites E2E. Doc
 
 **Archivos clave Fase 7:**
 - `src/data/apps.ts` — catálogo extensible de apps (App interface + APPS array)
-- `src/app/(marketing)/apps/page.tsx` — /apps catálogo
+- `src/app/(marketing)/apps/page.tsx` — /apps catálogo (rediseñado en Fase 8)
 - `src/app/(marketing)/apps/[slug]/page.tsx` — router dinámico por app
 - `src/components/apps/synclead-page.tsx` — landing SyncLead completa
 - `src/app/api/apps/synclead/waitlist/route.ts` — API waitlist (POST, rate-limited)
@@ -141,7 +274,7 @@ Build limpio. 179 tests unitarios pasan. Playwright instalado, 5 suites E2E. Doc
 - `docs/OPERATIONS.md` — guía operativa completa (13 secciones)
 - `docs/LAUNCH-CHECKLIST.md` — checklist de lanzamiento (12 stages)
 
-**SyncLead features afirmadas (verificadas contra codebase real):**
+**SyncLead features afirmadas:**
 - Real-time lead sync from Meta Ads ✅
 - Visual pipeline (kanban) ✅
 - WhatsApp Business integrated ✅
@@ -153,52 +286,6 @@ Build limpio. 179 tests unitarios pasan. Playwright instalado, 5 suites E2E. Doc
 - NO Stripe/pagos (no mencionar) ❌
 
 **SyncLead CTA:** Waitlist (no pagos listos). Incluido gratis con servicios de Meta Ads.
-
-**SEO Fase 7:**
-- Sitemap actualizado: incluye /apps, /apps/synclead — excluye /portal, /admin, /checkout, /cleaning
-- Robots actualizado: allow /apps; disallow /portal/, /admin/, /cleaning
-- JSON-LD SoftwareApplication en /apps/synclead
-- Navbar: "Apps" agregado entre Services y Pricing
-- SyncLeadSection: href actualizado de /synclead → /apps/synclead
-
-**Rate limiting:**
-- `src/lib/rate-limit.ts` — utilitario con configs por ruta (PORTAL_LIMITS)
-- Portal routes aún no tienen rate limiting aplicado en los handlers — pendiente integrar
-- Waitlist API: 3 req/hora por IP
-
-**Pendiente (post-lanzamiento):**
-- Integrar rate limiting en handlers de /api/portal/** (usar isRateLimited + portalRateLimitKey)
-- Instalar Playwright browsers: `pnpm playwright install --with-deps chromium`
-- Configurar Sentry para error tracking
-- Monitoreo de uptime (UptimeRobot o Better Uptime)
-- Primera activación manual de cliente
-
-**Scope original (retrasado post-lanzamiento):**
-
-### QA Integral
-- Pruebas E2E con Playwright: flujos críticos (registro → portal → request → comentario → descarga)
-- Pruebas de aislamiento multi-tenant: verificar que org A no puede leer datos de org B manipulando URLs o requests HTTP
-- Pruebas de pagos: Stripe + PayPal en modo sandbox, webhooks con ngrok
-- Pruebas de seguridad: fuzzing de IDs, manipulación de orgId en payloads, tokens expirados
-- Auditoría de performance: Core Web Vitals, bundle size, TTFB en rutas críticas
-
-### Apps / PWA
-- Progressive Web App: manifest, service worker, instalable en iOS y Android
-- O Capacitor wrapper si se requiere distribución nativa (App Store / Play Store)
-- Push notifications para eventos del portal (nuevo comentario, hito completado, entregable subido)
-
-### Hardening y Observabilidad
-- Rate limiting en todas las rutas `/api/portal/**` (no solo audit form)
-- Logging estructurado de errores en API routes (Sentry o similar)
-- Monitoreo de uptime y alertas
-- Revisión final de políticas RLS — confirmar que ninguna tabla `pf_*` es accesible sin auth
-- Variables de entorno auditadas: ningún secreto expuesto en `NEXT_PUBLIC_`
-
-### Lanzamiento
-- Checklist de deploy: migraciones aplicadas, bucket privado verificado, webhooks en producción
-- Seed de datos de prueba para demos a clientes potenciales
-- Documentación de onboarding para primer cliente: cómo registrarse, cómo acceder al portal, cómo interpretar el dashboard
-- Primer cliente activado manualmente: org creada, request vinculado a orden pagada, especialista asignado
 
 ---
 
@@ -250,6 +337,16 @@ src/
   app/
     (marketing)/              # Public marketing pages group
       page.tsx                # Homepage /
+      services/page.tsx       # /services — ServicesTabs + CartBar
+      pricing/page.tsx        # /pricing — PricingGrid filtrable + CartBar
+      projects/page.tsx       # /projects — portfolio de proyectos
+      apps/page.tsx           # /apps — catálogo de apps
+      apps/[slug]/page.tsx    # /apps/[slug] — landing individual
+      about/page.tsx          # /about — historia, equipo, ContactForm
+      resources/page.tsx      # /resources — recursos + newsletter
+      checkout/page.tsx       # /checkout — carrito + 3 métodos pago
+      checkout/success/       # /checkout/success — confirmación PayPal
+      checkout/cancel/        # /checkout/cancel
       audit/page.tsx          # /audit — 2-column layout with value props
       cleaning/page.tsx       # /cleaning — outbound landing (noindex)
       thank-you/page.tsx      # /thank-you (noindex)
@@ -262,76 +359,116 @@ src/
         pipeline/
         companies/
         contacts/
-        opportunities/
-        activities/
-        tasks/
-        audit-requests/
-        import/
-        settings/
+        ...
     api/
-      audit/route.ts          # Public audit form submission
-      export/companies/       # CSV export (auth-protected)
-      auth/callback/          # Supabase auth callback
-    layout.tsx                # Root layout — GA4 via next/script, JSON-LD
-    globals.css               # Tailwind @theme tokens + global helpers
+      audit/route.ts
+      apps/synclead/waitlist/route.ts
+      auth/callback/
+    layout.tsx                # Root layout — GA4, fonts, JSON-LD
+    globals.css               # Tailwind @theme tokens (marketing + admin) + Fontshare @import
     robots.ts
     sitemap.ts
   components/
-    ui/                       # button, input, badge, logo
-    crm/                      # app-sidebar, activity-timeline, company-actions, etc.
+    ui/
+      logo-wordmark.tsx       # CSS wordmark "clickONversion" con pill lime y chispas
+      logo-key.tsx            # Isotipo interactivo "c!" con press animation
+      logo.tsx                # Logo legacy (admin/portal)
+    crm/                      # app-sidebar, activity-timeline, etc.
     marketing/
-      navbar.tsx
-      footer.tsx
+      navbar.tsx              # Sticky, cream bg, cart pill, mobile hamburger
+      footer.tsx              # Cobalt floating footer con wordmark
       marketing-layout.tsx
-      hero.tsx
-      problem-section.tsx
-      system-section.tsx
-      service-section.tsx     # Local Revenue Engine — 5 pillars
-      differentiators.tsx     # Stop paying for disconnected marketing
-      services-slider.tsx     # CSS scroll-snap slider — 7 service cards
-      industries-section.tsx  # Service business verticals
-      process-section.tsx     # 4-step process
-      audit-example-section.tsx # Fictional Sunrise Cleaning demo
-      founder-section.tsx     # Arnaldo — photo or AC monogram fallback
-      audit-cta.tsx
+      cart-bar.tsx            # Sticky bottom bar → /checkout
+      services-tabs.tsx       # 4 tabs por área, cards con useCart
+      pricing-grid.tsx        # Grid filtrable por categoría y tipo
+      contact-form.tsx        # Multi-select chips + Server Action
+      contact-actions.ts      # sendContactAction (Resend)
+      apps-waitlist-form.tsx  # POST /api/apps/synclead/waitlist
+      resources-newsletter-form.tsx
+    admin/                    # StatusBadge, MetricCard, QueueTable, etc.
     forms/
       audit-form.tsx
   lib/
-    analytics.ts              # All GA4 events
-    validations.ts            # Zod schemas (auditFormSchema uses `email` not `work_email`)
-    normalize.ts
-    env.ts
-    utils.ts
+    analytics.ts
+    validations.ts
     supabase/
       client.ts
       server.ts
       middleware.ts
   types/
     database.ts
-    app.ts
+    catalog.ts                # CartItem interface, tipos catálogo
 ```
+
+---
+
+## Brand — Marketing Design System v3
+
+### Tokens marketing (`globals.css` `@theme`)
+
+| Token | Valor | Uso |
+|-------|-------|-----|
+| `--color-cream` | `#F7F5EF` | Background marketing |
+| `--color-ink` | `#202124` | Texto principal |
+| `--color-muted-ink` | `#5F6368` | Texto secundario |
+| `--color-body-2` | `#8C8C8C` | Cuerpo terciario |
+| `--color-cobalt` | `#345CFF` | Acento primario, footer |
+| `--color-lime` | `#D9FA62` | Pill ON, cart, CTAs |
+| `--color-lavender` | `#E9E4FF` | Hover nav, pills |
+| `--color-spark` | `#FF6B2C` | Chispas logo, warm highlights |
+| `--color-line` | `#E2DED3` | Bordes sobre cream |
+| `--font-mk-sans` | General Sans | Cuerpo marketing |
+| `--font-mk-mono` | JetBrains Mono | Datos, precios, carrito |
+| `--font-mk-serif` | Instrument Serif | Títulos editoriales |
+
+### Tokens admin/portal (legacy, preservados)
+
+| Token | Valor | Uso |
+|-------|-------|-----|
+| `--color-brand` | `#FF5A1F` | CTAs admin, highlights |
+| `--color-obsidian` | `#0B0D0F` | App shell, dark backgrounds |
+| `--color-surface-dark` | `#14171A` | Cards, sidebars, modals |
+| `--color-warm-white` | `#F7F7F3` | Body text on dark |
+| `--color-muted` | `#8A9099` | Secondary text |
+| `--color-success` | `#22C55E` | WON, positive states |
+| `--color-warning` | `#F59E0B` | NURTURE, deadlines |
+| `--color-danger` | `#EF4444` | LOST, errors |
 
 ---
 
 ## Homepage Section Order
 
 ```
-Hero → ProblemSection → SystemSection → ServiceSection →
-Differentiators → ServicesSlider → IndustriesSection →
-ProcessSection → AuditExampleSection → FounderSection → AuditCTA
+Hero → MarqueeStrip → Cards (3 colores) → ExpertiseList →
+HowWeWork → FeaturedServices → Projects → AiFlow →
+SyncLeadPreview → CTA Lime
 ```
 
 ---
 
-## CTA Copy Rules — Non-Negotiable
+## Pages & Indexing
 
-| Location | Text |
-|---|---|
-| All marketing CTAs | **Get a Free Growth Audit** |
-| Audit form submit button | **Get My Free Growth Audit** |
-| Secondary hero CTA | **See the System** |
-
-Never introduce new conversion paths. All CTAs go to `/audit`.
+| Route | Indexed | Notes |
+|---|---|---|
+| `/` | ✅ | Homepage |
+| `/services` | ✅ | Catálogo de servicios con carrito |
+| `/pricing` | ✅ | Grid de precios filtrable |
+| `/projects` | ✅ | Portfolio |
+| `/apps` | ✅ | Catálogo apps |
+| `/apps/synclead` | ✅ | Landing SyncLead |
+| `/about` | ✅ | Historia y contacto |
+| `/resources` | ✅ | Recursos descargables |
+| `/checkout` | ❌ noindex | Checkout |
+| `/audit` | ✅ | 2-column layout with value props |
+| `/privacy` | ✅ | |
+| `/terms` | ✅ | |
+| `/cleaning` | ❌ noindex | Outbound landing |
+| `/thank-you` | ❌ noindex | Conversion confirmation |
+| `/login` | ❌ noindex | Auth page |
+| `/app/**` | ❌ disallow | Protected CRM |
+| `/portal/**` | ❌ disallow | Portal clientes |
+| `/admin/**` | ❌ disallow | Panel admin |
+| `/api/**` | ❌ disallow | API routes |
 
 ---
 
@@ -365,44 +502,18 @@ Do NOT add a second gtag snippet. Check `src/app/layout.tsx` before touching GA4
 
 ---
 
-## Outbound Landing Pages
-
-Convention for vertical-specific landing pages:
-
-- URL: `/[vertical]` (e.g., `/cleaning`)
-- **noindex** during outbound phase via `layout.tsx` in the same route
-- **NOT added to sitemap** while noindex
-- Use `analytics.[vertical]CtaClick(location)` for attribution
-- All CTAs lead to `/audit` — no new funnels
-- UTM structure: `?utm_source=loom&utm_medium=outbound&utm_campaign=cleaning_florida_2026`
-
-To create a new vertical page, follow `src/app/(marketing)/cleaning/` as the template.
-
----
-
-## UTM Convention
-
-| Channel | `utm_source` | `utm_medium` |
-|---|---|---|
-| Cold email | `cold_email` | `outbound` |
-| Loom | `loom` | `outbound` |
-| LinkedIn | `linkedin` | `outbound` |
-| Referral | `referral` | `partner` |
-
-Campaign format: `[vertical]_[market]_[year]` — e.g., `cleaning_florida_2026`.
-Never put recipient names or emails inside UTM parameters.
-
----
-
 ## Security Rules
 
 1. **RLS on every table** — no table is readable or writable without a policy.
-2. **Never use `NEXT_PUBLIC_` prefix for secrets** — `SUPABASE_SERVICE_ROLE_KEY`, `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY` are server-only.
+2. **Never use `NEXT_PUBLIC_` prefix for secrets** — `SUPABASE_SERVICE_ROLE_KEY`, `PAYPAL_CLIENT_SECRET`, `RESEND_API_KEY` son server-only.
 3. **Always validate server-side** — Zod validation in API routes. Client validation is UX only.
 4. **Honeypot + Turnstile on audit form** — both verified server-side before any DB write.
-5. **Rate limiting on public routes** — audit form is rate-limited by IP (in-memory, per invocation).
+5. **Rate limiting on public routes** — audit form y waitlist API rate-limited por IP.
 6. **No PII in GA4** — events contain only non-sensitive marketing context.
-7. **Public API routes must use `createAdminClient()`** — the regular `createClient()` uses the anon key and is blocked by RLS without a user session. Use `createAdminClient()` (service role) for trusted server-side writes like the audit form.
+7. **Public API routes must use `createAdminClient()`** — service role para writes de confianza.
+8. **`internal_notes` e `is_internal` NUNCA se exponen al portal cliente** — filtrar a nivel de query.
+9. **Org isolation** — toda query a tablas `pf_*` debe incluir filtro explícito `orgId` (no RLS).
+10. **Signed URLs server-side** — nunca exponer raw blob URLs a clientes sin auth check.
 
 ---
 
@@ -411,140 +522,46 @@ Never put recipient names or emails inside UTM parameters.
 ### TypeScript
 - `"strict": true` — do not weaken
 - No `any` — use `unknown` and narrow
-- Generate Supabase types: `pnpm supabase gen types typescript --local > src/types/database.ts`
 
 ### Supabase Clients
-- `createClient()` — session-aware, uses anon key, subject to RLS. For Server Components and authenticated routes.
-- `createAdminClient()` — service role, bypasses RLS. For trusted server-side API routes (e.g. `/api/audit`). Never use in client components or expose to the browser.
+- `createClient()` — session-aware, uses anon key, subject to RLS.
+- `createAdminClient()` — service role, bypasses RLS. For trusted server-side API routes.
 
 ### organizations table — must have exactly one row
-This is a single-tenant CRM. The `organizations` table must have a seeded row or all CRM inserts will fail silently — `companies`, `contacts`, `opportunities`, and `activities` all have `organization_id NOT NULL`.
-
-The org ID is stored as `SUPABASE_ORG_ID` (server-only env var) and read via `getServerEnv().orgId`. **Never query the organizations table from a public API route** — RLS filters out rows when there is no `auth.uid()`, even with the service role client, because the `is_org_member()` function uses `SECURITY DEFINER` and checks `auth.uid()`.
-
-Current org ID: `db071585-6652-4d2a-87fd-ec4670c44c93`
-
-If starting fresh, seed with:
-```sql
-INSERT INTO organizations (name, slug) VALUES ('ClicKonversion', 'clickonversion');
-```
-Then add the resulting UUID as `SUPABASE_ORG_ID` in Vercel env vars.
+Org ID: `db071585-6652-4d2a-87fd-ec4670c44c93` → env var `SUPABASE_ORG_ID`
 
 ### Database
 - Schema changes via SQL migrations in `supabase/migrations/`
 - Never use Supabase Dashboard for schema changes
-- Every migration file includes rollback comment
-- Every table has RLS enabled
 
 ### Favicon
-- `src/app/icon.tsx` — generates a 32×32 PNG via `ImageResponse` (CK mark, obsidian bg + orange K). Next.js serves it at `/icon` and auto-injects the `<link rel="icon">` tag.
-- Do NOT add a manual `<link rel="icon">` in `layout.tsx` — Next.js handles it via the file convention.
-- Verify at `https://www.clickonversion.com/icon` after deploy.
+- `src/app/icon.tsx` — 32×32 PNG via `ImageResponse`. Next.js auto-inyecta el `<link>`.
 
 ### Icons
-- Use `lucide-react` for icons throughout the app
-- **lucide-react v1.33.0 does NOT have a `Linkedin` icon** — use inline SVG (see `footer.tsx` and `founder-section.tsx` for the correct SVG paths)
-- Do not mix icon libraries on the same page
+- Use `lucide-react` for icons
+- **lucide-react NO tiene icono `Linkedin`** — usar inline SVG
 
-### Components
-- Semantic HTML: `<button>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<header>`, `<footer>`
-- ARIA labels on icon-only buttons
-- Form inputs always have associated `<label>` elements
-- Mobile-first responsive design
+### Cart
+- Provider: `useCart()` de `src/components/shop/cart-provider`
+- Key localStorage: `ck_cart_v1`
+- Tipo `CartItem` en `src/types/catalog.ts`
+- `count` y `items` disponibles en cualquier Client Component que importe `useCart()`
 
 ### Styling
-- Tailwind 4 CSS-first: tokens defined in `src/app/globals.css` under `@theme`
-- Prefer token references over hardcoded hex in Tailwind classes
-- Use `style={{}}` only for dynamic values (colors from data arrays, gradients)
-- Section classes: `.section-dark` (#0B0D0F), `.section-surface` (#14171A)
-- Container classes: `.container-wide` (88rem), `.container-tight` (64rem)
-- `.no-scrollbar` — hides scrollbar for slider containers
-
-### Sliders / Carousels
-- Use native CSS `scroll-snap-type: x mandatory` — no library dependencies
-- Cards: `snap-start flex-shrink-0` with fixed width
-- Navigation: `scrollBy()` on a `useRef` container
-- Hide scrollbar with `.no-scrollbar` class (defined in `globals.css`)
+- Tailwind 4 CSS-first: tokens en `globals.css` bajo `@theme`
+- Marketing usa tokens `--color-*` / `--font-mk-*`
+- Admin usa tokens legacy `--color-brand`, `--color-obsidian`, etc.
+- Clases helper: `.section-dark`, `.section-surface`, `.container-wide`, `.container-tight`, `.no-scrollbar`
+- CSS `.mk-container` — contenedor marketing con max-width y padding responsive
 
 ---
 
-## Brand Quick Reference
+## Outbound Landing Pages
 
-| Token | Value | Usage |
-|---|---|---|
-| `--color-brand` | `#FF5A1F` | CTAs, highlights, active states |
-| `--color-obsidian` | `#0B0D0F` | App shell, dark backgrounds |
-| `--color-surface-dark` | `#14171A` | Cards, sidebars, modals |
-| `--color-warm-white` | `#F7F7F3` | Body text on dark |
-| `--color-muted` | `#8A9099` | Secondary text |
-| `--color-gray-500` | `#546072` | Tertiary text |
-| `--color-gray-600` | `#3D4A5C` | Very muted text, captions |
-| `--color-success` | `#22C55E` | WON, positive states |
-| `--color-warning` | `#F59E0B` | NURTURE, deadlines |
-| `--color-danger` | `#EF4444` | LOST, errors |
-
-Typography: Inter (primary), system-mono (code/data). Max 2 font families.
-
-Logo: `src/components/ui/logo.tsx` — variants `light` (dark bg) / `dark` (light bg). Sizes: sm/md/lg. Wordmark: "Clic**Konversion**" (full "Konversion" in orange).
-
-Founder photo: `public/founder.jpg` — if missing, component falls back to "AC" monogram automatically.
-
----
-
-## Copy Rules
-
-- **Outcome → explanation → mechanism** (never mechanism first)
-- Avoid: leverage, innovative, comprehensive, cutting-edge, transformative, supercharge, unlock, seamless
-- Every description must answer: "What does this help me accomplish?"
-- Language test: would a cleaning company owner immediately understand why this matters?
-
----
-
-## Pages & Indexing
-
-| Route | Indexed | Notes |
-|---|---|---|
-| `/` | ✅ | Homepage |
-| `/audit` | ✅ | 2-column layout with value props |
-| `/privacy` | ✅ | |
-| `/terms` | ✅ | |
-| `/cleaning` | ❌ noindex | Outbound landing — revisit after validation |
-| `/thank-you` | ❌ noindex | Conversion confirmation |
-| `/login` | ❌ noindex | Auth page |
-| `/app/**` | ❌ disallow | Protected CRM |
-| `/api/**` | ❌ disallow | API routes |
-
----
-
-## SEO Baseline — Measurement First
-
-Search Console and GA4 are installed. Data accumulates from day one.
-
-**SEO Phase 1 starts after the first paying client is acquired.** Until then:
-- No blog posts
-- No city pages
-- No programmatic content
-- No industry page expansion beyond `/cleaning` (outbound use only)
-
-Future content will be close to money: high-intent queries from service business owners (not "what is SEO?").
-
----
-
-## What NOT to Build (yet)
-
-Items marcados ✅ ya están construidos. Los demás siguen fuera de scope hasta la fase indicada.
-
-| Category | Status | Fase |
-|---|---|---|
-| Billing / payments (Stripe + PayPal) | ✅ Fase 3 | — |
-| Client portal (auth, requests, docs, billing) | ✅ Fase 5 | — |
-| Booking rights + Cal.com | ✅ Fase 4 | — |
-| AI features (lead scoring, drafts, enrichment) | ❌ fuera de scope | — |
-| Email automation (sequences, drip) | ❌ fuera de scope | — |
-| Social scheduler (Instagram, LinkedIn, GMB) | ❌ fuera de scope | — |
-| Custom CMS (Sanity blog, content editor) | ❌ pendiente | post-Fase 7 |
-| SEO content expansion (blog, city pages) | ❌ pendiente | post-Fase 7 |
-| Native mobile app (App Store / Play Store) | ❌ pendiente | Fase 7 (Capacitor / PWA) |
+- URL: `/[vertical]` (e.g., `/cleaning`)
+- **noindex** via `layout.tsx` en la misma ruta
+- **NOT added to sitemap** while noindex
+- All CTAs lead to `/audit`
 
 ---
 
@@ -552,18 +569,39 @@ Items marcados ✅ ya están construidos. Los demás siguen fuera de scope hasta
 
 | Address | Purpose | Provider |
 |---------|---------|----------|
-| `arnaldo@clickonversion.com` | Main inbox — sales, clients, conversations | Zoho Mail Free |
-| `hello@clickonversion.com` | Public contact — alias redirects to arnaldo | Zoho Mail Free |
-| `notifications@clickonversion.com` | Automated sends only — audit form notifications | Resend (sends only, no inbox) |
+| `arnaldo@clickonversion.com` | Main inbox | Zoho Mail Free |
+| `hello@clickonversion.com` | Public contact | Zoho Mail Free |
+| `notifications@clickonversion.com` | Automated sends | Resend (send only) |
 
-**Flow:** audit form submit → Supabase → Resend sends from `notifications@` → delivered to `arnaldo@`
-
-**Env vars:**
+**Env vars email:**
 - `EMAIL_FROM` — `ClicKonversion <notifications@clickonversion.com>`
 - `NOTIFICATION_EMAIL` — `arnaldo@clickonversion.com`
-- `RESEND_API_KEY` — server-only, never `NEXT_PUBLIC_`
+- `RESEND_API_KEY` — server-only
 
-**DNS (Cloudflare):** MX → Zoho, SPF split by subdomain (@ for Zoho, send. for Resend/SES — do not combine). DKIM selector: `zoho._domainkey`. SSL: Universal via Google Trust Services, auto-renews every 3 months — no action needed.
+---
+
+## Env Vars de referencia
+
+| Variable | Propósito | Público |
+|----------|-----------|---------|
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | GA4 | ✅ |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase URL | ✅ |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon | ✅ |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase admin | ❌ |
+| `SUPABASE_ORG_ID` | UUID org interna | ❌ |
+| `RESEND_API_KEY` | Email transaccional | ❌ |
+| `EMAIL_FROM` | From header emails | ❌ |
+| `NOTIFICATION_EMAIL` | Destino notificaciones | ❌ |
+| `PAYPAL_CLIENT_ID` | App PayPal | ❌ |
+| `PAYPAL_CLIENT_SECRET` | App PayPal | ❌ |
+| `PAYPAL_INVOICER_EMAIL` | Email invoicer facturas | ❌ |
+| `PAYPAL_BUSINESS_NAME` | Nombre empresa en facturas | ❌ |
+| `STRIPE_SECRET_KEY` | Stripe pagos | ❌ |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook | ❌ |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe frontend | ✅ |
+| `TURNSTILE_SECRET_KEY` | Cloudflare captcha | ❌ |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare captcha | ✅ |
+| `CAL_API_KEY` | Cal.com bookings | ❌ |
 
 ---
 
@@ -575,6 +613,8 @@ Items marcados ✅ ya están construidos. Los demás siguen fuera de scope hasta
 | `docs/CRM.md` | Pipeline stages, workflows, metrics, data relationships |
 | `docs/BRAND.md` | Colors, typography, voice, copy examples |
 | `docs/DEPLOYMENT.md` | Supabase setup, env vars, Vercel, DNS, GA4, Turnstile |
+| `docs/OPERATIONS.md` | Guía operativa completa (13 secciones) |
+| `docs/LAUNCH-CHECKLIST.md` | Checklist de lanzamiento (12 stages) |
 
 ---
 

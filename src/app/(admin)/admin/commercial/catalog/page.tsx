@@ -2,6 +2,7 @@ import { getServices } from "@/lib/admin/commercial"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { TogglePublishButton } from "./toggle-publish-button"
+import { NewServiceButton, EditServiceButton, DeleteServiceButton } from "./catalog-actions"
 import type { AdminService } from "@/types/admin"
 
 function formatPrice(service: AdminService): string {
@@ -48,6 +49,7 @@ export default async function CatalogPage() {
               {services.filter((s) => s.isPublished).length !== 1 ? "s" : ""}
             </p>
           </div>
+          <NewServiceButton />
         </div>
       </div>
 
@@ -71,6 +73,7 @@ export default async function CatalogPage() {
               <th className="text-left px-4 py-3 text-xs text-[#8A9099] font-medium">
                 Acciones
               </th>
+              <th className="w-8" />
             </tr>
           </thead>
           <tbody>
@@ -114,10 +117,14 @@ export default async function CatalogPage() {
                     </p>
                   </td>
                   <td className="px-4 py-4">
-                    <TogglePublishButton
-                      serviceId={service.id}
-                      isPublished={service.isPublished}
-                    />
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <TogglePublishButton
+                        serviceId={service.id}
+                        isPublished={service.isPublished}
+                      />
+                      <EditServiceButton service={service} />
+                      <DeleteServiceButton service={service} />
+                    </div>
                   </td>
                 </tr>
               ))

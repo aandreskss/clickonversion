@@ -57,6 +57,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Catálogo",     href: "/admin/commercial/catalog" },
       { label: "Cotizaciones", href: "/admin/commercial/quotes" },
       { label: "Clientes",     href: "/admin/commercial/clients" },
+      { label: "Facturas",     href: "/admin/commercial/invoices" },
     ],
   },
   {

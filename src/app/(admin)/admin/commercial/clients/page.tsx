@@ -1,6 +1,7 @@
 import { getClients } from "@/lib/admin/commercial"
 import Link from "next/link"
 import { ArrowLeft, Search, Users, ChevronRight } from "lucide-react"
+import { NewClientButton, DeleteClientButton } from "./client-actions"
 
 export default async function ClientsPage({
   searchParams,
@@ -37,6 +38,7 @@ export default async function ClientsPage({
               {search ? ` · Buscando: "${search}"` : ""}
             </p>
           </div>
+          <NewClientButton />
         </div>
       </div>
 
@@ -144,9 +146,12 @@ export default async function ClientsPage({
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <Link href={`/admin/commercial/clients/${client.id}`}>
-                      <ChevronRight className="w-4 h-4 text-[#3D4A5C] group-hover:text-[#FF5A1F] transition-colors" />
-                    </Link>
+                    <div className="flex items-center gap-1">
+                      <DeleteClientButton client={client} />
+                      <Link href={`/admin/commercial/clients/${client.id}`}>
+                        <ChevronRight className="w-4 h-4 text-[#3D4A5C] group-hover:text-[#FF5A1F] transition-colors" />
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))

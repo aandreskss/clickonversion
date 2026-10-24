@@ -26,7 +26,7 @@ export function CreateInvoiceForm() {
   const [notes, setNotes] = useState("")
   const [currency] = useState("USD")
   const [error, setError] = useState("")
-  const [result, setResult] = useState<{ invoiceId?: string; invoiceUrl?: string } | null>(null)
+  const [result, setResult] = useState<{ invoiceId?: string; invoiceUrl?: string; dashboardUrl?: string } | null>(null)
   const [isPending, startTransition] = useTransition()
 
   function addItem() {
@@ -82,7 +82,7 @@ export function CreateInvoiceForm() {
       if (res.error && !res.invoiceId) {
         setError(res.error)
       } else {
-        setResult({ invoiceId: res.invoiceId, invoiceUrl: res.invoiceUrl })
+        setResult({ invoiceId: res.invoiceId, invoiceUrl: res.invoiceUrl, dashboardUrl: res.dashboardUrl })
         if (res.error) {
           setError(res.error) // partial error (created but not sent)
         }
@@ -92,27 +92,67 @@ export function CreateInvoiceForm() {
 
   if (result?.invoiceId) {
     return (
-      <div className="bg-[#14171A] border border-[#3D4A5C] rounded-xl p-8 text-center space-y-4">
-        <CheckCircle className="w-12 h-12 text-[#22C55E] mx-auto" />
-        <div>
-          <h3 className="text-lg font-semibold text-[#F7F7F3] mb-1">Factura creada</h3>
-          <p className="text-sm text-[#8A9099]">ID: {result.invoiceId}</p>
-          {error && (
-            <p className="text-sm text-[#F59E0B] mt-2">{error}</p>
-          )}
+      <div className="bg-[#14171A] border border-[#3D4A5C] rounded-xl p-8 space-y-6">
+        <div className="flex items-center gap-3">
+          <CheckCircle className="w-8 h-8 text-[#22C55E] flex-shrink-0" />
+          <div>
+            <h3 className="text-lg font-semibold text-[#F7F7F3]">Factura creada y enviada</h3>
+            <p className="text-xs text-[#8A9099] mt-0.5">
+              El cliente recibirá un email de PayPal con el link de pago.
+            </p>
+          </div>
         </div>
-        {result.invoiceUrl && (
+
+        {error && (
+          <p className="text-sm text-[#F59E0B] bg-[#F59E0B]/10 border border-[#F59E0B]/20 rounded-lg px-4 py-3">
+            {error}
+          </p>
+        )}
+
+        <div className="bg-[#1C2026] border border-white/10 rounded-lg px-4 py-3 space-y-1">
+          <p className="text-xs text-[#546072]">ID de factura PayPal</p>
+          <p className="text-sm font-mono text-[#F7F7F3] break-all">{result.invoiceId}</p>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          {/* Admin: ver la factura en su panel PayPal */}
           <a
-            href={result.invoiceUrl}
+            href={result.dashboardUrl ?? "https://www.paypal.com/invoice/summary"}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[#FF5A1F] text-white text-sm font-medium rounded-lg hover:bg-[#E54A15] transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#FF5A1F] text-white text-sm font-medium rounded-lg hover:bg-[#E54A15] transition-colors"
           >
             <ExternalLink className="w-4 h-4" />
-            Ver factura en PayPal
+            Ver factura en tu panel de PayPal
           </a>
-        )}
-        <div>
+
+          {/* Client link (payer view) */}
+          {result.invoiceUrl && (
+            <a
+              href={result.invoiceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#1C2026] border border-white/10 text-[#8A9099] text-sm font-medium rounded-lg hover:text-[#F7F7F3] hover:border-white/20 transition-colors"
+            >
+              <ExternalLink className="w-4 h-4" />
+              Ver link del cliente (payer view)
+            </a>
+          )}
+
+          <p className="text-xs text-[#546072] text-center">
+            También puedes ver todas tus facturas en{" "}
+            <a
+              href="https://www.paypal.com/invoice/summary"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#FF5A1F] hover:underline"
+            >
+              paypal.com/invoice/summary
+            </a>
+          </p>
+        </div>
+
+        <div className="pt-2 border-t border-[#3D4A5C]">
           <button
             type="button"
             onClick={() => {
@@ -126,7 +166,7 @@ export function CreateInvoiceForm() {
             }}
             className="text-sm text-[#8A9099] hover:text-[#F7F7F3] transition-colors"
           >
-            Crear otra factura
+            ← Crear otra factura
           </button>
         </div>
       </div>

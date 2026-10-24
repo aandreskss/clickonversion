@@ -19,6 +19,7 @@ interface CreatePayPalInvoiceInput {
 interface PayPalInvoiceResult {
   invoiceId?: string
   invoiceUrl?: string
+  dashboardUrl?: string
   error?: string
 }
 
@@ -153,12 +154,28 @@ export async function createPayPalInvoiceAction(
       }
     }
 
-    // Get invoice URL from links
-    const links = createdData.links ?? []
-    const viewLink = links.find((l) => l.rel === "payer-view")
-    const invoiceUrl = viewLink?.href
+    // Fetch invoice detail to get confirmed payer-view URL
+    let invoiceUrl: string | undefined
+    try {
+      const detailRes = await fetch(`${baseUrl}/v2/invoicing/invoices/${invoiceId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (detailRes.ok) {
+        const detail = (await detailRes.json()) as {
+          links?: Array<{ rel: string; href: string }>
+        }
+        invoiceUrl = detail.links?.find((l) => l.rel === "payer-view")?.href
+      }
+    } catch {
+      // fallback: try links from create response
+      const links = createdData.links ?? []
+      invoiceUrl = links.find((l) => l.rel === "payer-view")?.href
+    }
 
-    return { invoiceId, invoiceUrl }
+    // Always include admin dashboard link
+    const dashboardUrl = `https://www.paypal.com/invoice/details/${invoiceId}`
+
+    return { invoiceId, invoiceUrl, dashboardUrl }
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "Error inesperado"
     return { error: msg }

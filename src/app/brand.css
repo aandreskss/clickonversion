@@ -67,8 +67,9 @@
   .ck-burger { display: inline-flex; }
   .ck-nav-cta { display: none; }
 }
-.ck-mobile-menu { display: flex; flex-direction: column; gap: 4px; padding: 12px; }
-.ck-mobile-menu a.ck-navlink { font-size: 22px; padding: 14px 16px; }
+.ck-mobile-menu { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px 14px; border-top: 1px solid rgba(1,14,37,.08); margin-top: 6px; }
+.ck-mobile-menu a.ck-navlink { font-size: 17px; padding: 11px 14px; }
+.ck-mobile-menu .ck-btn { min-height: 44px; font-size: 15px; }
 .ck-flink { color: #fff; text-decoration: none; font-size: 15px; }
 .ck-flink:hover { color: var(--ck-peach); }
 
@@ -102,6 +103,13 @@
 /* ── Hero 3D ──────────────────────────────────────────── */
 .ck-scene { position: relative; width: min(540px, 100%); aspect-ratio: 1 / 1; transform-style: preserve-3d; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
 .ck-layer { position: absolute; transform-style: preserve-3d; }
+@media (max-width: 700px) {
+  .ck-scene { transform: none !important; }
+  .ck-layer { transform: none !important; animation: none !important; }
+  .ck-layer-float { display: none !important; }
+  .ck-layer-video { position: relative !important; left: auto !important; top: auto !important; width: 100% !important; height: auto !important; aspect-ratio: 3/4; border-radius: 24px; overflow: hidden; }
+  .ck-layer-video > div { border-radius: 20px !important; height: 100% !important; }
+}
 .ck-bob { animation: ck-bob 6s ease-in-out infinite; }
 .ck-bob-2 { animation: ck-bob 7.5s ease-in-out -2s infinite; }
 .ck-bob-3 { animation: ck-bob 5.2s ease-in-out -1s infinite; }
@@ -255,3 +263,16 @@ a.ck-post:hover .ck-cover-g { transform: rotate(-6deg) scale(1.08); }
 @keyframes ck-rise { from { opacity: 0; transform: perspective(1000px) rotateX(22deg) translateY(80px); } }
 @supports (animation-timeline: view()) { .ck-reveal { animation: ck-rise linear both; animation-timeline: view(); animation-range: entry 0% cover 28%; } }
 @media (prefers-reduced-motion: reduce) { .ck *, .ck-wa-wrap * { animation: none !important; transition: none !important; } }
+
+/* ── Fix: el menú hamburguesa solo en pantallas chicas ── */
+.ck-icon-btn.ck-burger { display: none; }
+@media (max-width: 1020px) { .ck-icon-btn.ck-burger { display: inline-flex; } }
+
+/* ── Página de servicios: ilustraciones 3D ────────────── */
+.ck-viz-stage { perspective: 1300px; display: flex; justify-content: center; }
+.ck-viz { transform: rotateY(-14deg) rotateX(8deg); transition: transform .8s cubic-bezier(.2,.8,.2,1); transform-style: preserve-3d; }
+.ck-viz-r { transform: rotateY(14deg) rotateX(8deg); }
+.ck-viz-stage:hover .ck-viz { transform: rotateY(0deg) rotateX(0deg) translateY(-6px); }
+.ck-pop { transform: translateZ(60px); }
+.ck-svc-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,.72); border: 1.5px solid rgba(1,14,37,.1); }
+.ck-svc-row.on-dark { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.16); }

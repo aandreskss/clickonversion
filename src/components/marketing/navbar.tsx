@@ -41,7 +41,7 @@ export function Navbar({ active }: NavbarProps) {
           maxWidth: 1240, margin: "0 auto", display: "flex", flexWrap: "wrap", alignItems: "center",
           justifyContent: "space-between", gap: "8px 16px", padding: "8px 10px 8px 22px",
           background: "rgba(255,248,240,.88)", backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
-          border: "1.5px solid rgba(1,14,37,.1)", borderRadius: open ? 28 : 999,
+          border: "1.5px solid rgba(1,14,37,.1)", borderRadius: open ? 28 : 999, transition: "border-radius .3s",
         }}
       >
         <Link href="/" aria-label="ClicKonversion, ir al inicio" style={{ textDecoration: "none", padding: "2px 0" }}>

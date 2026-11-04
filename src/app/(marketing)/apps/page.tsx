@@ -64,7 +64,7 @@ export default function AppsPage() {
         {/* Hero dark */}
         <section
           style={{
-            background: "#202124",
+            background: "#010E25",
             padding: "clamp(120px, 15vw, 180px) clamp(16px, 5vw, 80px) clamp(80px, 10vw, 120px)",
           }}
           aria-label="SyncLead"
@@ -100,7 +100,7 @@ export default function AppsPage() {
                 style={{
                   fontStyle: "normal",
                   fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
-                  color: "#D9FA62",
+                  color: "#FE5C02",
                 }}
               >
                 sync.
@@ -125,7 +125,7 @@ export default function AppsPage() {
         {/* Features */}
         <section
           style={{
-            background: "#F7F5EF",
+            background: "#FFF8F0",
             padding: "clamp(80px, 10vw, 120px) clamp(16px, 5vw, 80px)",
           }}
           aria-label="Funcionalidades de SyncLead"
@@ -136,7 +136,7 @@ export default function AppsPage() {
                 fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
                 fontSize: "clamp(40px, 5vw, 64px)",
                 fontWeight: 400,
-                color: "#202124",
+                color: "#010E25",
                 lineHeight: 1,
                 marginBottom: 48,
               }}
@@ -158,16 +158,16 @@ export default function AppsPage() {
                     background: "#fff",
                     borderRadius: 24,
                     padding: "28px 24px",
-                    border: "1.5px solid #E2DED3",
+                    border: "1.5px solid #EFE3D6",
                   }}
                 >
                   <span style={{ fontSize: 28, display: "block", marginBottom: 16 }}>
                     {feat.icon}
                   </span>
-                  <p style={{ fontSize: 20, fontWeight: 700, color: "#202124", marginBottom: 8 }}>
+                  <p style={{ fontSize: 20, fontWeight: 700, color: "#010E25", marginBottom: 8 }}>
                     {feat.title}
                   </p>
-                  <p style={{ fontSize: 15, color: "#5F6168", lineHeight: 1.5 }}>{feat.desc}</p>
+                  <p style={{ fontSize: 15, color: "#5A6178", lineHeight: 1.5 }}>{feat.desc}</p>
                 </div>
               ))}
             </div>
@@ -177,7 +177,7 @@ export default function AppsPage() {
         {/* Integrations */}
         <section
           style={{
-            background: "#F7F5EF",
+            background: "#FFF8F0",
             padding: "0 clamp(16px, 5vw, 80px) clamp(64px, 8vw, 96px)",
           }}
           aria-label="Integraciones"
@@ -190,7 +190,7 @@ export default function AppsPage() {
                 fontWeight: 700,
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
-                color: "#5F6168",
+                color: "#5A6178",
                 marginBottom: 16,
               }}
             >
@@ -203,10 +203,10 @@ export default function AppsPage() {
                   style={{
                     padding: "8px 18px",
                     borderRadius: 999,
-                    border: "1.5px solid #202124",
+                    border: "1.5px solid #010E25",
                     fontSize: 14,
                     fontWeight: 600,
-                    color: "#202124",
+                    color: "#010E25",
                   }}
                 >
                   {intg}
@@ -224,7 +224,7 @@ export default function AppsPage() {
         >
           <div
             style={{
-              background: "#D9FA62",
+              background: "#FE5C02",
               borderRadius: 40,
               padding: "clamp(48px, 6vw, 80px) clamp(32px, 5vw, 64px)",
               maxWidth: "88rem",
@@ -244,7 +244,7 @@ export default function AppsPage() {
                   fontWeight: 700,
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  color: "#202124",
+                  color: "#010E25",
                   opacity: 0.6,
                   marginBottom: 12,
                 }}
@@ -256,7 +256,7 @@ export default function AppsPage() {
                   fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
                   fontSize: "clamp(28px, 4vw, 48px)",
                   fontWeight: 400,
-                  color: "#202124",
+                  color: "#010E25",
                   lineHeight: 1.1,
                   margin: 0,
                 }}
@@ -269,7 +269,7 @@ export default function AppsPage() {
             <Link
               href="/services#ads"
               style={{
-                background: "#202124",
+                background: "#010E25",
                 color: "#fff",
                 borderRadius: 999,
                 padding: "14px 28px",

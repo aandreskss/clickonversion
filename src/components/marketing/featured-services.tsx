@@ -86,7 +86,7 @@ function ServiceCardItem({ service }: { service: ServiceCard }) {
       style={{
         background: "white",
         borderRadius: 24,
-        border: added ? "1.5px solid #202124" : "1.5px solid transparent",
+        border: added ? "1.5px solid #010E25" : "1.5px solid transparent",
         padding: "28px 24px",
         display: "flex",
         flexDirection: "column",
@@ -108,7 +108,7 @@ function ServiceCardItem({ service }: { service: ServiceCard }) {
           style={{
             fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
             fontSize: 11,
-            color: "#5F6168",
+            color: "#5A6178",
             textTransform: "uppercase",
             letterSpacing: ".06em",
           }}
@@ -120,11 +120,11 @@ function ServiceCardItem({ service }: { service: ServiceCard }) {
             width: 7,
             height: 7,
             borderRadius: "50%",
-            background: service.type === "monthly" ? "#FF6B2C" : "#345CFF",
+            background: service.type === "monthly" ? "#FE5C02" : "#C94400",
             flexShrink: 0,
           }}
         />
-        <span style={{ fontSize: 12, color: "#5F6168" }}>
+        <span style={{ fontSize: 12, color: "#5A6178" }}>
           {service.type === "monthly" ? "Mensual" : "Pago único"}
         </span>
       </div>
@@ -134,7 +134,7 @@ function ServiceCardItem({ service }: { service: ServiceCard }) {
         style={{
           fontSize: 26,
           fontWeight: 600,
-          color: "#202124",
+          color: "#010E25",
           letterSpacing: "-.035em",
           lineHeight: 1.1,
           margin: 0,
@@ -144,7 +144,7 @@ function ServiceCardItem({ service }: { service: ServiceCard }) {
       </h3>
 
       {/* Desc */}
-      <p style={{ fontSize: 15, color: "#5F6168", lineHeight: 1.5, margin: 0, flexGrow: 1 }}>
+      <p style={{ fontSize: 15, color: "#5A6178", lineHeight: 1.5, margin: 0, flexGrow: 1 }}>
         {service.desc}
       </p>
 
@@ -155,7 +155,7 @@ function ServiceCardItem({ service }: { service: ServiceCard }) {
             style={{
               fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
               fontSize: 13,
-              color: "#5F6168",
+              color: "#5A6178",
             }}
           >
             {service.prefix}
@@ -166,14 +166,14 @@ function ServiceCardItem({ service }: { service: ServiceCard }) {
             fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
             fontSize: 40,
             fontWeight: 400,
-            color: "#202124",
+            color: "#010E25",
             lineHeight: 1,
           }}
         >
           ${service.price}
         </span>
         {service.type === "monthly" && (
-          <span style={{ fontSize: 14, color: "#5F6168", marginLeft: 4 }}>/mes</span>
+          <span style={{ fontSize: 14, color: "#5A6178", marginLeft: 4 }}>/mes</span>
         )}
       </div>
 
@@ -184,9 +184,9 @@ function ServiceCardItem({ service }: { service: ServiceCard }) {
         style={{
           padding: "12px 20px",
           borderRadius: "999px",
-          border: added ? "1.5px solid #202124" : "1.5px solid #E2DED3",
-          background: added ? "#D9FA62" : "transparent",
-          color: "#202124",
+          border: added ? "1.5px solid #010E25" : "1.5px solid #EFE3D6",
+          background: added ? "#FE5C02" : "transparent",
+          color: "#010E25",
           fontSize: 15,
           fontWeight: 600,
           fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
@@ -210,7 +210,7 @@ export function FeaturedServices() {
           style={{
             fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
             fontSize: 13,
-            color: "#5F6168",
+            color: "#5A6178",
             marginBottom: 24,
             letterSpacing: ".04em",
           }}
@@ -233,7 +233,7 @@ export function FeaturedServices() {
             style={{
               fontSize: "clamp(40px,5vw,72px)",
               fontWeight: 600,
-              color: "#202124",
+              color: "#010E25",
               letterSpacing: "-.045em",
               lineHeight: 0.9,
               margin: 0,
@@ -245,12 +245,12 @@ export function FeaturedServices() {
           {/* Legend */}
           <div style={{ display: "flex", alignItems: "center", gap: 16, paddingBottom: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#345CFF", display: "inline-block" }} />
-              <span style={{ fontSize: 14, color: "#5F6168" }}>Pago único</span>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#C94400", display: "inline-block" }} />
+              <span style={{ fontSize: 14, color: "#5A6178" }}>Pago único</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#FF6B2C", display: "inline-block" }} />
-              <span style={{ fontSize: 14, color: "#5F6168" }}>Mensual</span>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#FE5C02", display: "inline-block" }} />
+              <span style={{ fontSize: 14, color: "#5A6178" }}>Mensual</span>
             </div>
           </div>
         </div>

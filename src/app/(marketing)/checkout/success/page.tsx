@@ -11,7 +11,7 @@ function CheckoutHeader() {
     <header
       style={{
         background: "#fff",
-        borderBottom: "1px solid #E2DED3",
+        borderBottom: "1px solid #EFE3D6",
       }}
     >
       <div
@@ -29,7 +29,7 @@ function CheckoutHeader() {
           style={{
             fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
             fontSize: 12,
-            color: "#5F6168",
+            color: "#5A6178",
             display: "flex",
             alignItems: "center",
             gap: 6,
@@ -86,7 +86,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
   const isError = !!captureError
 
   return (
-    <div style={{ minHeight: "100dvh", background: "var(--color-cream, #F7F5EF)" }}>
+    <div style={{ minHeight: "100dvh", background: "var(--color-cream, #FFF8F0)" }}>
       <CheckoutHeader />
 
       {/* Clear cart client-side after successful redirect */}
@@ -104,7 +104,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
         <div
           style={{
             background: "#fff",
-            border: "1px solid #E2DED3",
+            border: "1px solid #EFE3D6",
             borderRadius: 20,
             padding: "40px 32px",
             maxWidth: 480,
@@ -135,7 +135,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
                   fontFamily: "var(--font-mk-sans)",
                   fontSize: 24,
                   fontWeight: 700,
-                  color: "var(--color-ink, #202124)",
+                  color: "var(--color-ink, #010E25)",
                   margin: "0 0 8px",
                 }}
               >
@@ -145,13 +145,13 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
                 style={{
                   fontFamily: "var(--font-mk-sans)",
                   fontSize: 14,
-                  color: "var(--color-muted-ink, #5F6168)",
+                  color: "var(--color-muted-ink, #5A6178)",
                   margin: "0 0 24px",
                   lineHeight: 1.6,
                 }}
               >
                 No pudimos confirmar tu pago. Si el cargo aparece en tu cuenta, escríbenos a{" "}
-                <a href="mailto:arnaldo@clickonversion.com" style={{ color: "#345CFF" }}>
+                <a href="mailto:arnaldo@clickonversion.com" style={{ color: "#C94400" }}>
                   arnaldo@clickonversion.com
                 </a>{" "}
                 y lo resolvemos de inmediato.
@@ -166,7 +166,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
                   width: "100%",
                   height: 54,
                   borderRadius: 12,
-                  background: "var(--color-cobalt, #345CFF)",
+                  background: "var(--color-cobalt, #C94400)",
                   color: "#fff",
                   fontFamily: "var(--font-mk-sans)",
                   fontSize: 15,
@@ -185,14 +185,14 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
                   width: 56,
                   height: 56,
                   borderRadius: "50%",
-                  background: "var(--color-lime, #D9FA62)",
+                  background: "var(--color-lime, #FE5C02)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   margin: "0 auto 20px",
                 }}
               >
-                <Check size={24} color="#202124" strokeWidth={2.5} />
+                <Check size={24} color="#010E25" strokeWidth={2.5} />
               </div>
 
               <h1
@@ -200,7 +200,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
                   fontFamily: "var(--font-mk-sans)",
                   fontSize: 26,
                   fontWeight: 700,
-                  color: "var(--color-ink, #202124)",
+                  color: "var(--color-ink, #010E25)",
                   margin: "0 0 8px",
                 }}
               >
@@ -211,7 +211,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
                 style={{
                   fontFamily: "var(--font-mk-sans)",
                   fontSize: 14,
-                  color: "var(--color-muted-ink, #5F6168)",
+                  color: "var(--color-muted-ink, #5A6178)",
                   margin: "0 0 24px",
                   lineHeight: 1.6,
                 }}
@@ -230,7 +230,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
               {(orderId || totalAmount) && (
                 <div
                   style={{
-                    background: "var(--color-cream, #F7F5EF)",
+                    background: "var(--color-cream, #FFF8F0)",
                     borderRadius: 10,
                     padding: "12px 16px",
                     marginBottom: 24,
@@ -245,7 +245,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
                       style={{
                         fontFamily: "var(--font-mk-mono, monospace)",
                         fontSize: 12,
-                        color: "var(--color-muted-ink, #5F6168)",
+                        color: "var(--color-muted-ink, #5A6178)",
                       }}
                     >
                       N.º {orderId.slice(0, 12).toUpperCase()}
@@ -257,7 +257,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
                         fontFamily: "var(--font-mk-sans)",
                         fontSize: 15,
                         fontWeight: 700,
-                        color: "var(--color-ink, #202124)",
+                        color: "var(--color-ink, #010E25)",
                       }}
                     >
                       ${totalAmount} USD
@@ -275,7 +275,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
                   width: "100%",
                   height: 54,
                   borderRadius: 12,
-                  background: "var(--color-cobalt, #345CFF)",
+                  background: "var(--color-cobalt, #C94400)",
                   color: "#fff",
                   fontFamily: "var(--font-mk-sans)",
                   fontSize: 15,

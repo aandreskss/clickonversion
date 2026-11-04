@@ -28,7 +28,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   seo: "#78E6B3",
   "paid-media": "#FFCB86",
   automation: "#7885FF",
-  support: "#FF5A1F",
+  support: "#FE5C02",
 }
 
 export default async function CatalogPage() {
@@ -74,7 +74,7 @@ export default async function CatalogPage() {
   return (
     <MarketingLayout>
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#101827]">
+      <section className="pt-32 pb-16 bg-[#010E25]">
         <div className="container-wide">
           <div className="max-w-2xl">
             <p className="eyebrow text-[#4E5D6E] mb-5">Catálogo</p>
@@ -98,7 +98,7 @@ export default async function CatalogPage() {
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service) => {
-                const accent = CATEGORY_COLORS[service.category] ?? "#FF5A1F"
+                const accent = CATEGORY_COLORS[service.category] ?? "#FE5C02"
                 const categoryLabel = CATEGORY_LABELS[service.category] ?? service.category
                 const price = formatPrice(service.id)
 

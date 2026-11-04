@@ -16,7 +16,7 @@ function MarqueeContent() {
       {ITEMS.map((item, i) => (
         <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 24 }}>
           <span>{item}</span>
-          <span style={{ color: "#D9FA62", fontSize: 20 }}>●</span>
+          <span style={{ color: "#FE5C02", fontSize: 20 }}>●</span>
         </span>
       ))}
     </>
@@ -27,8 +27,8 @@ export function MarqueeStrip() {
   return (
     <div
       style={{
-        background: "#202124",
-        color: "#F7F5EF",
+        background: "#010E25",
+        color: "#FFF8F0",
         padding: "18px 0",
         overflow: "hidden",
         whiteSpace: "nowrap",

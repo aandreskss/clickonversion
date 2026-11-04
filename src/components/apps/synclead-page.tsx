@@ -110,7 +110,7 @@ export function SyncLeadPage({ app }: { app: App }) {
       />
 
       {/* Hero */}
-      <section className="pt-32 pb-20 bg-[#101827]" aria-label="SyncLead hero">
+      <section className="pt-32 pb-20 bg-[#010E25]" aria-label="SyncLead hero">
         <div className="container-wide">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left: content */}
@@ -313,7 +313,7 @@ export function SyncLeadPage({ app }: { app: App }) {
       </section>
 
       {/* How it works */}
-      <section className="py-24 bg-[#101827]" aria-label="How SyncLead works">
+      <section className="py-24 bg-[#010E25]" aria-label="How SyncLead works">
         <div className="container-wide">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-16">
@@ -409,7 +409,7 @@ export function SyncLeadPage({ app }: { app: App }) {
       </section>
 
       {/* Pricing note */}
-      <section className="py-20 bg-[#101827] border-t border-white/[0.06]" aria-label="SyncLead pricing">
+      <section className="py-20 bg-[#010E25] border-t border-white/[0.06]" aria-label="SyncLead pricing">
         <div className="container-wide">
           <div className="max-w-2xl mx-auto">
             <div
@@ -498,7 +498,7 @@ export function SyncLeadPage({ app }: { app: App }) {
       </section>
 
       {/* Waitlist form */}
-      <section id="waitlist" className="py-24 bg-[#101827] border-t border-white/[0.06]" aria-label="Join SyncLead waitlist">
+      <section id="waitlist" className="py-24 bg-[#010E25] border-t border-white/[0.06]" aria-label="Join SyncLead waitlist">
         <div className="container-wide">
           <div className="max-w-lg mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#7885FF]/10 text-[#7885FF] border border-[#7885FF]/20 mb-6">

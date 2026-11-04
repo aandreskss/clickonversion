@@ -11,7 +11,7 @@ const STEPS = [
       width: "34%",
       height: "34%",
       borderRadius: "50%",
-      background: "#D9FA62",
+      background: "#FE5C02",
       rotate: "0deg",
     },
   },
@@ -23,7 +23,7 @@ const STEPS = [
       width: "56%",
       height: "56%",
       borderRadius: "36px",
-      background: "#345CFF",
+      background: "#C94400",
       rotate: "12deg",
     },
   },
@@ -35,7 +35,7 @@ const STEPS = [
       width: "78%",
       height: "42%",
       borderRadius: "999px",
-      background: "#E9E4FF",
+      background: "#E4DEFF",
       rotate: "-8deg",
     },
   },
@@ -47,7 +47,7 @@ const STEPS = [
       width: "80%",
       height: "80%",
       borderRadius: "50%",
-      background: "#FF6B2C",
+      background: "#FE5C02",
       rotate: "0deg",
     },
   },
@@ -60,7 +60,7 @@ export function HowWeWork() {
   return (
     <section
       style={{
-        background: "#E9E4FF",
+        background: "#E4DEFF",
         margin: "40px 16px",
         borderRadius: "40px",
         padding: "80px 0",
@@ -73,7 +73,7 @@ export function HowWeWork() {
           style={{
             fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
             fontSize: 13,
-            color: "#5F6168",
+            color: "#5A6178",
             marginBottom: 40,
             letterSpacing: ".04em",
           }}
@@ -116,7 +116,7 @@ export function HowWeWork() {
                       style={{
                         fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
                         fontSize: 12,
-                        color: "#5F6168",
+                        color: "#5A6178",
                       }}
                     >
                       {s.num}
@@ -125,7 +125,7 @@ export function HowWeWork() {
                       style={{
                         fontSize: 22,
                         fontWeight: 600,
-                        color: "#202124",
+                        color: "#010E25",
                         letterSpacing: "-.03em",
                       }}
                     >

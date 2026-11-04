@@ -69,7 +69,7 @@ export default function ServicesPage() {
     <MarketingLayout active="services">
       <div
         style={{
-          background: "#F7F5EF",
+          background: "#FFF8F0",
           fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
         }}
       >
@@ -91,7 +91,7 @@ export default function ServicesPage() {
                   fontWeight: 700,
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  color: "#5F6168",
+                  color: "#5A6178",
                   marginBottom: 24,
                 }}
               >
@@ -103,7 +103,7 @@ export default function ServicesPage() {
                   fontSize: "clamp(64px, 9vw, 140px)",
                   fontWeight: 400,
                   lineHeight: 0.9,
-                  color: "#202124",
+                  color: "#010E25",
                   letterSpacing: "-0.02em",
                   margin: 0,
                 }}
@@ -119,7 +119,7 @@ export default function ServicesPage() {
                 style={{
                   fontSize: 19,
                   lineHeight: 1.6,
-                  color: "#5F6168",
+                  color: "#5A6178",
                   maxWidth: 440,
                 }}
               >
@@ -143,7 +143,7 @@ export default function ServicesPage() {
         {/* Process: Así se ve trabajar juntos */}
         <section
           style={{
-            background: "#202124",
+            background: "#010E25",
             padding: "clamp(64px, 8vw, 96px) clamp(16px, 5vw, 80px)",
           }}
           aria-label="Proceso de trabajo"
@@ -173,7 +173,7 @@ export default function ServicesPage() {
               }}
             >
               Así se ve{" "}
-              <em style={{ fontStyle: "italic", color: "#D9FA62" }}>trabajar juntos.</em>
+              <em style={{ fontStyle: "italic", color: "#FE5C02" }}>trabajar juntos.</em>
             </h2>
             <div
               style={{
@@ -201,7 +201,7 @@ export default function ServicesPage() {
                           width: 10,
                           height: 10,
                           borderRadius: "50%",
-                          background: dot <= step.dots ? "#D9FA62" : "rgba(255,255,255,.2)",
+                          background: dot <= step.dots ? "#FE5C02" : "rgba(255,255,255,.2)",
                           display: "block",
                         }}
                       />
@@ -233,7 +233,7 @@ export default function ServicesPage() {
               fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
               fontSize: "clamp(40px, 5vw, 72px)",
               fontWeight: 400,
-              color: "#202124",
+              color: "#010E25",
               lineHeight: 1,
               marginBottom: 48,
             }}
@@ -247,7 +247,7 @@ export default function ServicesPage() {
               <details
                 key={faq.q}
                 style={{
-                  borderBottom: "1.5px solid #E2DED3",
+                  borderBottom: "1.5px solid #EFE3D6",
                   padding: "0 0 0 0",
                 }}
               >
@@ -255,7 +255,7 @@ export default function ServicesPage() {
                   style={{
                     fontSize: 18,
                     fontWeight: 600,
-                    color: "#202124",
+                    color: "#010E25",
                     padding: "20px 0",
                     cursor: "pointer",
                     listStyle: "none",
@@ -270,7 +270,7 @@ export default function ServicesPage() {
                     style={{
                       fontSize: 20,
                       flexShrink: 0,
-                      color: "#5F6168",
+                      color: "#5A6178",
                     }}
                     aria-hidden
                   >
@@ -280,7 +280,7 @@ export default function ServicesPage() {
                 <p
                   style={{
                     fontSize: 16,
-                    color: "#5F6168",
+                    color: "#5A6178",
                     lineHeight: 1.6,
                     paddingBottom: 20,
                     margin: 0,
@@ -301,7 +301,7 @@ export default function ServicesPage() {
         >
           <div
             style={{
-              background: "#D9FA62",
+              background: "#FE5C02",
               borderRadius: 40,
               padding: "clamp(48px, 6vw, 80px) clamp(32px, 5vw, 64px)",
               maxWidth: "88rem",
@@ -319,7 +319,7 @@ export default function ServicesPage() {
                 fontWeight: 700,
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
-                color: "#202124",
+                color: "#010E25",
                 opacity: 0.6,
               }}
             >
@@ -330,7 +330,7 @@ export default function ServicesPage() {
                 fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
                 fontSize: "clamp(36px, 5vw, 64px)",
                 fontWeight: 400,
-                color: "#202124",
+                color: "#010E25",
                 lineHeight: 1,
                 margin: 0,
               }}
@@ -341,7 +341,7 @@ export default function ServicesPage() {
             <Link
               href="/book"
               style={{
-                background: "#202124",
+                background: "#010E25",
                 color: "#fff",
                 borderRadius: 999,
                 padding: "14px 28px",

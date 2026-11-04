@@ -11,7 +11,7 @@ const ACCENT_HEX = {
   mint: "#78E6B3",
   violet: "#7885FF",
   warm: "#FFCB86",
-  orange: "#FF5A1F",
+  orange: "#FE5C02",
 } as const
 
 interface Props {
@@ -55,7 +55,7 @@ export default async function ServiceSlugPage({ params }: Props) {
   return (
     <MarketingLayout>
       {/* ── Hero ── */}
-      <section className="pt-32 pb-20 bg-[#101827]" aria-label="Service overview">
+      <section className="pt-32 pb-20 bg-[#010E25]" aria-label="Service overview">
         <div className="container-wide">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-xs text-[#4E5D6E] mb-8" aria-label="Breadcrumb">
@@ -102,7 +102,7 @@ export default async function ServiceSlugPage({ params }: Props) {
             <div className="flex flex-wrap gap-4">
               <Link
                 href="/audit"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-[#FF5A1F] text-white font-semibold rounded-xl hover:bg-[#E54A15] transition-all duration-150 active:scale-[0.98] shadow-lg shadow-[#FF5A1F]/25"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-[#FE5C02] text-white font-semibold rounded-xl hover:bg-[#C94400] transition-all duration-150 active:scale-[0.98] shadow-lg shadow-[#FE5C02]/25"
               >
                 Get a Free Audit
                 <ArrowRight size={18} />
@@ -163,7 +163,7 @@ export default async function ServiceSlugPage({ params }: Props) {
       </section>
 
       {/* ── Process ── */}
-      <section className="py-16 bg-[#101827]" aria-label="Our process">
+      <section className="py-16 bg-[#010E25]" aria-label="Our process">
         <div className="container-wide">
           <p className="eyebrow mb-3" style={{ color: accent }}>
             How it works
@@ -272,7 +272,7 @@ export default async function ServiceSlugPage({ params }: Props) {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="py-16 bg-[#101827]" aria-label="Frequently asked questions">
+      <section className="py-16 bg-[#010E25]" aria-label="Frequently asked questions">
         <div className="container-wide">
           <p className="eyebrow mb-3 text-center" style={{ color: accent }}>
             FAQ

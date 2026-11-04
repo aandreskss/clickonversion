@@ -2,11 +2,11 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
 const TOOLS = [
-  { name: "Callbell",  color: "#FF5A1F" },
+  { name: "Callbell",  color: "#FE5C02" },
   { name: "Kommo",     color: "#7885FF" },
   { name: "WATI",      color: "#78E6B3" },
   { name: "B2Chat",    color: "#FFCB86" },
-  { name: "Make",      color: "#FF5A1F" },
+  { name: "Make",      color: "#FE5C02" },
   { name: "n8n",       color: "#EA4B71" },
 ]
 
@@ -63,7 +63,7 @@ export function WhatsAppSection() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/audit"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#78E6B3] text-[#101827] font-semibold rounded-xl hover:bg-[#5DDBA4] transition-colors text-sm"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#78E6B3] text-[#010E25] font-semibold rounded-xl hover:bg-[#5DDBA4] transition-colors text-sm"
               >
                 Set up WhatsApp Business
                 <ArrowRight size={15} />

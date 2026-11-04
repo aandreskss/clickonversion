@@ -62,7 +62,7 @@ const PILLARS = [
 
 export function ServicesPreview() {
   return (
-    <section className="py-24 bg-[#101827]" aria-label="Services overview">
+    <section className="py-24 bg-[#010E25]" aria-label="Services overview">
       <div className="container-wide">
         <div className="text-center mb-16">
           <p className="eyebrow text-[#4E5D6E] mb-4">What we do</p>

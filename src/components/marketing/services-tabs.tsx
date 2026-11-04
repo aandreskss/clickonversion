@@ -25,7 +25,7 @@ const CATS = [
     id: "seo",
     label: "SEO y búsqueda IA",
     count: 4,
-    bg: "#345CFF",
+    bg: "#C94400",
     text: "#fff",
     chipBorder: "rgba(255,255,255,.7)",
     cardBg: "rgba(255,255,255,.1)",
@@ -41,9 +41,9 @@ const CATS = [
     id: "ads",
     label: "Publicidad digital",
     count: 3,
-    bg: "#D9FA62",
-    text: "#202124",
-    chipBorder: "#202124",
+    bg: "#FE5C02",
+    text: "#010E25",
+    chipBorder: "#010E25",
     cardBg: "rgba(32,33,36,.07)",
     includes: [
       "Estrategia por canal",
@@ -57,9 +57,9 @@ const CATS = [
     id: "ia",
     label: "IA y automatización",
     count: 3,
-    bg: "#E9E4FF",
-    text: "#202124",
-    chipBorder: "#202124",
+    bg: "#E4DEFF",
+    text: "#010E25",
+    chipBorder: "#010E25",
     cardBg: "rgba(32,33,36,.07)",
     includes: [
       "Mapa de tu proceso",
@@ -74,10 +74,10 @@ const CATS = [
     label: "Soporte Meta",
     count: 3,
     bg: "#FFFFFF",
-    text: "#202124",
-    chipBorder: "#202124",
-    cardBg: "#F7F5EF",
-    border: "1.5px solid #202124",
+    text: "#010E25",
+    chipBorder: "#010E25",
+    cardBg: "#FFF8F0",
+    border: "1.5px solid #010E25",
     includes: [
       "Diagnóstico antes de empezar",
       "Sesión documentada",
@@ -149,9 +149,9 @@ export function ServicesTabs() {
               borderRadius: 999,
               cursor: "pointer",
               transition: "all 0.2s",
-              background: active === i ? "#202124" : "transparent",
-              color: active === i ? "#fff" : "#202124",
-              border: "1.5px solid #202124",
+              background: active === i ? "#010E25" : "transparent",
+              color: active === i ? "#fff" : "#010E25",
+              border: "1.5px solid #010E25",
             }}
           >
             {c.label} {c.count}
@@ -168,7 +168,7 @@ export function ServicesTabs() {
           padding: "clamp(32px, 5vw, 64px)",
           marginTop: 16,
           border: cat.border ?? "none",
-          ...(active === 0 ? { background: "#345CFF" } : {}),
+          ...(active === 0 ? { background: "#C94400" } : {}),
         }}
       >
         <div
@@ -264,15 +264,15 @@ export function ServicesTabs() {
                     alignItems: "center",
                     justifyContent: "space-between",
                     gap: 16,
-                    color: "#202124",
+                    color: "#010E25",
                   }}
                 >
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 16, fontWeight: 700, color: "#202124", marginBottom: 4 }}>
+                    <p style={{ fontSize: 16, fontWeight: 700, color: "#010E25", marginBottom: 4 }}>
                       {svc.name}
                     </p>
-                    <p style={{ fontSize: 13, color: "#5F6168", lineHeight: 1.4 }}>{svc.desc}</p>
-                    <p style={{ marginTop: 8, fontSize: 14, fontWeight: 700, color: "#202124" }}>
+                    <p style={{ fontSize: 13, color: "#5A6178", lineHeight: 1.4 }}>{svc.desc}</p>
+                    <p style={{ marginTop: 8, fontSize: 14, fontWeight: 700, color: "#010E25" }}>
                       {svc.prefix && (
                         <span
                           style={{
@@ -285,7 +285,7 @@ export function ServicesTabs() {
                         </span>
                       )}
                       ${svc.price}
-                      <span style={{ fontSize: 12, fontWeight: 400, color: "#5F6168", marginLeft: 4 }}>
+                      <span style={{ fontSize: 12, fontWeight: 400, color: "#5A6178", marginLeft: 4 }}>
                         {svc.type === "mensual" ? "/mes" : "pago único"}
                       </span>
                     </p>
@@ -301,9 +301,9 @@ export function ServicesTabs() {
                       fontWeight: 700,
                       cursor: "pointer",
                       transition: "all 0.2s",
-                      background: added ? "#D9FA62" : "#202124",
-                      color: added ? "#202124" : "#fff",
-                      border: added ? "1.5px solid #202124" : "1.5px solid #202124",
+                      background: added ? "#FE5C02" : "#010E25",
+                      color: added ? "#010E25" : "#fff",
+                      border: added ? "1.5px solid #010E25" : "1.5px solid #010E25",
                     }}
                   >
                     {added ? "✓ Añadido" : "Añadir"}

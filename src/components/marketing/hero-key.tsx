@@ -70,9 +70,9 @@ export function HeroKey({ className }: HeroKeyProps) {
           top: "8%",
           right: "5%",
           transform: "rotate(8deg)",
-          background: "#FF6B2C",
+          background: "#FE5C02",
           color: "white",
-          border: "2px solid #202124",
+          border: "2px solid #010E25",
           borderRadius: "999px",
           padding: "10px 18px",
           fontWeight: 700,
@@ -93,30 +93,30 @@ export function HeroKey({ className }: HeroKeyProps) {
           bottom: "12%",
           left: "5%",
           background: "white",
-          border: "1.5px solid #202124",
+          border: "1.5px solid #010E25",
           borderRadius: 12,
           padding: "12px 16px",
           fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
           fontSize: 13,
-          color: "#202124",
+          color: "#010E25",
           userSelect: "none",
           zIndex: 2,
           lineHeight: 1.4,
         }}
       >
-        <span style={{ color: "#5F6168", display: "block", fontSize: 11, marginBottom: 2 }}>clics →</span>
+        <span style={{ color: "#5A6178", display: "block", fontSize: 11, marginBottom: 2 }}>clics →</span>
         <span style={{ fontWeight: 500, fontSize: 22 }}>{clicks}</span>
         {on && (
           <span
             style={{
               display: "block",
               marginTop: 4,
-              background: "#D9FA62",
+              background: "#FE5C02",
               borderRadius: "999px",
               padding: "2px 8px",
               fontSize: 11,
               fontWeight: 500,
-              color: "#202124",
+              color: "#010E25",
             }}
           >
             ON ✓
@@ -165,7 +165,7 @@ export function HeroKey({ className }: HeroKeyProps) {
                 width: 14,
                 height: 26,
                 borderRadius: "999px",
-                background: "#FF6B2C",
+                background: "#FE5C02",
                 transform: "rotate(-35deg)",
                 transformOrigin: "50% 100%",
               }}
@@ -178,7 +178,7 @@ export function HeroKey({ className }: HeroKeyProps) {
                 width: 14,
                 height: 32,
                 borderRadius: "999px",
-                background: "#FF6B2C",
+                background: "#FE5C02",
               }}
             />
             <span
@@ -189,7 +189,7 @@ export function HeroKey({ className }: HeroKeyProps) {
                 width: 14,
                 height: 26,
                 borderRadius: "999px",
-                background: "#FF6B2C",
+                background: "#FE5C02",
                 transform: "rotate(35deg)",
                 transformOrigin: "50% 100%",
               }}
@@ -201,10 +201,10 @@ export function HeroKey({ className }: HeroKeyProps) {
             style={{
               width: 300,
               height: 220,
-              background: on ? "#D9FA62" : "#FFFFFF",
+              background: on ? "#FE5C02" : "#FFFFFF",
               borderRadius: 66,
-              border: "6px solid #202124",
-              boxShadow: on ? "0 6px 0 #202124" : "0 28px 0 #202124",
+              border: "6px solid #010E25",
+              boxShadow: on ? "0 6px 0 #010E25" : "0 28px 0 #010E25",
               transform: on ? "translateY(22px)" : "translateY(0)",
               transition: "transform .12s ease, box-shadow .12s ease, background .2s ease",
               display: "flex",
@@ -219,7 +219,7 @@ export function HeroKey({ className }: HeroKeyProps) {
                 fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
                 fontWeight: 700,
                 fontSize: 108,
-                color: "#202124",
+                color: "#010E25",
                 lineHeight: 1,
                 letterSpacing: "-.04em",
               }}
@@ -232,7 +232,7 @@ export function HeroKey({ className }: HeroKeyProps) {
                 fontStyle: "italic",
                 fontWeight: 400,
                 fontSize: 120,
-                color: "#345CFF",
+                color: "#C94400",
                 lineHeight: 1,
                 marginTop: -6,
               }}

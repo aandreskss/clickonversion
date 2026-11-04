@@ -16,7 +16,7 @@ export async function sendContactAction(data: ContactData): Promise<{ ok: boolea
     <p><strong>Email:</strong> ${email}</p>
     <p><strong>Necesita:</strong> ${needs.length > 0 ? needs.join(", ") : "No especificado"}</p>
     <p><strong>Mensaje:</strong></p>
-    <blockquote style="border-left:3px solid #345CFF;padding-left:12px;color:#3A3B40">${message || "(sin mensaje adicional)"}</blockquote>
+    <blockquote style="border-left:3px solid #C94400;padding-left:12px;color:#3A3B40">${message || "(sin mensaje adicional)"}</blockquote>
   `
 
   const apiKey = process.env.RESEND_API_KEY

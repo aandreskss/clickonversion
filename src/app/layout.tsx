@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next"
-import { Inter, Plus_Jakarta_Sans, Instrument_Serif, JetBrains_Mono } from "next/font/google"
+import { Inter, Plus_Jakarta_Sans, Instrument_Serif, JetBrains_Mono, Outfit, Caveat } from "next/font/google"
 import Script from "next/script"
 import { CartProvider } from "@/components/shop/cart-provider"
 import { Providers } from "@/components/providers"
 import "./globals.css"
+import "./brand.css"
 
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" })
 
@@ -26,7 +27,22 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-jetbrains-mono",
-  weight: ["400", "500"],
+  weight: ["400", "500", "700"],
+})
+
+// Marca v4 (manual de identidad): Outfit = la voz, Caveat = la mano
+const outfit = Outfit({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-outfit",
+  weight: ["300", "400", "500", "600", "700", "800"],
+})
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-caveat",
+  weight: ["500", "700"],
 })
 
 const siteUrl   = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.clickonversion.com"
@@ -116,12 +132,12 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#101827",
+  themeColor: "#010E25",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${plusJakarta.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${plusJakarta.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${outfit.variable} ${caveat.variable}`}>
       <head>
         <script
           type="application/ld+json"

@@ -32,7 +32,7 @@ export default function ThankYouPage() {
 
           {/* What happens next */}
           <div className="rounded-2xl border border-white/8 bg-[#14171A] p-8 max-w-lg mx-auto mb-12 text-left">
-            <p className="text-xs font-semibold tracking-widest text-[#FF5A1F] uppercase mb-5">
+            <p className="text-xs font-semibold tracking-widest text-[#FE5C02] uppercase mb-5">
               What happens next
             </p>
             <div className="flex flex-col gap-4">
@@ -42,7 +42,7 @@ export default function ThankYouPage() {
                 { step: "03", text: "We reach out to schedule a 20-minute walk-through call." },
               ].map(({ step, text }) => (
                 <div key={step} className="flex items-start gap-3">
-                  <span className="text-xs font-bold text-[#FF5A1F] mt-0.5 w-6 flex-shrink-0">{step}</span>
+                  <span className="text-xs font-bold text-[#FE5C02] mt-0.5 w-6 flex-shrink-0">{step}</span>
                   <p className="text-sm text-[#8A9099]">{text}</p>
                 </div>
               ))}
@@ -50,8 +50,8 @@ export default function ThankYouPage() {
           </div>
 
           {/* Booking CTA */}
-          <div className="rounded-2xl border border-[#FF5A1F]/20 bg-[#FF5A1F]/5 p-8 max-w-lg mx-auto">
-            <Calendar size={24} className="text-[#FF5A1F] mx-auto mb-4" />
+          <div className="rounded-2xl border border-[#FE5C02]/20 bg-[#FE5C02]/5 p-8 max-w-lg mx-auto">
+            <Calendar size={24} className="text-[#FE5C02] mx-auto mb-4" />
             <h2 className="text-xl font-bold text-white mb-3">
               Want to walk through it together?
             </h2>
@@ -63,7 +63,7 @@ export default function ThankYouPage() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => analytics.bookingClick("thank-you-page")}
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#FF5A1F] text-white font-semibold rounded-lg hover:bg-[#E54A15] transition-colors duration-150 active:scale-[0.98]"
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#FE5C02] text-white font-semibold rounded-lg hover:bg-[#C94400] transition-colors duration-150 active:scale-[0.98]"
             >
               Book a 20-Minute Growth Call
               <ArrowRight size={18} />

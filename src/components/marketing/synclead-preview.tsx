@@ -21,11 +21,11 @@ const TAB_CONTENT: Record<string, React.ReactNode> = {
               justifyContent: "space-between",
             }}
           >
-            <span style={{ color: "#F7F5EF", fontSize: 14 }}>{lead}</span>
+            <span style={{ color: "#FFF8F0", fontSize: 14 }}>{lead}</span>
             <span
               style={{
-                background: "#D9FA62",
-                color: "#202124",
+                background: "#FE5C02",
+                color: "#010E25",
                 borderRadius: "999px",
                 padding: "2px 10px",
                 fontSize: 11,
@@ -41,13 +41,13 @@ const TAB_CONTENT: Record<string, React.ReactNode> = {
   ),
   "Chats": (
     <div style={{ padding: "20px 0", display: "flex", flexDirection: "column", gap: 8 }}>
-      <div style={{ background: "#2A2B2F", borderRadius: 10, padding: "10px 14px", alignSelf: "flex-start", maxWidth: "80%", color: "#F7F5EF", fontSize: 14 }}>
+      <div style={{ background: "#2A2B2F", borderRadius: 10, padding: "10px 14px", alignSelf: "flex-start", maxWidth: "80%", color: "#FFF8F0", fontSize: 14 }}>
         Hola, me interesa el servicio de SEO.
       </div>
-      <div style={{ background: "#D9FA62", borderRadius: 10, padding: "10px 14px", alignSelf: "flex-end", maxWidth: "80%", color: "#202124", fontSize: 14 }}>
+      <div style={{ background: "#FE5C02", borderRadius: 10, padding: "10px 14px", alignSelf: "flex-end", maxWidth: "80%", color: "#010E25", fontSize: 14 }}>
         ¡Hola! Perfecto, te cuento todo sobre nuestro plan de SEO técnico. ¿Tienes web actualmente?
       </div>
-      <div style={{ background: "#2A2B2F", borderRadius: 10, padding: "10px 14px", alignSelf: "flex-start", maxWidth: "80%", color: "#F7F5EF", fontSize: 14 }}>
+      <div style={{ background: "#2A2B2F", borderRadius: 10, padding: "10px 14px", alignSelf: "flex-start", maxWidth: "80%", color: "#FFF8F0", fontSize: 14 }}>
         Sí, en WordPress.
       </div>
     </div>
@@ -55,10 +55,10 @@ const TAB_CONTENT: Record<string, React.ReactNode> = {
   "Negocios": (
     <div style={{ padding: "20px 0", display: "flex", gap: 8, overflowX: "auto" }}>
       {[
-        { label: "Nuevo", count: 8, color: "#345CFF" },
-        { label: "Calificado", count: 4, color: "#FF6B2C" },
-        { label: "Propuesta", count: 2, color: "#E9E4FF" },
-        { label: "Ganado", count: 1, color: "#D9FA62" },
+        { label: "Nuevo", count: 8, color: "#C94400" },
+        { label: "Calificado", count: 4, color: "#FE5C02" },
+        { label: "Propuesta", count: 2, color: "#E4DEFF" },
+        { label: "Ganado", count: 1, color: "#FE5C02" },
       ].map((col) => (
         <div
           key={col.label}
@@ -74,7 +74,7 @@ const TAB_CONTENT: Record<string, React.ReactNode> = {
             <span style={{ width: 8, height: 8, borderRadius: "50%", background: col.color }} />
             <span style={{ fontSize: 12, color: "#A9AAB0" }}>{col.label}</span>
           </div>
-          <span style={{ color: "#F7F5EF", fontWeight: 600, fontSize: 22 }}>{col.count}</span>
+          <span style={{ color: "#FFF8F0", fontWeight: 600, fontSize: 22 }}>{col.count}</span>
         </div>
       ))}
     </div>
@@ -82,14 +82,14 @@ const TAB_CONTENT: Record<string, React.ReactNode> = {
   "Ventas": (
     <div style={{ padding: "20px 0" }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 20 }}>
-        <span style={{ fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)", fontSize: 40, color: "#D9FA62", fontWeight: 400 }}>$2,340</span>
-        <span style={{ color: "#5F6168", fontSize: 14 }}>cerrado este mes</span>
+        <span style={{ fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)", fontSize: 40, color: "#FE5C02", fontWeight: 400 }}>$2,340</span>
+        <span style={{ color: "#5A6178", fontSize: 14 }}>cerrado este mes</span>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {[["SEO Auditoría", "$120"], ["Meta Ads x2", "$300"], ["Agente IA", "$350"]].map(([n, p]) => (
           <div key={n} style={{ display: "flex", justifyContent: "space-between", color: "#A9AAB0", fontSize: 14 }}>
             <span>{n}</span>
-            <span style={{ color: "#F7F5EF" }}>{p}</span>
+            <span style={{ color: "#FFF8F0" }}>{p}</span>
           </div>
         ))}
       </div>
@@ -117,7 +117,7 @@ export function SyncLeadPreview() {
               style={{
                 fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
                 fontSize: 13,
-                color: "#5F6168",
+                color: "#5A6178",
                 marginBottom: 24,
                 letterSpacing: ".04em",
               }}
@@ -129,7 +129,7 @@ export function SyncLeadPreview() {
               style={{
                 fontSize: "clamp(40px,5vw,72px)",
                 fontWeight: 600,
-                color: "#202124",
+                color: "#010E25",
                 letterSpacing: "-.045em",
                 lineHeight: 0.9,
                 margin: "0 0 32px",
@@ -141,7 +141,7 @@ export function SyncLeadPreview() {
                   fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
                   fontStyle: "italic",
                   fontWeight: 400,
-                  color: "#345CFF",
+                  color: "#C94400",
                 }}
               >
                 estrategias.
@@ -154,7 +154,7 @@ export function SyncLeadPreview() {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 8,
-                background: "#202124",
+                background: "#010E25",
                 borderRadius: 12,
                 padding: "8px 14px",
                 marginBottom: 24,
@@ -164,7 +164,7 @@ export function SyncLeadPreview() {
                 style={{
                   fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
                   fontSize: 16,
-                  color: "#D9FA62",
+                  color: "#FE5C02",
                   fontWeight: 500,
                   letterSpacing: "-.02em",
                 }}
@@ -173,8 +173,8 @@ export function SyncLeadPreview() {
               </span>
               <span
                 style={{
-                  background: "#D9FA62",
-                  color: "#202124",
+                  background: "#FE5C02",
+                  color: "#010E25",
                   borderRadius: "999px",
                   padding: "2px 8px",
                   fontSize: 11,
@@ -197,15 +197,15 @@ export function SyncLeadPreview() {
                 gap: 8,
                 padding: "14px 24px",
                 borderRadius: "999px",
-                background: "#202124",
-                color: "#F7F5EF",
+                background: "#010E25",
+                color: "#FFF8F0",
                 fontWeight: 600,
                 fontSize: 15,
                 textDecoration: "none",
                 transition: "background .15s",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#345CFF" }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#202124" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#C94400" }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#010E25" }}
             >
               Conoce SyncLead ↗
             </Link>
@@ -214,7 +214,7 @@ export function SyncLeadPreview() {
           {/* Right col: Terminal */}
           <div
             style={{
-              background: "#202124",
+              background: "#010E25",
               borderRadius: 24,
               overflow: "hidden",
               border: "1.5px solid #2A2B2F",
@@ -238,7 +238,7 @@ export function SyncLeadPreview() {
                 style={{
                   fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
                   fontSize: 12,
-                  color: "#5F6168",
+                  color: "#5A6178",
                 }}
               >
                 synclead · dashboard
@@ -253,10 +253,10 @@ export function SyncLeadPreview() {
                   onClick={() => setTab(t)}
                   style={{
                     padding: "10px 16px",
-                    background: tab === t ? "#202124" : "transparent",
+                    background: tab === t ? "#010E25" : "transparent",
                     border: "none",
-                    borderBottom: tab === t ? "2px solid #D9FA62" : "2px solid transparent",
-                    color: tab === t ? "#F7F5EF" : "#5F6168",
+                    borderBottom: tab === t ? "2px solid #FE5C02" : "2px solid transparent",
+                    color: tab === t ? "#FFF8F0" : "#5A6178",
                     fontSize: 13,
                     fontWeight: tab === t ? 500 : 400,
                     cursor: "pointer",

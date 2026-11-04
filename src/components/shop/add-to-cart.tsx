@@ -62,8 +62,8 @@ export function AddToCart({
         href="/audit"
         className={`inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-xl transition-colors text-sm ${
           variant === "primary"
-            ? "bg-[#FF5A1F] text-white hover:bg-[#E54A15]"
-            : "border border-[#FF5A1F]/40 text-[#FF5A1F] hover:bg-[#FF5A1F]/10"
+            ? "bg-[#FE5C02] text-white hover:bg-[#C94400]"
+            : "border border-[#FE5C02]/40 text-[#FE5C02] hover:bg-[#FE5C02]/10"
         } ${className}`}
       >
         {label ?? "Request Quote"}
@@ -79,8 +79,8 @@ export function AddToCart({
         inCart || added
           ? "bg-[#78E6B3]/20 text-[#78E6B3] border border-[#78E6B3]/30"
           : variant === "primary"
-          ? "bg-[#FF5A1F] text-white hover:bg-[#E54A15] shadow-lg shadow-[#FF5A1F]/20"
-          : "border border-[#FF5A1F]/40 text-[#FF5A1F] hover:bg-[#FF5A1F]/10"
+          ? "bg-[#FE5C02] text-white hover:bg-[#C94400] shadow-lg shadow-[#FE5C02]/20"
+          : "border border-[#FE5C02]/40 text-[#FE5C02] hover:bg-[#FE5C02]/10"
       } ${className}`}
     >
       {added ? (

@@ -6,7 +6,7 @@ function CheckoutHeader() {
     <header
       style={{
         background: "#fff",
-        borderBottom: "1px solid #E2DED3",
+        borderBottom: "1px solid #EFE3D6",
       }}
     >
       <div
@@ -24,7 +24,7 @@ function CheckoutHeader() {
           style={{
             fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
             fontSize: 12,
-            color: "#5F6168",
+            color: "#5A6178",
             display: "flex",
             alignItems: "center",
             gap: 6,
@@ -48,7 +48,7 @@ function CheckoutHeader() {
 
 export default function CheckoutCancelPage() {
   return (
-    <div style={{ minHeight: "100dvh", background: "var(--color-cream, #F7F5EF)" }}>
+    <div style={{ minHeight: "100dvh", background: "var(--color-cream, #FFF8F0)" }}>
       <CheckoutHeader />
 
       <main
@@ -63,7 +63,7 @@ export default function CheckoutCancelPage() {
         <div
           style={{
             background: "#fff",
-            border: "1px solid #E2DED3",
+            border: "1px solid #EFE3D6",
             borderRadius: 20,
             padding: "40px 32px",
             maxWidth: 440,
@@ -104,7 +104,7 @@ export default function CheckoutCancelPage() {
               fontFamily: "var(--font-mk-sans)",
               fontSize: 24,
               fontWeight: 700,
-              color: "var(--color-ink, #202124)",
+              color: "var(--color-ink, #010E25)",
               margin: "0 0 8px",
             }}
           >
@@ -115,7 +115,7 @@ export default function CheckoutCancelPage() {
             style={{
               fontFamily: "var(--font-mk-sans)",
               fontSize: 14,
-              color: "var(--color-muted-ink, #5F6168)",
+              color: "var(--color-muted-ink, #5A6178)",
               margin: "0 0 28px",
               lineHeight: 1.6,
             }}
@@ -132,7 +132,7 @@ export default function CheckoutCancelPage() {
               width: "100%",
               height: 54,
               borderRadius: 12,
-              background: "var(--color-cobalt, #345CFF)",
+              background: "var(--color-cobalt, #C94400)",
               color: "#fff",
               fontFamily: "var(--font-mk-sans)",
               fontSize: 15,
@@ -153,8 +153,8 @@ export default function CheckoutCancelPage() {
               width: "100%",
               height: 44,
               borderRadius: 12,
-              border: "1px solid #E2DED3",
-              color: "var(--color-muted-ink, #5F6168)",
+              border: "1px solid #EFE3D6",
+              color: "var(--color-muted-ink, #5A6178)",
               fontFamily: "var(--font-mk-sans)",
               fontSize: 14,
               fontWeight: 500,

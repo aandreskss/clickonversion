@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useCart } from "@/components/shop/cart-provider"
 import type { CartItem } from "@/types/catalog"
 
-const SERVICES = [
+export const SERVICES = [
   { id: "seo-audit",    cat: 0, name: "Auditoría SEO",            desc: "Revisión técnica y de contenido con una lista de mejoras priorizada.",       price: 120, prefix: "",      type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
   { id: "seo-mensual",  cat: 0, name: "SEO mensual",              desc: "Optimización continua, contenido y enlaces, con reporte cada mes.",           price: 250, prefix: "desde", type: "mensual" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
   { id: "seo-local",    cat: 0, name: "SEO local",                desc: "Google Business Profile, reseñas y presencia en mapas.",                     price: 180, prefix: "",      type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
@@ -88,9 +88,9 @@ export function PricingGrid() {
                 fontWeight: 600,
                 cursor: "pointer",
                 transition: "all 0.2s",
-                background: catFilter === label ? "#202124" : "transparent",
-                color: catFilter === label ? "#fff" : "#202124",
-                border: "1.5px solid #202124",
+                background: catFilter === label ? "#010E25" : "transparent",
+                color: catFilter === label ? "#fff" : "#010E25",
+                border: "1.5px solid #010E25",
                 fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
               }}
             >
@@ -106,7 +106,7 @@ export function PricingGrid() {
             background: "#fff",
             borderRadius: 999,
             padding: 4,
-            border: "1.5px solid #E2DED3",
+            border: "1.5px solid #EFE3D6",
             gap: 2,
           }}
         >
@@ -122,8 +122,8 @@ export function PricingGrid() {
                 fontWeight: 600,
                 cursor: "pointer",
                 transition: "all 0.2s",
-                background: typeFilter === t ? "#D9FA62" : "transparent",
-                color: "#202124",
+                background: typeFilter === t ? "#FE5C02" : "transparent",
+                color: "#010E25",
                 border: "none",
                 fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
               }}
@@ -150,7 +150,7 @@ export function PricingGrid() {
               style={{
                 background: "#fff",
                 borderRadius: 24,
-                border: added ? "1.5px solid #202124" : "1.5px solid transparent",
+                border: added ? "1.5px solid #010E25" : "1.5px solid transparent",
                 padding: 24,
                 display: "flex",
                 flexDirection: "column",
@@ -176,7 +176,7 @@ export function PricingGrid() {
                     fontWeight: 700,
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
-                    color: "#5F6168",
+                    color: "#5A6178",
                   }}
                 >
                   {CAT_LABELS[svc.cat]}
@@ -187,19 +187,19 @@ export function PricingGrid() {
                     width: 8,
                     height: 8,
                     borderRadius: "50%",
-                    background: svc.type === "mensual" ? "#FF6B2C" : "#345CFF",
+                    background: svc.type === "mensual" ? "#FE5C02" : "#C94400",
                     flexShrink: 0,
                   }}
                 />
               </div>
 
               {/* Name */}
-              <h3 style={{ fontSize: 26, fontWeight: 600, color: "#202124", lineHeight: 1.1 }}>
+              <h3 style={{ fontSize: 26, fontWeight: 600, color: "#010E25", lineHeight: 1.1 }}>
                 {svc.name}
               </h3>
 
               {/* Description */}
-              <p style={{ fontSize: 15, color: "#5F6168", lineHeight: 1.5, flex: 1 }}>{svc.desc}</p>
+              <p style={{ fontSize: 15, color: "#5A6178", lineHeight: 1.5, flex: 1 }}>{svc.desc}</p>
 
               {/* Price */}
               <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginTop: 4 }}>
@@ -208,16 +208,16 @@ export function PricingGrid() {
                     style={{
                       fontFamily: "var(--font-mk-mono, monospace)",
                       fontSize: 12,
-                      color: "#5F6168",
+                      color: "#5A6178",
                     }}
                   >
                     {svc.prefix}
                   </span>
                 )}
-                <span style={{ fontSize: 40, fontWeight: 600, color: "#202124", lineHeight: 1 }}>
+                <span style={{ fontSize: 40, fontWeight: 600, color: "#010E25", lineHeight: 1 }}>
                   ${svc.price}
                 </span>
-                <span style={{ fontSize: 14, color: "#5F6168" }}>
+                <span style={{ fontSize: 14, color: "#5A6178" }}>
                   {svc.type === "mensual" ? "/mes" : "pago único"}
                 </span>
               </div>
@@ -234,9 +234,9 @@ export function PricingGrid() {
                   fontWeight: 700,
                   cursor: "pointer",
                   transition: "all 0.2s",
-                  background: added ? "#D9FA62" : "#202124",
-                  color: added ? "#202124" : "#fff",
-                  border: added ? "1.5px solid #202124" : "1.5px solid #202124",
+                  background: added ? "#FE5C02" : "#010E25",
+                  color: added ? "#010E25" : "#fff",
+                  border: added ? "1.5px solid #010E25" : "1.5px solid #010E25",
                   fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
                 }}
               >

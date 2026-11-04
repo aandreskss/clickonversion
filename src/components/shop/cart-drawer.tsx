@@ -65,7 +65,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             <span className="font-display font-bold text-white">
               Cart
               {count > 0 && (
-                <span className="ml-2 text-xs bg-[#FF5A1F] text-white rounded-full px-1.5 py-0.5">
+                <span className="ml-2 text-xs bg-[#FE5C02] text-white rounded-full px-1.5 py-0.5">
                   {count}
                 </span>
               )}
@@ -159,7 +159,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             <Link
               href="/checkout"
               onClick={onClose}
-              className="flex w-full items-center justify-center gap-2 py-3.5 bg-[#FF5A1F] text-white font-semibold rounded-xl hover:bg-[#E54A15] transition-colors shadow-lg shadow-[#FF5A1F]/20 text-sm"
+              className="flex w-full items-center justify-center gap-2 py-3.5 bg-[#FE5C02] text-white font-semibold rounded-xl hover:bg-[#C94400] transition-colors shadow-lg shadow-[#FE5C02]/20 text-sm"
             >
               Proceed to Checkout
               <ArrowRight size={15} />

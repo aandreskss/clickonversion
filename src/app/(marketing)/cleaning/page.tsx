@@ -69,7 +69,7 @@ function CtaButton({ location, label = "Get a Free Growth Audit" }: { location: 
     <Link
       href="/audit"
       onClick={() => analytics.cleaningCtaClick(location)}
-      className="inline-flex items-center gap-2 px-7 py-4 bg-[#FF5A1F] text-white font-semibold rounded-lg hover:bg-[#E54A15] transition-colors duration-150 active:scale-[0.98] text-base"
+      className="inline-flex items-center gap-2 px-7 py-4 bg-[#FE5C02] text-white font-semibold rounded-lg hover:bg-[#C94400] transition-colors duration-150 active:scale-[0.98] text-base"
     >
       {label}
       <ArrowRight size={18} />
@@ -93,20 +93,20 @@ export default function CleaningPage() {
         />
         <div
           className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-[0.06] blur-3xl pointer-events-none"
-          style={{ background: "radial-gradient(circle, #FF5A1F, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, #FE5C02, transparent 70%)" }}
           aria-hidden="true"
         />
 
         <div className="container-wide relative z-10">
           <div className="max-w-3xl flex flex-col gap-8">
-            <p className="text-xs font-semibold tracking-widest text-[#FF5A1F] uppercase">
+            <p className="text-xs font-semibold tracking-widest text-[#FE5C02] uppercase">
               Growth Systems for Cleaning Companies
             </p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
               <span className="text-white">Turn local search into </span>
               <span
                 style={{
-                  background: "linear-gradient(135deg, #FF5A1F 0%, #FF8A50 100%)",
+                  background: "linear-gradient(135deg, #FE5C02 0%, #FF8A50 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -134,7 +134,7 @@ export default function CleaningPage() {
       <section className="section-surface py-24 lg:py-32">
         <div className="container-wide">
           <div className="max-w-2xl mb-12">
-            <p className="text-xs font-semibold tracking-widest text-[#FF5A1F] uppercase mb-4">
+            <p className="text-xs font-semibold tracking-widest text-[#FE5C02] uppercase mb-4">
               Where Customers Are Lost
             </p>
             <h2 className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
@@ -153,7 +153,7 @@ export default function CleaningPage() {
               >
                 <span
                   className="inline-block text-xs font-bold px-2.5 py-1 rounded-md mb-4"
-                  style={{ backgroundColor: "rgba(255,90,31,0.1)", color: "#FF5A1F", border: "1px solid rgba(255,90,31,0.2)" }}
+                  style={{ backgroundColor: "rgba(255,90,31,0.1)", color: "#FE5C02", border: "1px solid rgba(255,90,31,0.2)" }}
                 >
                   {p.tag}
                 </span>
@@ -171,7 +171,7 @@ export default function CleaningPage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="flex flex-col gap-6">
               <div>
-                <p className="text-xs font-semibold tracking-widest text-[#FF5A1F] uppercase mb-4">
+                <p className="text-xs font-semibold tracking-widest text-[#FE5C02] uppercase mb-4">
                   The System
                 </p>
                 <h2 className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
@@ -197,9 +197,9 @@ export default function CleaningPage() {
                         className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold"
                         style={{
                           background: i === FLOW_STEPS.length - 1
-                            ? "linear-gradient(135deg, #FF5A1F, #FF8A50)"
+                            ? "linear-gradient(135deg, #FE5C02, #FF8A50)"
                             : "rgba(255,90,31,0.12)",
-                          color:  i === FLOW_STEPS.length - 1 ? "white" : "#FF5A1F",
+                          color:  i === FLOW_STEPS.length - 1 ? "white" : "#FE5C02",
                           border: i === FLOW_STEPS.length - 1 ? "none" : "1px solid rgba(255,90,31,0.25)",
                         }}
                       >
@@ -225,7 +225,7 @@ export default function CleaningPage() {
       <section className="section-surface py-24 lg:py-32">
         <div className="container-wide">
           <div className="max-w-2xl mb-12">
-            <p className="text-xs font-semibold tracking-widest text-[#FF5A1F] uppercase mb-4">
+            <p className="text-xs font-semibold tracking-widest text-[#FE5C02] uppercase mb-4">
               What We Improve
             </p>
             <h2 className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
@@ -256,14 +256,14 @@ export default function CleaningPage() {
       {/* ── Final CTA ─────────────────────────────────────────────────── */}
       <section className="section-dark py-24 lg:py-32">
         <div className="container-tight">
-          <div className="rounded-3xl border border-[#FF5A1F]/20 bg-[#14171A] p-10 lg:p-16 text-center relative overflow-hidden">
+          <div className="rounded-3xl border border-[#FE5C02]/20 bg-[#14171A] p-10 lg:p-16 text-center relative overflow-hidden">
             <div
               className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 blur-3xl pointer-events-none"
               style={{ background: "radial-gradient(ellipse, rgba(255,90,31,0.08), transparent 70%)" }}
               aria-hidden="true"
             />
             <div className="relative z-10">
-              <p className="text-xs font-semibold tracking-widest text-[#FF5A1F] uppercase mb-6">
+              <p className="text-xs font-semibold tracking-widest text-[#FE5C02] uppercase mb-6">
                 Free Growth Audit
               </p>
               <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">

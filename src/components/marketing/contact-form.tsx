@@ -48,7 +48,7 @@ export function ContactForm() {
     return (
       <div
         style={{
-          background: "#D9FA62",
+          background: "#FE5C02",
           borderRadius: 24,
           padding: 40,
           fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
@@ -61,7 +61,7 @@ export function ContactForm() {
             fontWeight: 700,
             letterSpacing: "0.12em",
             textTransform: "uppercase",
-            color: "#202124",
+            color: "#010E25",
             opacity: 0.6,
             marginBottom: 12,
           }}
@@ -72,7 +72,7 @@ export function ContactForm() {
           style={{
             fontSize: 28,
             fontWeight: 700,
-            color: "#202124",
+            color: "#010E25",
             marginBottom: 12,
             lineHeight: 1.1,
           }}
@@ -100,7 +100,7 @@ export function ContactForm() {
       {/* Name + Email */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }} className="contact-form-row">
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <label htmlFor="contact-name" style={{ fontSize: 13, fontWeight: 600, color: "#202124" }}>
+          <label htmlFor="contact-name" style={{ fontSize: 13, fontWeight: 600, color: "#010E25" }}>
             Nombre
           </label>
           <input
@@ -114,7 +114,7 @@ export function ContactForm() {
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <label htmlFor="contact-email" style={{ fontSize: 13, fontWeight: 600, color: "#202124" }}>
+          <label htmlFor="contact-email" style={{ fontSize: 13, fontWeight: 600, color: "#010E25" }}>
             Email
           </label>
           <input
@@ -131,7 +131,7 @@ export function ContactForm() {
 
       {/* Needs multi-select */}
       <div>
-        <p style={{ fontSize: 13, fontWeight: 600, color: "#202124", marginBottom: 10 }}>
+        <p style={{ fontSize: 13, fontWeight: 600, color: "#010E25", marginBottom: 10 }}>
           ¿Qué necesitas?
         </p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
@@ -150,9 +150,9 @@ export function ContactForm() {
                   fontWeight: 600,
                   cursor: "pointer",
                   transition: "all 0.2s",
-                  background: active ? "#D9FA62" : "transparent",
-                  color: "#202124",
-                  border: "1.5px solid #202124",
+                  background: active ? "#FE5C02" : "transparent",
+                  color: "#010E25",
+                  border: "1.5px solid #010E25",
                   fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
                 }}
               >
@@ -165,7 +165,7 @@ export function ContactForm() {
 
       {/* Message */}
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        <label htmlFor="contact-message" style={{ fontSize: 13, fontWeight: 600, color: "#202124" }}>
+        <label htmlFor="contact-message" style={{ fontSize: 13, fontWeight: 600, color: "#010E25" }}>
           Mensaje
         </label>
         <textarea
@@ -179,7 +179,7 @@ export function ContactForm() {
       </div>
 
       {status === "error" && (
-        <p style={{ fontSize: 13, color: "#FF6B2C" }}>
+        <p style={{ fontSize: 13, color: "#FE5C02" }}>
           Hubo un error al enviar. Escríbenos directamente a hello@clickonversion.com
         </p>
       )}
@@ -194,7 +194,7 @@ export function ContactForm() {
           fontSize: 15,
           fontWeight: 700,
           cursor: isValid && status !== "loading" ? "pointer" : "not-allowed",
-          background: isValid && status !== "loading" ? "#202124" : "#C0C0C0",
+          background: isValid && status !== "loading" ? "#010E25" : "#C0C0C0",
           color: "#fff",
           border: "none",
           transition: "all 0.2s",
@@ -222,9 +222,9 @@ export function ContactForm() {
 const inputStyle: React.CSSProperties = {
   padding: "12px 16px",
   borderRadius: 12,
-  border: "1.5px solid #E2DED3",
+  border: "1.5px solid #EFE3D6",
   fontSize: 15,
-  color: "#202124",
+  color: "#010E25",
   background: "#fff",
   fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
   outline: "none",

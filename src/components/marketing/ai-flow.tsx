@@ -34,7 +34,7 @@ export function AiFlow() {
   return (
     <section
       style={{
-        background: "#202124",
+        background: "#010E25",
         margin: "0 16px",
         borderRadius: "40px",
         padding: "80px 0",
@@ -47,7 +47,7 @@ export function AiFlow() {
           style={{
             fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
             fontSize: 13,
-            color: "#D9FA62",
+            color: "#FE5C02",
             marginBottom: 24,
             letterSpacing: ".04em",
           }}
@@ -70,7 +70,7 @@ export function AiFlow() {
             style={{
               fontSize: "clamp(40px,5.5vw,88px)",
               fontWeight: 600,
-              color: "#F7F5EF",
+              color: "#FFF8F0",
               letterSpacing: "-.05em",
               lineHeight: 0.9,
               margin: 0,
@@ -83,7 +83,7 @@ export function AiFlow() {
                 fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
                 fontStyle: "italic",
                 fontWeight: 400,
-                color: "#D9FA62",
+                color: "#FE5C02",
               }}
             >
               pesado.
@@ -91,7 +91,7 @@ export function AiFlow() {
           </h2>
 
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 16 }}>
-            <p style={{ color: "#5F6168", fontSize: 17, margin: 0, textAlign: "right", maxWidth: 280, lineHeight: 1.5 }}>
+            <p style={{ color: "#5A6178", fontSize: 17, margin: 0, textAlign: "right", maxWidth: 280, lineHeight: 1.5 }}>
               Automatizamos la captación, calificación y seguimiento para que tu equipo se enfoque en cerrar.
             </p>
             <button
@@ -100,8 +100,8 @@ export function AiFlow() {
               style={{
                 padding: "14px 24px",
                 borderRadius: "999px",
-                background: running ? "#3A3B40" : "#D9FA62",
-                color: "#202124",
+                background: running ? "#3A3B40" : "#FE5C02",
+                color: "#010E25",
                 fontSize: 15,
                 fontWeight: 600,
                 border: "none",
@@ -130,12 +130,12 @@ export function AiFlow() {
               <div
                 key={step.id}
                 style={{
-                  background: isActive ? "#D9FA62" : "#2A2B2F",
+                  background: isActive ? "#FE5C02" : "#2A2B2F",
                   borderRadius: 20,
                   padding: "24px 20px",
                   transition: "background .35s ease, transform .25s ease",
                   transform: isCurrent ? "scale(1.04)" : "scale(1)",
-                  border: isCurrent ? "1.5px solid #D9FA62" : "1.5px solid transparent",
+                  border: isCurrent ? "1.5px solid #FE5C02" : "1.5px solid transparent",
                 }}
               >
                 <p
@@ -143,7 +143,7 @@ export function AiFlow() {
                     fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
                     fontSize: 11,
                     fontWeight: 500,
-                    color: isActive ? "#202124" : "#5F6168",
+                    color: isActive ? "#010E25" : "#5A6178",
                     letterSpacing: ".1em",
                     margin: "0 0 12px",
                   }}
@@ -153,7 +153,7 @@ export function AiFlow() {
                 <p
                   style={{
                     fontSize: 14,
-                    color: isActive ? "#202124" : "#5F6168",
+                    color: isActive ? "#010E25" : "#5A6178",
                     lineHeight: 1.45,
                     margin: 0,
                   }}

@@ -42,7 +42,7 @@ export function HomepageFaq() {
   const [open, setOpen] = useState<number | null>(null)
 
   return (
-    <section className="py-24 bg-[#101827]" aria-label="Frequently asked questions">
+    <section className="py-24 bg-[#010E25]" aria-label="Frequently asked questions">
       <div className="container-wide">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-14">

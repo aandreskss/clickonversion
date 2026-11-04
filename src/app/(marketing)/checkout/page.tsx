@@ -42,7 +42,7 @@ function CheckoutHeader() {
     <header
       style={{
         background: "#fff",
-        borderBottom: "1px solid #E2DED3",
+        borderBottom: "1px solid #EFE3D6",
       }}
     >
       <div
@@ -60,7 +60,7 @@ function CheckoutHeader() {
           style={{
             fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
             fontSize: 12,
-            color: "#5F6168",
+            color: "#5A6178",
             display: "flex",
             alignItems: "center",
             gap: 6,
@@ -94,7 +94,7 @@ function EmptyCart() {
         alignItems: "center",
         justifyContent: "center",
         gap: 16,
-        background: "var(--color-cream, #F7F5EF)",
+        background: "var(--color-cream, #FFF8F0)",
         padding: "48px 24px",
         textAlign: "center",
       }}
@@ -104,7 +104,7 @@ function EmptyCart() {
           fontFamily: "var(--font-mk-sans)",
           fontSize: 18,
           fontWeight: 600,
-          color: "var(--color-ink, #202124)",
+          color: "var(--color-ink, #010E25)",
         }}
       >
         Tu carrito está vacío
@@ -115,7 +115,7 @@ function EmptyCart() {
           style={{
             fontFamily: "var(--font-mk-sans)",
             fontSize: 14,
-            color: "var(--color-cobalt, #345CFF)",
+            color: "var(--color-cobalt, #C94400)",
             textDecoration: "none",
             fontWeight: 500,
           }}
@@ -143,14 +143,14 @@ function ConfirmedState({ email, orderId, totalToday }: ConfirmedStateProps) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "var(--color-cream, #F7F5EF)",
+        background: "var(--color-cream, #FFF8F0)",
         padding: "48px 24px",
       }}
     >
       <div
         style={{
           background: "#fff",
-          border: "1px solid #E2DED3",
+          border: "1px solid #EFE3D6",
           borderRadius: 20,
           padding: "40px 32px",
           maxWidth: 440,
@@ -163,14 +163,14 @@ function ConfirmedState({ email, orderId, totalToday }: ConfirmedStateProps) {
             width: 56,
             height: 56,
             borderRadius: "50%",
-            background: "var(--color-lime, #D9FA62)",
+            background: "var(--color-lime, #FE5C02)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             margin: "0 auto 20px",
           }}
         >
-          <Check size={24} color="#202124" strokeWidth={2.5} />
+          <Check size={24} color="#010E25" strokeWidth={2.5} />
         </div>
 
         <h1
@@ -178,7 +178,7 @@ function ConfirmedState({ email, orderId, totalToday }: ConfirmedStateProps) {
             fontFamily: "var(--font-mk-sans)",
             fontSize: 24,
             fontWeight: 700,
-            color: "var(--color-ink, #202124)",
+            color: "var(--color-ink, #010E25)",
             margin: "0 0 8px",
           }}
         >
@@ -188,7 +188,7 @@ function ConfirmedState({ email, orderId, totalToday }: ConfirmedStateProps) {
           style={{
             fontFamily: "var(--font-mk-sans)",
             fontSize: 14,
-            color: "var(--color-muted-ink, #5F6168)",
+            color: "var(--color-muted-ink, #5A6178)",
             margin: "0 0 24px",
             lineHeight: 1.6,
           }}
@@ -200,7 +200,7 @@ function ConfirmedState({ email, orderId, totalToday }: ConfirmedStateProps) {
         {(orderId || totalToday > 0) && (
           <div
             style={{
-              background: "var(--color-cream, #F7F5EF)",
+              background: "var(--color-cream, #FFF8F0)",
               borderRadius: 10,
               padding: "12px 16px",
               marginBottom: 24,
@@ -214,7 +214,7 @@ function ConfirmedState({ email, orderId, totalToday }: ConfirmedStateProps) {
                 style={{
                   fontFamily: "var(--font-mk-mono)",
                   fontSize: 12,
-                  color: "var(--color-muted-ink, #5F6168)",
+                  color: "var(--color-muted-ink, #5A6178)",
                 }}
               >
                 N.º {orderId.slice(0, 12).toUpperCase()}
@@ -226,7 +226,7 @@ function ConfirmedState({ email, orderId, totalToday }: ConfirmedStateProps) {
                   fontFamily: "var(--font-mk-sans)",
                   fontSize: 14,
                   fontWeight: 700,
-                  color: "var(--color-ink, #202124)",
+                  color: "var(--color-ink, #010E25)",
                 }}
               >
                 {fmt(totalToday)}
@@ -241,7 +241,7 @@ function ConfirmedState({ email, orderId, totalToday }: ConfirmedStateProps) {
             display: "inline-flex",
             alignItems: "center",
             gap: 8,
-            background: "var(--color-cobalt, #345CFF)",
+            background: "var(--color-cobalt, #C94400)",
             color: "#fff",
             borderRadius: 12,
             padding: "14px 28px",
@@ -274,14 +274,14 @@ function TransferConfirmed({ email }: TransferConfirmedProps) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "var(--color-cream, #F7F5EF)",
+        background: "var(--color-cream, #FFF8F0)",
         padding: "48px 24px",
       }}
     >
       <div
         style={{
           background: "#fff",
-          border: "1px solid #E2DED3",
+          border: "1px solid #EFE3D6",
           borderRadius: 20,
           padding: "40px 32px",
           maxWidth: 480,
@@ -293,14 +293,14 @@ function TransferConfirmed({ email }: TransferConfirmedProps) {
             width: 56,
             height: 56,
             borderRadius: "50%",
-            background: "var(--color-lime, #D9FA62)",
+            background: "var(--color-lime, #FE5C02)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             margin: "0 auto 20px",
           }}
         >
-          <Check size={24} color="#202124" strokeWidth={2.5} />
+          <Check size={24} color="#010E25" strokeWidth={2.5} />
         </div>
 
         <h2
@@ -308,7 +308,7 @@ function TransferConfirmed({ email }: TransferConfirmedProps) {
             fontFamily: "var(--font-mk-sans)",
             fontSize: 22,
             fontWeight: 700,
-            color: "var(--color-ink, #202124)",
+            color: "var(--color-ink, #010E25)",
             margin: "0 0 8px",
             textAlign: "center",
           }}
@@ -319,7 +319,7 @@ function TransferConfirmed({ email }: TransferConfirmedProps) {
           style={{
             fontFamily: "var(--font-mk-sans)",
             fontSize: 14,
-            color: "var(--color-muted-ink, #5F6168)",
+            color: "var(--color-muted-ink, #5A6178)",
             margin: "0 0 24px",
             textAlign: "center",
             lineHeight: 1.6,
@@ -331,22 +331,22 @@ function TransferConfirmed({ email }: TransferConfirmedProps) {
 
         <div
           style={{
-            background: "var(--color-cream, #F7F5EF)",
-            border: "1px solid #E2DED3",
+            background: "var(--color-cream, #FFF8F0)",
+            border: "1px solid #EFE3D6",
             borderRadius: 10,
             padding: "16px",
             fontFamily: "var(--font-mk-mono, monospace)",
             fontSize: 13,
-            color: "var(--color-ink, #202124)",
+            color: "var(--color-ink, #010E25)",
             lineHeight: 1.8,
           }}
         >
-          <div style={{ color: "#5F6168", fontSize: 11, marginBottom: 8, fontFamily: "var(--font-mk-sans)" }}>
+          <div style={{ color: "#5A6178", fontSize: 11, marginBottom: 8, fontFamily: "var(--font-mk-sans)" }}>
             DATOS BANCARIOS
           </div>
-          <div>Banco: <span style={{ color: "#5F6168" }}>Por confirmar</span></div>
-          <div>Beneficiario: <strong>Clickonversion</strong></div>
-          <div>IBAN/Cuenta: <span style={{ color: "#5F6168" }}>Por confirmar</span></div>
+          <div>Banco: <span style={{ color: "#5A6178" }}>Por confirmar</span></div>
+          <div>Beneficiario: <strong>ClicKonversion</strong></div>
+          <div>IBAN/Cuenta: <span style={{ color: "#5A6178" }}>Por confirmar</span></div>
           <div>Referencia: <strong>Tu email ({email})</strong></div>
         </div>
 
@@ -357,7 +357,7 @@ function TransferConfirmed({ email }: TransferConfirmedProps) {
             alignItems: "center",
             justifyContent: "center",
             marginTop: 20,
-            background: "var(--color-ink, #202124)",
+            background: "var(--color-ink, #010E25)",
             color: "#fff",
             borderRadius: 12,
             padding: "14px 28px",
@@ -390,14 +390,14 @@ function MethodButton({ id, label, active, onClick }: MethodButtonProps) {
       type="button"
       onClick={onClick}
       style={{
-        border: active ? "1.5px solid #202124" : "1px solid #D6D2C6",
-        background: active ? "#F7F5EF" : "#fff",
+        border: active ? "1.5px solid #010E25" : "1px solid #E3D6C8",
+        background: active ? "#FFF8F0" : "#fff",
         borderRadius: 10,
         padding: "10px 8px",
         fontFamily: "var(--font-mk-sans)",
         fontSize: 13,
         fontWeight: 500,
-        color: "var(--color-ink, #202124)",
+        color: "var(--color-ink, #010E25)",
         cursor: "pointer",
         display: "flex",
         alignItems: "center",
@@ -411,8 +411,8 @@ function MethodButton({ id, label, active, onClick }: MethodButtonProps) {
           width: 8,
           height: 8,
           borderRadius: "50%",
-          background: active ? "#345CFF" : "transparent",
-          border: active ? "none" : "1.5px solid #D6D2C6",
+          background: active ? "#C94400" : "transparent",
+          border: active ? "none" : "1.5px solid #E3D6C8",
           flexShrink: 0,
           transition: "background 0.15s",
         }}
@@ -435,7 +435,7 @@ function CardFields() {
             fontFamily: "var(--font-mk-sans)",
             fontSize: 13,
             fontWeight: 500,
-            color: "var(--color-ink, #202124)",
+            color: "var(--color-ink, #010E25)",
             marginBottom: 6,
           }}
         >
@@ -449,12 +449,12 @@ function CardFields() {
           style={{
             width: "100%",
             height: 46,
-            border: "1px solid #D6D2C6",
+            border: "1px solid #E3D6C8",
             borderRadius: 10,
             padding: "0 14px",
             fontFamily: "var(--font-mk-mono, monospace)",
             fontSize: 14,
-            color: "#202124",
+            color: "#010E25",
             background: "#FAFAFA",
             cursor: "not-allowed",
             boxSizing: "border-box",
@@ -469,7 +469,7 @@ function CardFields() {
             fontFamily: "var(--font-mk-sans)",
             fontSize: 13,
             fontWeight: 500,
-            color: "var(--color-ink, #202124)",
+            color: "var(--color-ink, #010E25)",
             marginBottom: 6,
           }}
         >
@@ -483,12 +483,12 @@ function CardFields() {
           style={{
             width: "100%",
             height: 46,
-            border: "1px solid #D6D2C6",
+            border: "1px solid #E3D6C8",
             borderRadius: 10,
             padding: "0 14px",
             fontFamily: "var(--font-mk-sans)",
             fontSize: 14,
-            color: "#202124",
+            color: "#010E25",
             background: "#FAFAFA",
             cursor: "not-allowed",
             boxSizing: "border-box",
@@ -504,7 +504,7 @@ function CardFields() {
               fontFamily: "var(--font-mk-sans)",
               fontSize: 13,
               fontWeight: 500,
-              color: "var(--color-ink, #202124)",
+              color: "var(--color-ink, #010E25)",
               marginBottom: 6,
             }}
           >
@@ -518,12 +518,12 @@ function CardFields() {
             style={{
               width: "100%",
               height: 46,
-              border: "1px solid #D6D2C6",
+              border: "1px solid #E3D6C8",
               borderRadius: 10,
               padding: "0 14px",
               fontFamily: "var(--font-mk-mono, monospace)",
               fontSize: 14,
-              color: "#202124",
+              color: "#010E25",
               background: "#FAFAFA",
               cursor: "not-allowed",
               boxSizing: "border-box",
@@ -538,7 +538,7 @@ function CardFields() {
               fontFamily: "var(--font-mk-sans)",
               fontSize: 13,
               fontWeight: 500,
-              color: "var(--color-ink, #202124)",
+              color: "var(--color-ink, #010E25)",
               marginBottom: 6,
             }}
           >
@@ -552,12 +552,12 @@ function CardFields() {
             style={{
               width: "100%",
               height: 46,
-              border: "1px solid #D6D2C6",
+              border: "1px solid #E3D6C8",
               borderRadius: 10,
               padding: "0 14px",
               fontFamily: "var(--font-mk-mono, monospace)",
               fontSize: 14,
-              color: "#202124",
+              color: "#010E25",
               background: "#FAFAFA",
               cursor: "not-allowed",
               boxSizing: "border-box",
@@ -601,13 +601,13 @@ function FormField({
           fontFamily: "var(--font-mk-sans)",
           fontSize: 13,
           fontWeight: 500,
-          color: "var(--color-ink, #202124)",
+          color: "var(--color-ink, #010E25)",
           marginBottom: 6,
         }}
       >
         {label}
         {optional && (
-          <span style={{ color: "#5F6168", fontWeight: 400, marginLeft: 4 }}>
+          <span style={{ color: "#5A6178", fontWeight: 400, marginLeft: 4 }}>
             (opcional)
           </span>
         )}
@@ -621,12 +621,12 @@ function FormField({
         style={{
           width: "100%",
           height: 46,
-          border: error ? "1.5px solid #EF4444" : "1px solid #D6D2C6",
+          border: error ? "1.5px solid #EF4444" : "1px solid #E3D6C8",
           borderRadius: 10,
           padding: "0 14px",
           fontFamily: "var(--font-mk-sans)",
           fontSize: 14,
-          color: "#202124",
+          color: "#010E25",
           background: "#fff",
           outline: "none",
           boxSizing: "border-box",
@@ -742,7 +742,7 @@ export default function CheckoutPage() {
 
   if (confirmed) {
     return (
-      <div style={{ minHeight: "100dvh", background: "var(--color-cream, #F7F5EF)" }}>
+      <div style={{ minHeight: "100dvh", background: "var(--color-cream, #FFF8F0)" }}>
         <CheckoutHeader />
         <ConfirmedState email={email} orderId={confirmedOrderId} totalToday={totalToday} />
       </div>
@@ -751,7 +751,7 @@ export default function CheckoutPage() {
 
   if (transferConfirmed) {
     return (
-      <div style={{ minHeight: "100dvh", background: "var(--color-cream, #F7F5EF)" }}>
+      <div style={{ minHeight: "100dvh", background: "var(--color-cream, #FFF8F0)" }}>
         <CheckoutHeader />
         <TransferConfirmed email={email} />
       </div>
@@ -760,7 +760,7 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div style={{ minHeight: "100dvh", background: "var(--color-cream, #F7F5EF)" }}>
+      <div style={{ minHeight: "100dvh", background: "var(--color-cream, #FFF8F0)" }}>
         <CheckoutHeader />
         <EmptyCart />
       </div>
@@ -771,7 +771,7 @@ export default function CheckoutPage() {
 
   const cardStyle: React.CSSProperties = {
     background: "#fff",
-    border: "1px solid #E2DED3",
+    border: "1px solid #EFE3D6",
     borderRadius: 16,
     padding: 24,
   }
@@ -780,12 +780,12 @@ export default function CheckoutPage() {
     fontFamily: "var(--font-mk-sans)",
     fontSize: 16,
     fontWeight: 700,
-    color: "var(--color-ink, #202124)",
+    color: "var(--color-ink, #010E25)",
     margin: "0 0 16px",
   }
 
   return (
-    <div style={{ minHeight: "100dvh", background: "var(--color-cream, #F7F5EF)" }}>
+    <div style={{ minHeight: "100dvh", background: "var(--color-cream, #FFF8F0)" }}>
       <CheckoutHeader />
 
       <main style={{ maxWidth: 1120, margin: "0 auto", padding: "32px 24px 64px" }}>
@@ -798,7 +798,7 @@ export default function CheckoutPage() {
             gap: 6,
             fontFamily: "var(--font-mk-sans)",
             fontSize: 13,
-            color: "var(--color-muted-ink, #5F6168)",
+            color: "var(--color-muted-ink, #5A6178)",
             textDecoration: "none",
             marginBottom: 20,
           }}
@@ -811,7 +811,7 @@ export default function CheckoutPage() {
             fontFamily: "var(--font-mk-sans)",
             fontSize: 28,
             fontWeight: 700,
-            color: "var(--color-ink, #202124)",
+            color: "var(--color-ink, #010E25)",
             margin: "0 0 24px",
           }}
         >
@@ -917,7 +917,7 @@ export default function CheckoutPage() {
                   style={{
                     fontFamily: "var(--font-mk-sans)",
                     fontSize: 14,
-                    color: "var(--color-muted-ink, #5F6168)",
+                    color: "var(--color-muted-ink, #5A6178)",
                     lineHeight: 1.6,
                     margin: 0,
                   }}
@@ -931,7 +931,7 @@ export default function CheckoutPage() {
                   style={{
                     fontFamily: "var(--font-mk-sans)",
                     fontSize: 14,
-                    color: "var(--color-muted-ink, #5F6168)",
+                    color: "var(--color-muted-ink, #5A6178)",
                     lineHeight: 1.6,
                     margin: 0,
                   }}
@@ -967,7 +967,7 @@ export default function CheckoutPage() {
                   fontFamily: "var(--font-mk-sans)",
                   fontSize: 18,
                   fontWeight: 700,
-                  color: "var(--color-ink, #202124)",
+                  color: "var(--color-ink, #010E25)",
                   margin: "0 0 16px",
                 }}
               >
@@ -992,7 +992,7 @@ export default function CheckoutPage() {
                           fontFamily: "var(--font-mk-sans)",
                           fontSize: 14,
                           fontWeight: 500,
-                          color: "var(--color-ink, #202124)",
+                          color: "var(--color-ink, #010E25)",
                           margin: 0,
                           lineHeight: 1.4,
                         }}
@@ -1003,7 +1003,7 @@ export default function CheckoutPage() {
                         style={{
                           fontFamily: "var(--font-mk-sans)",
                           fontSize: 12,
-                          color: "var(--color-muted-ink, #5F6168)",
+                          color: "var(--color-muted-ink, #5A6178)",
                           margin: "2px 0 0",
                         }}
                       >
@@ -1017,7 +1017,7 @@ export default function CheckoutPage() {
                           fontFamily: "var(--font-mk-sans)",
                           fontSize: 14,
                           fontWeight: 600,
-                          color: "var(--color-ink, #202124)",
+                          color: "var(--color-ink, #010E25)",
                           margin: 0,
                         }}
                       >
@@ -1029,7 +1029,7 @@ export default function CheckoutPage() {
                         style={{
                           fontFamily: "var(--font-mk-sans)",
                           fontSize: 12,
-                          color: "var(--color-muted-ink, #5F6168)",
+                          color: "var(--color-muted-ink, #5A6178)",
                           background: "none",
                           border: "none",
                           cursor: "pointer",
@@ -1052,7 +1052,7 @@ export default function CheckoutPage() {
                   gap: 8,
                   marginBottom: 16,
                   paddingBottom: 16,
-                  borderBottom: "1px solid #E2DED3",
+                  borderBottom: "1px solid #EFE3D6",
                 }}
               >
                 <input
@@ -1063,12 +1063,12 @@ export default function CheckoutPage() {
                   style={{
                     flex: 1,
                     height: 40,
-                    border: "1px solid #D6D2C6",
+                    border: "1px solid #E3D6C8",
                     borderRadius: 8,
                     padding: "0 12px",
                     fontFamily: "var(--font-mk-sans)",
                     fontSize: 13,
-                    color: "#202124",
+                    color: "#010E25",
                     background: "#fff",
                     outline: "none",
                     boxSizing: "border-box",
@@ -1079,12 +1079,12 @@ export default function CheckoutPage() {
                   style={{
                     height: 40,
                     padding: "0 14px",
-                    border: "1px solid #D6D2C6",
+                    border: "1px solid #E3D6C8",
                     borderRadius: 8,
                     fontFamily: "var(--font-mk-sans)",
                     fontSize: 13,
                     fontWeight: 500,
-                    color: "var(--color-ink, #202124)",
+                    color: "var(--color-ink, #010E25)",
                     background: "#fff",
                     cursor: "pointer",
                     whiteSpace: "nowrap",
@@ -1102,7 +1102,7 @@ export default function CheckoutPage() {
                       style={{
                         fontFamily: "var(--font-mk-sans)",
                         fontSize: 13,
-                        color: "var(--color-muted-ink, #5F6168)",
+                        color: "var(--color-muted-ink, #5A6178)",
                       }}
                     >
                       Pagos únicos
@@ -1111,7 +1111,7 @@ export default function CheckoutPage() {
                       style={{
                         fontFamily: "var(--font-mk-sans)",
                         fontSize: 13,
-                        color: "var(--color-ink, #202124)",
+                        color: "var(--color-ink, #010E25)",
                       }}
                     >
                       {fmt(onceTotal)}
@@ -1124,7 +1124,7 @@ export default function CheckoutPage() {
                       style={{
                         fontFamily: "var(--font-mk-sans)",
                         fontSize: 13,
-                        color: "var(--color-muted-ink, #5F6168)",
+                        color: "var(--color-muted-ink, #5A6178)",
                       }}
                     >
                       Primer mes de servicios mensuales
@@ -1133,7 +1133,7 @@ export default function CheckoutPage() {
                       style={{
                         fontFamily: "var(--font-mk-sans)",
                         fontSize: 13,
-                        color: "var(--color-ink, #202124)",
+                        color: "var(--color-ink, #010E25)",
                       }}
                     >
                       {fmt(monthlyTotal)}
@@ -1145,7 +1145,7 @@ export default function CheckoutPage() {
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    borderTop: "1px solid #E2DED3",
+                    borderTop: "1px solid #EFE3D6",
                     paddingTop: 10,
                     marginTop: 4,
                   }}
@@ -1155,7 +1155,7 @@ export default function CheckoutPage() {
                       fontFamily: "var(--font-mk-sans)",
                       fontSize: 15,
                       fontWeight: 700,
-                      color: "var(--color-ink, #202124)",
+                      color: "var(--color-ink, #010E25)",
                     }}
                   >
                     Total hoy
@@ -1165,7 +1165,7 @@ export default function CheckoutPage() {
                       fontFamily: "var(--font-mk-sans)",
                       fontSize: 18,
                       fontWeight: 700,
-                      color: "var(--color-ink, #202124)",
+                      color: "var(--color-ink, #010E25)",
                     }}
                   >
                     {fmt(totalToday)} USD
@@ -1177,7 +1177,7 @@ export default function CheckoutPage() {
                     style={{
                       fontFamily: "var(--font-mk-sans)",
                       fontSize: 12,
-                      color: "var(--color-muted-ink, #5F6168)",
+                      color: "var(--color-muted-ink, #5A6178)",
                       margin: "2px 0 0",
                     }}
                   >
@@ -1197,7 +1197,7 @@ export default function CheckoutPage() {
                   height: 54,
                   borderRadius: 12,
                   border: "none",
-                  background: payButtonDisabled ? "#D6D2C6" : "var(--color-cobalt, #345CFF)",
+                  background: payButtonDisabled ? "#E3D6C8" : "var(--color-cobalt, #C94400)",
                   color: payButtonDisabled ? "#8A8A8A" : "#fff",
                   fontFamily: "var(--font-mk-sans)",
                   fontSize: 16,
@@ -1218,7 +1218,7 @@ export default function CheckoutPage() {
                 style={{
                   fontFamily: "var(--font-mk-sans)",
                   fontSize: 11,
-                  color: "var(--color-muted-ink, #5F6168)",
+                  color: "var(--color-muted-ink, #5A6178)",
                   textAlign: "center",
                   marginTop: 10,
                   lineHeight: 1.5,

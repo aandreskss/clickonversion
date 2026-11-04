@@ -1,237 +1,83 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { MarketingLayout } from "@/components/marketing/marketing-layout"
+import { ProjectsGrid } from "@/components/brand/projects-grid"
+import { waLink } from "@/lib/whatsapp"
 
 export const metadata: Metadata = {
-  title: "Proyectos — Trabajo que habla | ClicKonversion",
-  description:
-    "Casos de éxito y proyectos de ClicKonversion. Solo publicamos resultados verificados.",
-  alternates: {
-    canonical: "https://www.clickonversion.com/projects",
-  },
+  title: "Proyectos — lo que hemos construido y medido",
+  description: "Webs, campañas, agentes de IA y configuraciones técnicas para negocios reales. Cada proyecto con su problema, lo que hicimos y lo que cambió.",
+  alternates: { canonical: "https://www.clickonversion.com/projects" },
   openGraph: {
-    title: "Proyectos — Trabajo que habla | ClicKonversion",
+    title: "Proyectos | ClicKonversion",
     description: "Casos reales con resultados reales. Sin métricas de vanidad.",
     url: "https://www.clickonversion.com/projects",
     siteName: "ClicKonversion",
-    locale: "es_ES",
+    locale: "es_419",
     type: "website",
   },
 }
 
-const PLACEHOLDERS = [
-  { color: "#345CFF", sector: "E-commerce", text: "#fff" },
-  { color: "#D9FA62", sector: "SaaS B2B", text: "#202124" },
-  { color: "#E9E4FF", sector: "Servicios locales", text: "#202124" },
-  { color: "#202124", sector: "Inmobiliaria", text: "#fff" },
-]
-
 export default function ProjectsPage() {
   return (
-    <MarketingLayout active="projects">
-      <div
-        style={{
-          background: "#F7F5EF",
-          fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
-        }}
-      >
-        {/* Hero */}
-        <section
-          style={{
-            padding: "clamp(120px, 15vw, 180px) clamp(16px, 5vw, 80px) clamp(64px, 8vw, 96px)",
-            maxWidth: "88rem",
-            margin: "0 auto",
-          }}
-          aria-label="Proyectos"
-        >
-          <p
-            style={{
-              fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "#5F6168",
-              marginBottom: 24,
-            }}
-          >
-            PROYECTOS
-          </p>
-          <div
-            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(32px, 5vw, 80px)", alignItems: "end" }}
-            className="projects-hero-grid"
-          >
-            <h1
-              style={{
-                fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
-                fontSize: "clamp(60px, 8vw, 120px)",
-                fontWeight: 400,
-                lineHeight: 0.9,
-                color: "#202124",
-                letterSpacing: "-0.02em",
-                margin: 0,
-              }}
-            >
-              Trabajo que{" "}
-              <em style={{ fontStyle: "italic" }}>habla.</em>
-            </h1>
-            <p style={{ fontSize: 19, lineHeight: 1.6, color: "#5F6168", maxWidth: 440 }}>
-              Solo publicamos casos con resultados verificados. Datos reales, sin métricas de vanidad.
-            </p>
-          </div>
-        </section>
+    <MarketingLayout active="projects" whatsapp={{ message: "¿Te gustó algún proyecto? Cuéntanos el tuyo y te decimos cómo lo haríamos.", replies: ["Quiero algo parecido", "Quiero ver SyncLead", "Tengo una duda"] }}>
+      <section className="ck-dots" style={{ padding: "56px 0 48px" }}>
+        <div className="ck-wrap" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          <nav aria-label="Migas de pan"><ol className="ck-crumbs"><li><Link href="/">Inicio</Link></li><li aria-hidden="true">/</li><li aria-current="page" style={{ color: "#010E25", fontWeight: 700 }}>Proyectos</li></ol></nav>
+          <h1 style={{ fontSize: "clamp(46px, 6.4vw, 96px)", lineHeight: 0.98, maxWidth: 1000 }}>Lo que hemos <span style={{ color: "#FE5C02" }}>construido y medido</span>.</h1>
+          <p style={{ fontSize: "clamp(18px, 1.6vw, 21px)", color: "#3A4158", maxWidth: 700 }}>Webs, campañas, agentes de IA y configuraciones técnicas para negocios reales. Cada proyecto con su problema, lo que hicimos y lo que cambió.</p>
+        </div>
+      </section>
 
-        {/* Cases staggered grid */}
-        <section
-          style={{
-            padding: "0 clamp(16px, 5vw, 80px) clamp(80px, 10vw, 120px)",
-            maxWidth: "88rem",
-            margin: "0 auto",
-          }}
-          aria-label="Casos de clientes"
-        >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 20,
-            }}
-            className="cases-grid"
-          >
-            {PLACEHOLDERS.map((p, i) => (
-              <div
-                key={p.sector}
-                style={{
-                  marginTop: i % 2 === 1 ? 80 : 0,
-                }}
-              >
-                <div
-                  style={{
-                    aspectRatio: "4/3",
-                    background: p.color,
-                    borderRadius: 28,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-end",
-                    padding: 28,
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  {/* Badge */}
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: 20,
-                      right: 20,
-                      background: "#FF6B2C",
-                      color: "#fff",
-                      borderRadius: 999,
-                      padding: "5px 12px",
-                      fontSize: 11,
-                      fontWeight: 700,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      fontFamily: "var(--font-mk-mono, monospace)",
-                    }}
-                  >
-                    RESULTADO POR VERIFICAR
-                  </span>
-                  <div>
-                    <p
-                      style={{
-                        fontSize: 13,
-                        fontWeight: 600,
-                        color: p.text,
-                        opacity: 0.6,
-                        marginBottom: 6,
-                        fontFamily: "var(--font-mk-mono, monospace)",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.1em",
-                      }}
-                    >
-                      {p.sector}
-                    </p>
-                    <p style={{ fontSize: 22, fontWeight: 700, color: p.text }}>
-                      [Cliente]
-                    </p>
-                  </div>
-                </div>
+      <section style={{ padding: "0 16px 72px" }}>
+        <div style={{ maxWidth: 1240, margin: "0 auto", background: "#010E25", color: "#fff", borderRadius: 44, padding: "clamp(28px, 5vw, 64px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 56 }}>
+          <div style={{ flex: "1 1 420px", minWidth: 0, display: "flex", flexDirection: "column", gap: 20 }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              <span className="ck-tag" style={{ background: "#FE5C02" }}>PRODUCTO PROPIO</span>
+              <span className="ck-tag" style={{ color: "#fff", borderColor: "rgba(255,255,255,.55)" }}>[CRM]</span>
+              <span className="ck-tag" style={{ color: "#fff", borderColor: "rgba(255,255,255,.55)" }}>[META ADS]</span>
+            </div>
+            <h2 style={{ fontSize: "clamp(36px, 4.6vw, 62px)", color: "#fff" }}>SyncLead: el CRM que hicimos para los leads de Meta Ads</h2>
+            <p style={{ color: "rgba(255,255,255,.82)" }}>Un CRM multiempresa donde los leads de Meta Ads llegan solos, se ordenan por etapa y cada equipo sabe a quién responder primero.</p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+              <Link className="ck-btn ck-btn-primary on-dark" href="/apps/synclead">Conocer SyncLead ↗</Link>
+            </div>
+          </div>
+          <div style={{ flex: "1 1 440px", minWidth: 0, display: "flex", justifyContent: "center", perspective: 1400 }} aria-hidden="true">
+            <div className="ck-phone" style={{ width: "min(520px, 100%)", background: "#FFF8F0", color: "#010E25", borderRadius: 24, overflow: "hidden", boxShadow: "0 50px 90px -40px rgba(0,0,0,.8)", transform: "rotateY(-16deg) rotateX(8deg)" }}>
+              <div style={{ background: "#010E25", borderBottom: "1px solid rgba(255,255,255,.12)", padding: "12px 16px", display: "flex", alignItems: "center", gap: 14, color: "#fff", fontSize: 13 }}>
+                <span className="ck-mono" style={{ fontSize: 11, border: "1.5px solid rgba(255,255,255,.5)", borderRadius: 6, padding: "3px 8px" }}>SYNCLEAD</span>
+                <span>Panel</span><span style={{ color: "#FE5C02" }}>Leads</span><span>Campañas</span>
               </div>
-            ))}
+              <div style={{ padding: 16, display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 10, fontSize: 12.5 }}>
+                {[["NUEVOS", "#fff", "Lead nuevo", "META ADS · ahora"], ["CONTACTADOS", "#FFDCC7", "Lead", "WHATSAPP"], ["CLIENTES", "#D3F2E3", "Cliente ✓", "CERRADO"]].map(([h, bg, t, s]) => (
+                  <div key={h} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <span className="ck-mono" style={{ fontSize: 10.5, color: "#5A6178" }}>{h}</span>
+                    <span style={{ background: bg, border: bg === "#fff" ? "1.5px solid #010E25" : undefined, borderRadius: 12, padding: 10, display: "flex", flexDirection: "column", gap: 4 }}><strong style={{ fontWeight: 600 }}>{t}</strong><span className="ck-mono" style={{ fontSize: 10, color: "#C94400" }}>{s}</span></span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <p
-            style={{
-              marginTop: 48,
-              fontFamily: "var(--font-mk-mono, monospace)",
-              fontSize: 12,
-              color: "#5F6168",
-              opacity: 0.7,
-            }}
-          >
-            Solo publicaremos casos con resultados verificados.
-          </p>
-        </section>
+      <section style={{ paddingBottom: "clamp(80px, 10vw, 140px)" }}>
+        <div className="ck-wrap"><ProjectsGrid /></div>
+      </section>
 
-        {/* CTA lime */}
-        <section style={{ padding: "0 16px clamp(64px, 8vw, 96px)" }}>
-          <div
-            style={{
-              background: "#D9FA62",
-              borderRadius: 40,
-              padding: "clamp(48px, 6vw, 80px) clamp(32px, 5vw, 64px)",
-              maxWidth: "88rem",
-              margin: "0 auto",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: 24,
-            }}
-          >
-            <h2
-              style={{
-                fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
-                fontSize: "clamp(36px, 5vw, 64px)",
-                fontWeight: 400,
-                color: "#202124",
-                lineHeight: 1,
-                margin: 0,
-              }}
-            >
-              ¿Quieres ser<br />
-              el próximo{" "}
-              <em style={{ fontStyle: "italic" }}>caso?</em>
-            </h2>
-            <Link
-              href="/book"
-              style={{
-                background: "#202124",
-                color: "#fff",
-                borderRadius: 999,
-                padding: "14px 28px",
-                fontSize: 15,
-                fontWeight: 700,
-                textDecoration: "none",
-              }}
-            >
-              Hablemos →
-            </Link>
+      <section style={{ padding: "0 16px clamp(48px, 6vw, 80px)" }}>
+        <div className="ck-reveal" style={{ maxWidth: 1240, margin: "0 auto", background: "#FE5C02", border: "1.5px solid #010E25", borderRadius: 44, padding: "clamp(32px, 6vw, 80px)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 32 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 680 }}>
+            <h2 style={{ fontSize: "clamp(36px, 4.6vw, 64px)" }}>¿El próximo proyecto es el tuyo?</h2>
+            <p style={{ fontSize: 20 }}>Cuéntanos qué quieres lograr y te decimos cómo lo haríamos.</p>
           </div>
-        </section>
-      </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          .projects-hero-grid,
-          .cases-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .cases-grid > div {
-            margin-top: 0 !important;
-          }
-        }
-      `}</style>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+            <a className="ck-btn ck-btn-dark" href={waLink("Hola, quiero un proyecto parecido")} target="_blank" rel="noopener noreferrer" style={{ minHeight: 56, fontSize: 17 }}>Escríbenos por WhatsApp ↗</a>
+            <Link className="ck-btn ck-btn-line" href="/pricing" style={{ minHeight: 56, fontSize: 17 }}>Ver precios</Link>
+          </div>
+        </div>
+      </section>
     </MarketingLayout>
   )
 }

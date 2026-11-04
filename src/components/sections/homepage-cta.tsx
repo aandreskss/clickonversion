@@ -3,7 +3,7 @@ import { ArrowRight, Calendar } from "lucide-react"
 
 export function HomepageCta() {
   return (
-    <section className="py-24 bg-[#101827]" aria-label="Get started">
+    <section className="py-24 bg-[#010E25]" aria-label="Get started">
       <div className="container-wide">
         <div
           className="relative rounded-3xl overflow-hidden p-12 md:p-16 text-center"
@@ -21,8 +21,8 @@ export function HomepageCta() {
           />
 
           {/* Top badge */}
-          <div className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FF5A1F]/10 border border-[#FF5A1F]/20 text-[#FF5A1F] text-xs font-semibold mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A1F] animate-pulse" />
+          <div className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FE5C02]/10 border border-[#FE5C02]/20 text-[#FE5C02] text-xs font-semibold mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FE5C02] animate-pulse" />
             Free — no commitment required
           </div>
 
@@ -49,7 +49,7 @@ export function HomepageCta() {
           <div className="relative flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/audit"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-[#FF5A1F] text-white font-semibold rounded-xl hover:bg-[#E54A15] transition-all duration-150 active:scale-[0.98] text-base shadow-lg shadow-[#FF5A1F]/25"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#FE5C02] text-white font-semibold rounded-xl hover:bg-[#C94400] transition-all duration-150 active:scale-[0.98] text-base shadow-lg shadow-[#FE5C02]/25"
             >
               Get a Free Audit
               <ArrowRight size={18} />

@@ -31,14 +31,14 @@ const STEPS = [
     title: "Measure & Scale",
     description:
       "Monthly reporting with clear metrics tied to leads, conversations, and revenue. What works gets more investment. What doesn't gets cut or adjusted. The system compounds.",
-    accent: "#FF5A1F",
+    accent: "#FE5C02",
     duration: "Monthly reviews",
   },
 ]
 
 export function HowItWorks() {
   return (
-    <section className="py-24 bg-[#101827]" aria-label="How it works">
+    <section className="py-24 bg-[#010E25]" aria-label="How it works">
       <div className="container-wide">
         <div className="text-center mb-16">
           <p className="eyebrow text-[#4E5D6E] mb-4">The process</p>
@@ -94,7 +94,7 @@ export function HowItWorks() {
         <div className="text-center">
           <Link
             href="/audit"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#FF5A1F] text-white font-semibold rounded-xl hover:bg-[#E54A15] transition-colors shadow-lg shadow-[#FF5A1F]/20 text-base"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-[#FE5C02] text-white font-semibold rounded-xl hover:bg-[#C94400] transition-colors shadow-lg shadow-[#FE5C02]/20 text-base"
           >
             Start with a Free Audit
             <ArrowRight size={18} />

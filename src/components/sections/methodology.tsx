@@ -25,7 +25,7 @@ const PRINCIPLES = [
     title: "Built to compound",
     description:
       "Good SEO compounds. Good automations scale. Good data improves AI. We build systems designed to get better over time — not campaigns that stop the moment you stop paying.",
-    accent: "#FF5A1F",
+    accent: "#FE5C02",
   },
 ]
 

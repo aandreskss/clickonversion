@@ -43,7 +43,7 @@ export default function TermsPage() {
 
               <section>
                 <h2 className="text-lg font-bold text-white mb-3">Contact</h2>
-                <p>Questions? Email <a href="mailto:hello@clicKonversion.com" className="text-[#FF5A1F] hover:underline">hello@clicKonversion.com</a>.</p>
+                <p>Questions? Email <a href="mailto:hello@clicKonversion.com" className="text-[#FE5C02] hover:underline">hello@clicKonversion.com</a>.</p>
               </section>
             </div>
           </div>

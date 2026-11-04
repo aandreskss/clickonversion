@@ -1,321 +1,78 @@
-"use client"
-
 import Link from "next/link"
 import { LogoWordmark } from "@/components/ui/logo-wordmark"
+import { waLink } from "@/lib/whatsapp"
 
-const FOOTER_NAVEGA = [
-  { href: "/",          label: "Inicio" },
-  { href: "/services",  label: "Servicios" },
-  { href: "/pricing",   label: "Precios" },
-  { href: "/projects",  label: "Proyectos" },
-  { href: "/about",     label: "Nosotros" },
-  { href: "/resources", label: "Recursos" },
-]
-
-const FOOTER_SERVICIOS = [
-  { href: "/services#seo",  label: "SEO técnico" },
-  { href: "/services#seo",  label: "SEO local" },
-  { href: "/services#seo",  label: "AI Search" },
-  { href: "/services#ads",  label: "Google Ads" },
-  { href: "/services#ads",  label: "Meta Ads" },
-  { href: "/services#ads",  label: "TikTok Ads" },
-  { href: "/services#ia",   label: "Automatización WhatsApp" },
-  { href: "/services#ia",   label: "Agentes IA" },
-  { href: "/services#meta", label: "Soporte Meta Business" },
-]
-
-const FOOTER_APPS = [
-  { href: "/apps/synclead",     label: "SyncLead" },
-  { href: "/portal/dashboard",  label: "Portal de clientes" },
-  { href: "/pricing",           label: "Ver precios" },
-  { href: "/checkout",          label: "Checkout" },
+const COLS = [
+  {
+    title: "SERVICIOS",
+    links: [
+      { href: "/services#seo", label: "SEO local y técnico" },
+      { href: "/services#ads", label: "Meta, Google y TikTok Ads" },
+      { href: "/services#ia", label: "Agentes IA y automatización" },
+      { href: "/services", label: "Webs, apps y landings" },
+      { href: "/services", label: "Configuración y medición" },
+    ],
+  },
+  {
+    title: "ESTUDIO",
+    links: [
+      { href: "/about", label: "Quiénes somos" },
+      { href: "/projects", label: "Proyectos" },
+      { href: "/pricing", label: "Precios" },
+      { href: "/apps", label: "Apps · SyncLead" },
+      { href: "/blog", label: "Blog" },
+      { href: "/resources", label: "Recursos" },
+    ],
+  },
 ]
 
 export function Footer() {
   return (
-    <footer
-      style={{
-        margin: "16px",
-        borderRadius: "40px",
-        background: "#345CFF",
-        color: "white",
-        fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
-        overflow: "hidden",
-      }}
-      role="contentinfo"
-    >
-      <div
-        style={{
-          maxWidth: 1328,
-          margin: "0 auto",
-          padding: "96px 32px 40px",
-        }}
-      >
-        {/* Upper: CTA gigante */}
-        <div style={{ marginBottom: 80 }}>
-          <h2
-            style={{
-              fontSize: "clamp(56px,9vw,152px)",
-              fontWeight: 600,
-              lineHeight: 0.88,
-              letterSpacing: "-.05em",
-              color: "white",
-              margin: "0 0 40px",
-            }}
-          >
-            Hagamos que todo haga{" "}
-            <em
-              style={{
-                fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
-                fontStyle: "italic",
-                fontWeight: 400,
-                color: "#D9FA62",
-              }}
-            >
-              clic.
-            </em>
-          </h2>
-
-          <Link
-            href="/about#contacto"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "16px 28px",
-              borderRadius: "999px",
-              background: "#D9FA62",
-              color: "#202124",
-              fontWeight: 600,
-              fontSize: 17,
-              textDecoration: "none",
-              transition: "background .15s",
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#FFFFFF" }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#D9FA62" }}
-          >
-            Empezar un proyecto ↗
-          </Link>
-        </div>
-
-        {/* Link grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-            gap: 40,
-            marginBottom: 80,
-            borderTop: "1px solid rgba(255,255,255,.2)",
-            paddingTop: 48,
-          }}
-        >
-          {/* NAVEGA */}
-          <div>
-            <h3
-              style={{
-                fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
-                fontSize: 12,
-                fontWeight: 400,
-                color: "#E9E4FF",
-                letterSpacing: ".08em",
-                textTransform: "uppercase",
-                marginBottom: 16,
-              }}
-            >
-              NAVEGA
-            </h3>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-              {FOOTER_NAVEGA.map((link) => (
-                <li key={link.href + link.label}>
-                  <Link
-                    href={link.href}
-                    style={{ color: "white", textDecoration: "none", fontSize: 15, transition: "color .15s" }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#D9FA62" }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "white" }}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* SERVICIOS */}
-          <div>
-            <h3
-              style={{
-                fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
-                fontSize: 12,
-                fontWeight: 400,
-                color: "#E9E4FF",
-                letterSpacing: ".08em",
-                textTransform: "uppercase",
-                marginBottom: 16,
-              }}
-            >
-              SERVICIOS
-            </h3>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-              {FOOTER_SERVICIOS.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    style={{ color: "white", textDecoration: "none", fontSize: 15, transition: "color .15s" }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#D9FA62" }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "white" }}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* APPS Y CUENTA */}
-          <div>
-            <h3
-              style={{
-                fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
-                fontSize: 12,
-                fontWeight: 400,
-                color: "#E9E4FF",
-                letterSpacing: ".08em",
-                textTransform: "uppercase",
-                marginBottom: 16,
-              }}
-            >
-              APPS Y CUENTA
-            </h3>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-              {FOOTER_APPS.map((link) => (
-                <li key={link.href + link.label}>
-                  <Link
-                    href={link.href}
-                    style={{ color: "white", textDecoration: "none", fontSize: 15, transition: "color .15s" }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#D9FA62" }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "white" }}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* SALUDA */}
-          <div>
-            <h3
-              style={{
-                fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
-                fontSize: 12,
-                fontWeight: 400,
-                color: "#E9E4FF",
-                letterSpacing: ".08em",
-                textTransform: "uppercase",
-                marginBottom: 16,
-              }}
-            >
-              SALUDA
-            </h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <a
-                href="mailto:hello@clickonversion.com"
-                style={{ color: "white", textDecoration: "none", fontSize: 15, transition: "color .15s" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#D9FA62" }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "white" }}
-              >
-                hello@clickonversion.com
-              </a>
-              <a
-                href="#"
-                style={{ color: "white", textDecoration: "none", fontSize: 15, transition: "color .15s" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#D9FA62" }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "white" }}
-              >
-                WhatsApp →
-              </a>
-              <div style={{ display: "flex", gap: 16, marginTop: 4 }}>
-                {["Instagram", "LinkedIn", "TikTok"].map((social) => (
-                  <a
-                    key={social}
-                    href="#"
-                    style={{ color: "white", textDecoration: "none", fontSize: 15, transition: "color .15s" }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#D9FA62" }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "white" }}
-                  >
-                    {social}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Wordmark gigante */}
-        <div
-          style={{
-            borderTop: "1px solid rgba(255,255,255,.2)",
-            paddingTop: 40,
-            marginBottom: 32,
-          }}
-        >
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              fontSize: "clamp(40px,11.5vw,190px)",
-              fontWeight: 600,
-              letterSpacing: "-.05em",
-              fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
-              color: "white",
-              lineHeight: 1,
-              userSelect: "none",
-            }}
-          >
-            click
-            <span
-              style={{
-                position: "relative",
-                background: "#D9FA62",
-                borderRadius: "999px",
-                padding: "0 .2em .06em",
-                margin: "0 .04em",
-                display: "inline-flex",
-                alignItems: "center",
-                color: "#202124",
-              }}
-            >
-              ON
-            </span>
-            version
-          </span>
-        </div>
-
-        {/* Fila legal */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 12,
-            fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
-            fontSize: 12,
-            color: "#E9E4FF",
-          }}
-        >
-          <span>
-            © 2026 Clickonversion ·{" "}
-            <Link href="/privacy" style={{ color: "inherit", textDecoration: "none" }}>
-              Privacidad
-            </Link>{" "}
-            ·{" "}
-            <Link href="/terms" style={{ color: "inherit", textDecoration: "none" }}>
-              Términos
+    <footer style={{ padding: "0 16px 16px" }}>
+      <div style={{ maxWidth: 1272, margin: "0 auto", background: "#010E25", color: "#fff", borderRadius: 40, padding: "clamp(32px, 5vw, 56px)", display: "flex", flexDirection: "column", gap: 40 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", gap: 28 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <Link href="/" aria-label="ClicKonversion, ir al inicio" style={{ textDecoration: "none" }}>
+              <LogoWordmark size="xl" tone="dark" />
             </Link>
-          </span>
-          <span>Estrategia · Tecnología · Crecimiento</span>
-          <span>Pequeños clics. Grandes cosas.</span>
+            <span className="ck-mono" style={{ fontSize: 12, letterSpacing: ".32em", color: "rgba(255,255,255,.8)" }}>ESTRATEGIA · TECNOLOGÍA · CRECIMIENTO</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 12 }}>
+            <span className="ck-hand" style={{ fontSize: 30, color: "#FE5C02", transform: "rotate(-3deg)" }}>¿hablamos? te leemos</span>
+            <a className="ck-btn ck-btn-primary on-dark" href={waLink("Hola, quiero hablar con ustedes")} target="_blank" rel="noopener noreferrer">Escríbenos ↗</a>
+          </div>
+        </div>
+
+        <div style={{ height: 1, background: "rgba(255,255,255,.14)" }} />
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(180px, 100%), 1fr))", gap: 32 }}>
+          {COLS.map((c) => (
+            <div key={c.title} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <span className="ck-mono" style={{ fontSize: 12, letterSpacing: ".08em", color: "rgba(255,255,255,.65)" }}>{c.title}</span>
+              {c.links.map((l) => (
+                <Link key={l.label} className="ck-flink" href={l.href}>{l.label}</Link>
+              ))}
+            </div>
+          ))}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <span className="ck-mono" style={{ fontSize: 12, letterSpacing: ".08em", color: "rgba(255,255,255,.65)" }}>CONTACTO</span>
+            <a className="ck-flink" href={waLink()} target="_blank" rel="noopener noreferrer">WhatsApp ↗</a>
+            <a className="ck-flink" href="mailto:hello@clickonversion.com">hello@clickonversion.com</a>
+            <a className="ck-flink" href="https://www.linkedin.com/in/arnaldocasadiego/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+            <Link className="ck-flink" href="/portal/login">Portal de clientes</Link>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <span className="ck-mono" style={{ fontSize: 12, letterSpacing: ".08em", color: "rgba(255,255,255,.65)" }}>AHORA MISMO</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 15 }}><span className="ck-dot" />en línea desde Venezuela</span>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 12 }}>
+          <span className="ck-mono" style={{ fontSize: 12, color: "rgba(255,255,255,.65)" }}>© {new Date().getFullYear()} ClicKonversion · hecho a mano en Venezuela</span>
+          <div style={{ display: "flex", gap: 16 }}>
+            <Link className="ck-flink ck-mono" href="/privacy" style={{ fontSize: 12 }}>Privacidad</Link>
+            <Link className="ck-flink ck-mono" href="/terms" style={{ fontSize: 12 }}>Términos</Link>
+          </div>
         </div>
       </div>
     </footer>

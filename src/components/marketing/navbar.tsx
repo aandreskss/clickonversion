@@ -4,268 +4,96 @@ import { useState } from "react"
 import Link from "next/link"
 import { LogoWordmark } from "@/components/ui/logo-wordmark"
 import { useCart } from "@/components/shop/cart-provider"
-import { Menu, X } from "lucide-react"
+import { waLink } from "@/lib/whatsapp"
 
 const NAV_LINKS = [
-  { href: "/services",  label: "Servicios" },
-  { href: "/pricing",   label: "Precios" },
-  { href: "/projects",  label: "Proyectos" },
-  { href: "/apps",      label: "Apps" },
-  { href: "/about",     label: "Nosotros" },
-  { href: "/resources", label: "Recursos" },
+  { key: "services", href: "/services", label: "Servicios" },
+  { key: "pricing", href: "/pricing", label: "Precios" },
+  { key: "projects", href: "/projects", label: "Proyectos" },
+  { key: "apps", href: "/apps", label: "Apps" },
+  { key: "about", href: "/about", label: "Quiénes somos" },
+  { key: "blog", href: "/blog", label: "Blog" },
 ]
 
 interface NavbarProps {
   active?: string
 }
 
+function CartIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" width={22} height={22} fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 4h2.2l2.1 10.2a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.5 8H6.1" />
+      <circle cx="9.5" cy="19.5" r="1.3" />
+      <circle cx="17" cy="19.5" r="1.3" />
+    </svg>
+  )
+}
+
 export function Navbar({ active }: NavbarProps) {
   const [open, setOpen] = useState(false)
-  const { items, count } = useCart()
-
-  const cartTotal = items.reduce(
-    (sum, item) => sum + item.displayPrice * item.quantity,
-    0
-  )
+  const { count } = useCart()
 
   return (
-    <header
-      style={{
-        fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
-        background: "#F7F5EF",
-        borderBottom: "1px solid #E2DED3",
-      }}
-      role="banner"
-    >
-      <div
-        className="mk-container"
+    <header style={{ position: "sticky", top: 12, zIndex: 50, padding: "12px 16px 0" }}>
+      <nav
+        aria-label="Principal"
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "12px 32px",
-          gap: 16,
+          maxWidth: 1240, margin: "0 auto", display: "flex", flexWrap: "wrap", alignItems: "center",
+          justifyContent: "space-between", gap: "8px 16px", padding: "8px 10px 8px 22px",
+          background: "rgba(255,248,240,.88)", backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
+          border: "1.5px solid rgba(1,14,37,.1)", borderRadius: open ? 28 : 999,
         }}
       >
-        {/* Logo */}
-        <Link
-          href="/"
-          aria-label="ClicKonversion home"
-          style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, textDecoration: "none" }}
-        >
-          <LogoWordmark size="sm" />
+        <Link href="/" aria-label="ClicKonversion, ir al inicio" style={{ textDecoration: "none", padding: "2px 0" }}>
+          <LogoWordmark size="md" />
         </Link>
 
-        {/* Desktop nav */}
-        <nav
-          className="hidden lg:flex"
-          style={{ alignItems: "center", gap: 2 }}
-          aria-label="Navegación principal"
-        >
-          {NAV_LINKS.map((link) => {
-            const isActive = active === link.href
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                style={{
-                  padding: "8px 12px",
-                  borderRadius: "999px",
-                  fontSize: 15,
-                  fontWeight: 500,
-                  color: "#202124",
-                  background: isActive ? "#E9E4FF" : "transparent",
-                  textDecoration: "none",
-                  transition: "background .15s",
-                  whiteSpace: "nowrap",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) (e.currentTarget as HTMLElement).style.background = "#E9E4FF"
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent"
-                }}
-              >
-                {link.label}
-              </Link>
-            )
-          })}
-        </nav>
-
-        {/* Desktop right */}
-        <div
-          className="hidden lg:flex"
-          style={{ alignItems: "center", gap: 10, flexShrink: 0 }}
-        >
-          {/* Cart pill */}
-          {count > 0 && (
-            <Link
-              href="/checkout"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "8px 14px",
-                borderRadius: "999px",
-                border: "1.5px solid #202124",
-                background: "#D9FA62",
-                fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#202124",
-                textDecoration: "none",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Carrito {count} · ${cartTotal.toLocaleString("es-VE", { minimumFractionDigits: 0 })}
-            </Link>
-          )}
-
-          <Link
-            href="/portal/dashboard"
-            style={{
-              padding: "8px 14px",
-              borderRadius: "999px",
-              fontSize: 15,
-              fontWeight: 500,
-              color: "#202124",
-              textDecoration: "none",
-              transition: "background .15s",
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#E9E4FF" }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent" }}
-          >
-            Mi cuenta
-          </Link>
-
-          <Link
-            href="/about#contacto"
-            style={{
-              padding: "12px 20px",
-              borderRadius: "999px",
-              fontSize: 15,
-              fontWeight: 600,
-              color: "#F7F5EF",
-              background: "#202124",
-              textDecoration: "none",
-              transition: "background .15s",
-              whiteSpace: "nowrap",
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#345CFF" }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#202124" }}
-          >
-            Hablemos →
-          </Link>
-        </div>
-
-        {/* Mobile toggle */}
-        <button
-          className="lg:hidden"
-          onClick={() => setOpen(!open)}
-          style={{ background: "none", border: "none", cursor: "pointer", padding: 8, color: "#202124" }}
-          aria-label={open ? "Cerrar menú" : "Abrir menú"}
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-        >
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
-      </div>
-
-      {/* Mobile nav */}
-      <div
-        id="mobile-nav"
-        className="lg:hidden"
-        style={{
-          maxHeight: open ? "85vh" : 0,
-          overflow: "hidden",
-          transition: "max-height .3s ease",
-          borderTop: open ? "1px solid #E2DED3" : "none",
-        }}
-        aria-hidden={!open}
-      >
-        <nav
-          style={{ padding: "12px 24px 24px", display: "flex", flexDirection: "column", gap: 4 }}
-          aria-label="Menú móvil"
-        >
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              style={{
-                padding: "12px 16px",
-                borderRadius: 12,
-                fontSize: 16,
-                fontWeight: 500,
-                color: "#202124",
-                textDecoration: "none",
-                background: active === link.href ? "#E9E4FF" : "transparent",
-              }}
-            >
-              {link.label}
+        <div className="ck-navlinks">
+          {NAV_LINKS.map((l) => (
+            <Link key={l.key} href={l.href} className="ck-navlink" aria-current={active === l.key ? "page" : undefined}>
+              {l.label}
             </Link>
           ))}
+        </div>
 
-          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-            {count > 0 && (
-              <Link
-                href="/checkout"
-                onClick={() => setOpen(false)}
-                style={{
-                  padding: "12px 20px",
-                  borderRadius: "999px",
-                  fontSize: 15,
-                  fontWeight: 500,
-                  color: "#202124",
-                  background: "#D9FA62",
-                  border: "1.5px solid #202124",
-                  textDecoration: "none",
-                  textAlign: "center",
-                  fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
-                }}
-              >
-                Carrito {count} · ${cartTotal.toLocaleString("es-VE", { minimumFractionDigits: 0 })}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span className="ck-navstatus ck-mono" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13, color: "#5A6178", marginRight: 6 }}>
+            <span className="ck-dot" />en línea
+          </span>
+          <Link href={count > 0 ? "/checkout" : "/pricing"} className="ck-icon-btn" aria-label={count > 0 ? `Ir al pago, ${count} en el carrito` : "Ver precios y carrito"}>
+            <CartIcon />
+            {count > 0 && <span className="ck-badge">{count}</span>}
+          </Link>
+          <a className="ck-btn ck-btn-dark" href={waLink("Hola, quiero hablar con ustedes")} target="_blank" rel="noopener noreferrer" style={{ minHeight: 46, padding: "0 20px" }}>
+            Hablemos →
+          </a>
+          <button
+            type="button"
+            className="ck-icon-btn ck-burger"
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" width={20} height={20} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
+              {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+            </svg>
+          </button>
+        </div>
+
+        {open && (
+          <div className="ck-mobile-menu" style={{ width: "100%" }}>
+            {NAV_LINKS.map((l) => (
+              <Link key={l.key} href={l.href} className="ck-navlink" aria-current={active === l.key ? "page" : undefined} onClick={() => setOpen(false)}>
+                {l.label}
               </Link>
-            )}
-            <Link
-              href="/portal/dashboard"
-              onClick={() => setOpen(false)}
-              style={{
-                padding: "12px 20px",
-                borderRadius: "999px",
-                fontSize: 15,
-                fontWeight: 500,
-                color: "#202124",
-                background: "transparent",
-                border: "1.5px solid #E2DED3",
-                textDecoration: "none",
-                textAlign: "center",
-              }}
-            >
-              Mi cuenta
+            ))}
+            <Link href="/pricing" className="ck-btn ck-btn-primary" style={{ marginTop: 8 }} onClick={() => setOpen(false)}>
+              Ver precios y paquetes ↗
             </Link>
-            <Link
-              href="/about#contacto"
-              onClick={() => setOpen(false)}
-              style={{
-                padding: "14px 20px",
-                borderRadius: "999px",
-                fontSize: 15,
-                fontWeight: 600,
-                color: "#F7F5EF",
-                background: "#202124",
-                textDecoration: "none",
-                textAlign: "center",
-              }}
-            >
-              Hablemos →
-            </Link>
+            <span className="ck-hand" style={{ fontSize: 22, color: "#C94400", textAlign: "center" }}>te respondemos nosotros</span>
           </div>
-        </nav>
-      </div>
+        )}
+      </nav>
     </header>
   )
 }

@@ -86,7 +86,7 @@ export function AuditForm() {
   const inputClass = [
     "w-full rounded-lg border border-white/10 bg-[#1C2026] text-white placeholder:text-[#546072]",
     "px-3.5 py-2.5 text-sm transition-colors duration-150",
-    "focus:outline-none focus:ring-2 focus:ring-[#FF5A1F]/40 focus:border-[#FF5A1F]/60",
+    "focus:outline-none focus:ring-2 focus:ring-[#FE5C02]/40 focus:border-[#FE5C02]/60",
     "hover:border-white/20",
   ].join(" ")
 
@@ -123,7 +123,7 @@ export function AuditForm() {
           <div className="grid sm:grid-cols-2 gap-5">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="first_name" className="text-sm font-medium text-[#B0B8C1]">
-                First name <span className="text-[#FF5A1F]">*</span>
+                First name <span className="text-[#FE5C02]">*</span>
               </label>
               <input
                 id="first_name"
@@ -137,7 +137,7 @@ export function AuditForm() {
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="email" className="text-sm font-medium text-[#B0B8C1]">
-                Email <span className="text-[#FF5A1F]">*</span>
+                Email <span className="text-[#FE5C02]">*</span>
               </label>
               <input
                 id="email"
@@ -156,7 +156,7 @@ export function AuditForm() {
           <div className="grid sm:grid-cols-2 gap-5">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="company_name" className="text-sm font-medium text-[#B0B8C1]">
-                Company name <span className="text-[#FF5A1F]">*</span>
+                Company name <span className="text-[#FE5C02]">*</span>
               </label>
               <input
                 id="company_name"
@@ -170,7 +170,7 @@ export function AuditForm() {
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="website_url" className="text-sm font-medium text-[#B0B8C1]">
-                Website <span className="text-[#FF5A1F]">*</span>
+                Website <span className="text-[#FE5C02]">*</span>
               </label>
               <input
                 id="website_url"
@@ -189,7 +189,7 @@ export function AuditForm() {
           <div className="grid sm:grid-cols-2 gap-5">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="main_service" className="text-sm font-medium text-[#B0B8C1]">
-                Main service <span className="text-[#FF5A1F]">*</span>
+                Main service <span className="text-[#FE5C02]">*</span>
               </label>
               <input
                 id="main_service"
@@ -203,7 +203,7 @@ export function AuditForm() {
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="city" className="text-sm font-medium text-[#B0B8C1]">
-                City / primary market <span className="text-[#FF5A1F]">*</span>
+                City / primary market <span className="text-[#FE5C02]">*</span>
               </label>
               <input
                 id="city"
@@ -220,7 +220,7 @@ export function AuditForm() {
           {/* Primary goal */}
           <div className="flex flex-col gap-1.5">
             <label htmlFor="primary_goal" className="text-sm font-medium text-[#B0B8C1]">
-              Primary goal <span className="text-[#FF5A1F]">*</span>
+              Primary goal <span className="text-[#FE5C02]">*</span>
             </label>
             <select
               id="primary_goal"
@@ -303,7 +303,7 @@ export function AuditForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full inline-flex items-center justify-center gap-2 px-7 py-4 bg-[#FF5A1F] text-white font-semibold rounded-lg hover:bg-[#E54A15] transition-colors duration-150 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-base"
+            className="w-full inline-flex items-center justify-center gap-2 px-7 py-4 bg-[#FE5C02] text-white font-semibold rounded-lg hover:bg-[#C94400] transition-colors duration-150 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-base"
           >
             {isSubmitting ? (
               <>

@@ -23,7 +23,7 @@ export function ResourcesNewsletterForm() {
         style={{
           fontSize: 16,
           fontWeight: 700,
-          color: "#202124",
+          color: "#010E25",
           fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
         }}
       >
@@ -58,7 +58,7 @@ export function ResourcesNewsletterForm() {
           borderRadius: 999,
           border: "1.5px solid rgba(32,33,36,.25)",
           fontSize: 15,
-          color: "#202124",
+          color: "#010E25",
           background: "#fff",
           fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
           outline: "none",
@@ -74,7 +74,7 @@ export function ResourcesNewsletterForm() {
           fontSize: 15,
           fontWeight: 700,
           cursor: isValid && status !== "loading" ? "pointer" : "not-allowed",
-          background: isValid && status !== "loading" ? "#202124" : "rgba(32,33,36,.3)",
+          background: isValid && status !== "loading" ? "#010E25" : "rgba(32,33,36,.3)",
           color: "#fff",
           border: "none",
           transition: "opacity 0.2s",

@@ -27,6 +27,22 @@ Design system v3 aplicado a todas las páginas de marketing. Checkout con PayPal
 
 ---
 
+## Fase 9 — Marca v4 (manual de identidad ClicKonversion) 🚧 En prueba
+
+Reemplaza el design system v3 (cream/cobalt/lime) en la capa de marketing. Admin, portal y CRM no cambian.
+
+- **Paleta:** marino `#010E25`, naranja `#FE5C02`, naranja profundo `#C94400` (texto pequeño/enlaces), crema `#FFF8F0`, pasteles de servicio: lavanda IA `#E4DEFF`, celeste SEO `#D6EBFF`, durazno Ads `#FFDCC7`, menta Chat `#D3F2E3`, pizarra `#5A6178`.
+- **Tipografía:** Outfit (voz, `--font-outfit`), Caveat (notas a mano, `--font-caveat`), JetBrains Mono (etiquetas). `--font-mk-sans` y `--font-mk-serif` apuntan a Outfit.
+- **CSS de marca:** `src/app/brand.css` (clases `.ck-*`: botones, tags, efectos 3D, cubo, escalera, widget WhatsApp, blog). Importado en `src/app/layout.tsx`.
+- **Logo:** `src/components/ui/logo-wordmark.tsx` → `LogoWordmark` (props `size`, `tone`) y `LogoSymbol` (globo con chispas).
+- **Componentes nuevos:** `src/components/brand/*` (hero-scene con video, marquee-bands, value-cube, team-grid, pricing-packages con paquetes + armador conectados a `useCart`, projects-grid, blog-list, articles/*).
+- **WhatsApp:** `src/lib/whatsapp.ts` (`waLink`) + `components/marketing/whatsapp-widget.tsx` en `MarketingLayout` (prop `whatsapp` para mensaje por página). Requiere `NEXT_PUBLIC_WHATSAPP_NUMBER`.
+- **Páginas rehechas:** `/`, `/pricing`, `/about`, `/projects`; nuevas `/blog` y `/blog/[slug]` (datos en `src/data/blog.ts`, equipo en `src/data/team.ts`). El resto de páginas de marketing recibió el remapeo de colores de v3 → v4.
+- **Video del hero:** `public/video/clickonversion-reel.mp4` + poster.
+- **Pendiente:** datos reales de Abisai y Yoli, reseñas y casos reales, número de WhatsApp, revisar precios de los paquetes (calculados con descuento por volumen sobre `SERVICES` de `pricing-grid.tsx`).
+
+---
+
 ## Fase 8 — Rediseño Marketing v3 + Checkout + Mejoras Admin ✅
 
 ### Design System v3 (Marketing)

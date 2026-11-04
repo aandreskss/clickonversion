@@ -32,14 +32,14 @@ export function AppsWaitlistForm() {
     return (
       <div
         style={{
-          background: "#D9FA62",
+          background: "#FE5C02",
           borderRadius: 16,
           padding: "16px 24px",
           display: "inline-block",
           fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
         }}
       >
-        <p style={{ fontSize: 15, fontWeight: 700, color: "#202124" }}>
+        <p style={{ fontSize: 15, fontWeight: 700, color: "#010E25" }}>
           ¡Ya estás en la lista! Te avisamos cuando esté listo.
         </p>
       </div>
@@ -81,7 +81,7 @@ export function AppsWaitlistForm() {
           }}
         />
         {status === "error" && (
-          <p style={{ fontSize: 12, color: "#FF6B2C", paddingLeft: 8 }}>
+          <p style={{ fontSize: 12, color: "#FE5C02", paddingLeft: 8 }}>
             Error al registrarse. Intenta de nuevo.
           </p>
         )}
@@ -95,8 +95,8 @@ export function AppsWaitlistForm() {
           fontSize: 15,
           fontWeight: 700,
           cursor: isValid && status !== "loading" ? "pointer" : "not-allowed",
-          background: isValid && status !== "loading" ? "#D9FA62" : "rgba(217,250,98,.4)",
-          color: "#202124",
+          background: isValid && status !== "loading" ? "#FE5C02" : "rgba(217,250,98,.4)",
+          color: "#010E25",
           border: "none",
           transition: "opacity 0.2s",
           fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",

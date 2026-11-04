@@ -40,7 +40,7 @@ export default function AuditPage() {
 
             {/* Left — value props */}
             <div className="lg:sticky lg:top-32">
-              <p className="text-xs font-semibold tracking-widest text-[#FF5A1F] uppercase mb-4">
+              <p className="text-xs font-semibold tracking-widest text-[#FE5C02] uppercase mb-4">
                 Free Growth Audit
               </p>
               <h1 className="text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight">
@@ -65,7 +65,7 @@ export default function AuditPage() {
                       aria-hidden="true"
                     >
                       <svg width="9" height="7" viewBox="0 0 9 7" fill="none">
-                        <path d="M1 3.5L3.5 6L8 1" stroke="#FF5A1F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M1 3.5L3.5 6L8 1" stroke="#FE5C02" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
                     <div>

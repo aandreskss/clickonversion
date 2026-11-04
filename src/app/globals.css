@@ -1,4 +1,3 @@
-@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap");
 @import "tailwindcss";
 
 /* ============================================================
@@ -99,9 +98,9 @@
   --color-spark:        #FF6B2C;
   --color-line:         #E2DED3;
   --color-line-2:       #D6D2C6;
-  --font-mk-sans:       'General Sans', system-ui, sans-serif;
+  --font-mk-sans:       var(--font-outfit), 'Outfit', system-ui, sans-serif;
   --font-mk-mono:       var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  --font-mk-serif:      var(--font-instrument-serif), 'Instrument Serif', serif;
+  --font-mk-serif:      var(--font-outfit), 'Outfit', system-ui, sans-serif;
 
   /* ── Radius ─────────────────────────────────────────── */
   --radius-sm:   0.25rem;
@@ -396,30 +395,30 @@ p { color: var(--color-muted-light); line-height: 1.75; }
 .mk-card { border-radius: 24px; }
 
 /* Marketing hover utilities */
-.mk-btn-cobalt { background: #345CFF; color: white; transition: background .15s; }
-.mk-btn-cobalt:hover { background: #202124; }
+.mk-btn-cobalt { background: #C94400; color: white; transition: background .15s; }
+.mk-btn-cobalt:hover { background: #010E25; }
 
-.mk-btn-outline { background: transparent; border: 1.5px solid #202124; color: #202124; transition: background .15s; }
-.mk-btn-outline:hover { background: #D9FA62; }
+.mk-btn-outline { background: transparent; border: 1.5px solid #010E25; color: #010E25; transition: background .15s; }
+.mk-btn-outline:hover { background: #FE5C02; }
 
-.mk-btn-ink { background: #202124; color: #F7F5EF; transition: background .15s; }
-.mk-btn-ink:hover { background: #345CFF; }
+.mk-btn-ink { background: #010E25; color: #FFF8F0; transition: background .15s; }
+.mk-btn-ink:hover { background: #C94400; }
 
-.mk-btn-lime { background: #D9FA62; color: #202124; transition: background .15s; }
+.mk-btn-lime { background: #FE5C02; color: #010E25; transition: background .15s; }
 .mk-btn-lime:hover { background: #FFFFFF; }
 
-.mk-btn-outline-lime { background: transparent; border: 1.5px solid #202124; color: #202124; transition: background .15s; }
+.mk-btn-outline-lime { background: transparent; border: 1.5px solid #010E25; color: #010E25; transition: background .15s; }
 .mk-btn-outline-lime:hover { background: white; }
 
-.mk-nav-link { padding: 8px 12px; border-radius: 999px; font-size: 15px; font-weight: 500; color: #202124; text-decoration: none; transition: background .15s; }
-.mk-nav-link:hover { background: #E9E4FF; }
-.mk-nav-link--active { background: #E9E4FF; }
+.mk-nav-link { padding: 8px 12px; border-radius: 999px; font-size: 15px; font-weight: 500; color: #010E25; text-decoration: none; transition: background .15s; }
+.mk-nav-link:hover { background: #E4DEFF; }
+.mk-nav-link--active { background: #E4DEFF; }
 
 .mk-footer-link { color: white; text-decoration: none; font-size: 15px; transition: color .15s; }
-.mk-footer-link:hover { color: #D9FA62; }
+.mk-footer-link:hover { color: #FE5C02; }
 
 .mk-expertise-row { display: flex; align-items: center; justify-content: space-between; padding: 20px 16px; border-radius: 16px; gap: 16px; transition: background .25s, padding-left .25s; cursor: default; }
-.mk-expertise-row:hover { background: #D9FA62; padding-left: 28px; }
+.mk-expertise-row:hover { background: #FE5C02; padding-left: 28px; }
 
 .mk-service-card { background: white; border-radius: 24px; border: 1.5px solid transparent; padding: 28px 24px; display: flex; flex-direction: column; gap: 12px; transition: transform .25s ease, border-color .2s; cursor: default; position: relative; }
 .mk-service-card:hover { transform: translateY(-4px); }

@@ -20,7 +20,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   seo: "#78E6B3",
   "paid-media": "#FFCB86",
   automation: "#7885FF",
-  support: "#FF5A1F",
+  support: "#FE5C02",
 }
 
 interface Props {
@@ -83,7 +83,7 @@ export default async function CatalogServicePage({ params }: Props) {
     .where(and(eq(pfServicePrices.serviceId, service.id), eq(pfServicePrices.isActive, true)))
     .orderBy(asc(pfServicePrices.sortOrder))
 
-  const accent = CATEGORY_COLORS[service.category] ?? "#FF5A1F"
+  const accent = CATEGORY_COLORS[service.category] ?? "#FE5C02"
   const categoryLabel = CATEGORY_LABELS[service.category] ?? service.category
 
   function formatPrice(basePriceUsd: string | null, billingPeriodVal: string | null): string {
@@ -100,7 +100,7 @@ export default async function CatalogServicePage({ params }: Props) {
   return (
     <MarketingLayout>
       {/* Hero */}
-      <section className="pt-32 pb-20 bg-[#101827]">
+      <section className="pt-32 pb-20 bg-[#010E25]">
         <div className="container-wide">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-xs text-[#4E5D6E] mb-8">
@@ -227,7 +227,7 @@ export default async function CatalogServicePage({ params }: Props) {
             <p className="text-[#7A8799] mb-6">Este servicio tiene precio personalizado según el proyecto.</p>
             <Link
               href="/audit"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-[#FF5A1F] text-white font-semibold rounded-xl hover:bg-[#E54A15] transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#FE5C02] text-white font-semibold rounded-xl hover:bg-[#C94400] transition-colors"
             >
               Get a Free Growth Audit
               <ArrowRight size={18} />

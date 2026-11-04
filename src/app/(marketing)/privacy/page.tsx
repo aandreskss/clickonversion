@@ -46,12 +46,12 @@ export default function PrivacyPage() {
 
               <section>
                 <h2 className="text-lg font-bold text-white mb-3">Your Rights</h2>
-                <p>You may request to view, update, or delete the personal information we hold about you at any time by emailing <a href="mailto:hello@clicKonversion.com" className="text-[#FF5A1F] hover:underline">hello@clicKonversion.com</a>.</p>
+                <p>You may request to view, update, or delete the personal information we hold about you at any time by emailing <a href="mailto:hello@clicKonversion.com" className="text-[#FE5C02] hover:underline">hello@clicKonversion.com</a>.</p>
               </section>
 
               <section>
                 <h2 className="text-lg font-bold text-white mb-3">Contact</h2>
-                <p>Questions about this policy? Email us at <a href="mailto:hello@clicKonversion.com" className="text-[#FF5A1F] hover:underline">hello@clicKonversion.com</a>.</p>
+                <p>Questions about this policy? Email us at <a href="mailto:hello@clicKonversion.com" className="text-[#FE5C02] hover:underline">hello@clicKonversion.com</a>.</p>
               </section>
             </div>
           </div>

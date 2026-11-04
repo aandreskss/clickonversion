@@ -41,7 +41,7 @@ export function CartBar() {
         left: "50%",
         transform: "translateX(-50%)",
         width: "min(calc(100% - 32px), 720px)",
-        background: "#202124",
+        background: "#010E25",
         color: "#fff",
         borderRadius: 999,
         padding: "10px 10px 10px 28px",
@@ -60,8 +60,8 @@ export function CartBar() {
       <Link
         href="/checkout"
         style={{
-          background: "#D9FA62",
-          color: "#202124",
+          background: "#FE5C02",
+          color: "#010E25",
           borderRadius: 999,
           padding: "10px 20px",
           fontSize: 14,

@@ -6,7 +6,7 @@ const SERVICE_TAGS = [
   { label: "Google Ads / SEM",  color: "#FFCB86" },
   { label: "Meta Ads",          color: "#7885FF" },
   { label: "WhatsApp Business", color: "#25D366" },
-  { label: "AI Agents",         color: "#FF5A1F" },
+  { label: "AI Agents",         color: "#FE5C02" },
   { label: "Automations",       color: "#78E6B3" },
 ]
 
@@ -75,7 +75,7 @@ export function Hero() {
           <div className="flex flex-wrap items-center gap-4 mb-12 animate-fade-in-up delay-300">
             <Link
               href="/audit"
-              className="inline-flex items-center gap-2 px-7 py-4 bg-[#FF5A1F] text-white font-semibold rounded-xl hover:bg-[#E54A15] transition-all duration-150 active:scale-[0.98] text-base shadow-lg shadow-[#FF5A1F]/20"
+              className="inline-flex items-center gap-2 px-7 py-4 bg-[#FE5C02] text-white font-semibold rounded-xl hover:bg-[#C94400] transition-all duration-150 active:scale-[0.98] text-base shadow-lg shadow-[#FE5C02]/20"
             >
               Get a Free Audit
               <ArrowRight size={18} />
@@ -130,7 +130,7 @@ export function Hero() {
       {/* Bottom fade */}
       <div
         className="absolute bottom-0 inset-x-0 h-32 pointer-events-none"
-        style={{ background: "linear-gradient(to top, #101827, transparent)" }}
+        style={{ background: "linear-gradient(to top, #010E25, transparent)" }}
       />
     </section>
   )

@@ -32,7 +32,7 @@ export default function ResourcesPage() {
     <MarketingLayout active="resources">
       <div
         style={{
-          background: "#F7F5EF",
+          background: "#FFF8F0",
           fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
         }}
       >
@@ -57,7 +57,7 @@ export default function ResourcesPage() {
                   fontWeight: 700,
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  color: "#5F6168",
+                  color: "#5A6178",
                   marginBottom: 24,
                 }}
               >
@@ -69,7 +69,7 @@ export default function ResourcesPage() {
                   fontSize: "clamp(60px, 8vw, 120px)",
                   fontWeight: 400,
                   lineHeight: 0.9,
-                  color: "#202124",
+                  color: "#010E25",
                   letterSpacing: "-0.02em",
                   margin: 0,
                 }}
@@ -80,7 +80,7 @@ export default function ResourcesPage() {
               </h1>
             </div>
             <div>
-              <p style={{ fontSize: 19, lineHeight: 1.6, color: "#5F6168", maxWidth: 440 }}>
+              <p style={{ fontSize: 19, lineHeight: 1.6, color: "#5A6178", maxWidth: 440 }}>
                 Artículos, guías y casos de uso sobre marketing digital real. Sin relleno, sin teoría — solo lo que funciona.
               </p>
               <p
@@ -88,7 +88,7 @@ export default function ResourcesPage() {
                   marginTop: 20,
                   fontFamily: "var(--font-mk-mono, monospace)",
                   fontSize: 12,
-                  color: "#5F6168",
+                  color: "#5A6178",
                   opacity: 0.6,
                 }}
               >
@@ -110,7 +110,7 @@ export default function ResourcesPage() {
           <div
             style={{
               aspectRatio: "4/3",
-              background: "#345CFF",
+              background: "#C94400",
               borderRadius: 32,
               display: "flex",
               flexDirection: "column",
@@ -177,7 +177,7 @@ export default function ResourcesPage() {
                 key={art.title}
                 style={{
                   background: "#fff",
-                  border: "1.5px solid #E2DED3",
+                  border: "1.5px solid #EFE3D6",
                   borderRadius: 24,
                   padding: "28px 24px",
                   display: "flex",
@@ -192,19 +192,19 @@ export default function ResourcesPage() {
                     fontWeight: 700,
                     letterSpacing: "0.14em",
                     textTransform: "uppercase",
-                    color: "#345CFF",
+                    color: "#C94400",
                   }}
                 >
                   {art.tag}
                 </span>
-                <p style={{ fontSize: 18, fontWeight: 700, color: "#202124", lineHeight: 1.3 }}>
+                <p style={{ fontSize: 18, fontWeight: 700, color: "#010E25", lineHeight: 1.3 }}>
                   {art.title}
                 </p>
                 <p
                   style={{
                     fontFamily: "var(--font-mk-mono, monospace)",
                     fontSize: 11,
-                    color: "#5F6168",
+                    color: "#5A6178",
                     opacity: 0.5,
                   }}
                 >
@@ -219,7 +219,7 @@ export default function ResourcesPage() {
         <section style={{ padding: "0 16px clamp(64px, 8vw, 96px)" }}>
           <div
             style={{
-              background: "#D9FA62",
+              background: "#FE5C02",
               borderRadius: 40,
               padding: "clamp(48px, 6vw, 80px) clamp(32px, 5vw, 64px)",
               maxWidth: "88rem",
@@ -239,7 +239,7 @@ export default function ResourcesPage() {
                   fontWeight: 700,
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  color: "#202124",
+                  color: "#010E25",
                   opacity: 0.6,
                   marginBottom: 12,
                 }}
@@ -251,7 +251,7 @@ export default function ResourcesPage() {
                   fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
                   fontSize: "clamp(32px, 4vw, 56px)",
                   fontWeight: 400,
-                  color: "#202124",
+                  color: "#010E25",
                   lineHeight: 1.1,
                   margin: 0,
                 }}

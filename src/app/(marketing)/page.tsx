@@ -1,783 +1,249 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { MarketingLayout } from "@/components/marketing/marketing-layout"
-import { HeroKey } from "@/components/marketing/hero-key"
-import { MarqueeStrip } from "@/components/marketing/marquee-strip"
-import { HowWeWork } from "@/components/marketing/how-we-work"
-import { FeaturedServices } from "@/components/marketing/featured-services"
-import { AiFlow } from "@/components/marketing/ai-flow"
-import { SyncLeadPreview } from "@/components/marketing/synclead-preview"
+import { ContactForm } from "@/components/marketing/contact-form"
+import { HeroScene } from "@/components/brand/hero-scene"
+import { MarqueeBands } from "@/components/brand/marquee-bands"
+import { ValueCube } from "@/components/brand/value-cube"
+import { TeamGrid } from "@/components/brand/team-grid"
+import { LogoSymbol } from "@/components/ui/logo-wordmark"
+import { waLink } from "@/lib/whatsapp"
 
 export const metadata: Metadata = {
-  title: "ClicKonversion — SEO, Meta Ads, Agentes IA y Automatización",
+  title: "ClicKonversion — Marketing hecho por personas: SEO, Ads, IA y WhatsApp",
   description:
-    "Combinamos SEO, publicidad digital, IA y automatización para que las marcas ambiciosas crezcan de forma más inteligente.",
-  alternates: {
-    canonical: "https://www.clickonversion.com",
-    languages: {
-      "en": "https://www.clickonversion.com",
-      "es": "https://www.clickonversion.com/es",
-    },
-  },
+    "SEO local y técnico, Meta y Google Ads, agentes de IA para WhatsApp, desarrollo web y medición de conversiones. Un equipo de tres personas que te explica cada decisión.",
+  alternates: { canonical: "https://www.clickonversion.com" },
   openGraph: {
-    title: "ClicKonversion — SEO, Meta Ads, IA & WhatsApp Business",
-    description: "SEO, Meta Ads, agentes IA y automatización — un sistema integrado que convierte visibilidad en clientes.",
+    title: "ClicKonversion — Marketing hecho por personas, para personas",
+    description: "SEO, anuncios, agentes de IA, webs y medición explicados en cristiano. Hablas con nosotros, no con un ticket.",
     url: "https://www.clickonversion.com",
     siteName: "ClicKonversion",
     locale: "es_419",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "ClicKonversion — SEO, Meta Ads, IA & WhatsApp Business",
-    description: "SEO, Meta Ads, agentes IA y automatización — un sistema integrado que convierte visibilidad en clientes.",
-  },
 }
 
-const MK_FONT = "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)"
-const MK_MONO = "var(--font-mk-mono, 'JetBrains Mono', monospace)"
-const MK_SERIF = "var(--font-mk-serif, 'Instrument Serif', serif)"
-
-/* ── Section 1: Hero ─────────────────────────────────────── */
-function HeroSection() {
-  return (
-    <section
-      style={{
-        padding: "80px 0 60px",
-        fontFamily: MK_FONT,
-      }}
-    >
-      <div className="mk-container">
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 48,
-            alignItems: "center",
-          }}
-        >
-          {/* Left col */}
-          <div>
-            {/* Tags */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 32 }}>
-              {["[SEO]", "[ADS]", "[IA]", "[AUTOMATIZACIÓN]"].map((tag) => (
-                <span
-                  key={tag}
-                  style={{
-                    fontFamily: MK_MONO,
-                    fontSize: 13,
-                    border: "1.5px solid #202124",
-                    borderRadius: 8,
-                    padding: "6px 10px",
-                    color: "#202124",
-                    background: "transparent",
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* H1 */}
-            <h1
-              style={{
-                fontSize: "clamp(72px,10.5vw,168px)",
-                fontWeight: 600,
-                lineHeight: 0.86,
-                letterSpacing: "-.06em",
-                color: "#202124",
-                margin: "0 0 32px",
-              }}
-            >
-              Pequeños clics.{" "}
-              <em
-                style={{
-                  fontFamily: MK_SERIF,
-                  fontStyle: "italic",
-                  fontWeight: 400,
-                  color: "#345CFF",
-                }}
-              >
-                Grandes
-              </em>{" "}
-              cosas.
-            </h1>
-
-            {/* Párrafo */}
-            <p
-              style={{
-                fontSize: 20,
-                color: "#3A3B40",
-                lineHeight: 1.5,
-                margin: "0 0 40px",
-                maxWidth: 520,
-              }}
-            >
-              Combinamos SEO, publicidad digital, IA y automatización para que las
-              marcas ambiciosas crezcan de forma más inteligente.
-            </p>
-
-            {/* CTAs */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-              <Link
-                href="/services"
-                className="mk-btn-cobalt"
-                style={{
-                  padding: "18px 28px",
-                  borderRadius: "999px",
-                  fontWeight: 600,
-                  fontSize: 17,
-                  textDecoration: "none",
-                  display: "inline-block",
-                }}
-              >
-                Descubre lo que hacemos ↗
-              </Link>
-              <Link
-                href="/about#contacto"
-                className="mk-btn-outline"
-                style={{
-                  padding: "18px 28px",
-                  borderRadius: "999px",
-                  fontWeight: 600,
-                  fontSize: 17,
-                  textDecoration: "none",
-                  display: "inline-block",
-                }}
-              >
-                Hagámoslo realidad
-              </Link>
-            </div>
-          </div>
-
-          {/* Right col: interactive key */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 440 }}>
-            <HeroKey />
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ── Section 3: Todo lo que tu crecimiento necesita ─────── */
-function ServicesCards() {
-  return (
-    <section style={{ padding: "100px 0", fontFamily: MK_FONT }}>
-      <div className="mk-container">
-        <p
-          style={{
-            fontFamily: MK_MONO,
-            fontSize: 13,
-            color: "#5F6168",
-            marginBottom: 24,
-            letterSpacing: ".04em",
-          }}
-        >
-          02 — LO BUENO ↗
-        </p>
-
-        <h2
-          style={{
-            fontSize: "clamp(48px,6.5vw,96px)",
-            fontWeight: 600,
-            color: "#202124",
-            letterSpacing: "-.05em",
-            lineHeight: 0.9,
-            margin: "0 0 56px",
-          }}
-        >
-          Todo lo que tu{" "}
-          <em style={{ fontFamily: MK_SERIF, fontStyle: "italic", fontWeight: 400, color: "#345CFF" }}>
-            crecimiento
-          </em>{" "}
-          necesita.
-        </h2>
-
-        {/* Cards */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 16,
-            alignItems: "start",
-          }}
-        >
-          {/* Card 1: SEO - Cobalt */}
-          <div
-            className="mk-color-card mk-color-card--tilt-left"
-            style={{
-              background: "#345CFF",
-              position: "relative",
-            }}
-          >
-            {/* Decoration */}
-            <div
-              style={{
-                position: "absolute",
-                top: -40,
-                right: -40,
-                width: 160,
-                height: 160,
-                borderRadius: "50%",
-                border: "2px solid rgba(255,255,255,.2)",
-              }}
-              aria-hidden="true"
-            />
-            <div
-              style={{
-                position: "absolute",
-                top: 24,
-                right: 32,
-                width: 12,
-                height: 12,
-                borderRadius: "50%",
-                background: "#D9FA62",
-              }}
-              aria-hidden="true"
-            />
-            <p
-              style={{
-                fontFamily: MK_MONO,
-                fontSize: 12,
-                color: "rgba(255,255,255,.7)",
-                letterSpacing: ".08em",
-                margin: "0 0 24px",
-              }}
-            >
-              01 / SEO Y BÚSQUEDA IA
-            </p>
-            <h3
-              style={{
-                fontSize: "clamp(48px,5vw,72px)",
-                fontWeight: 600,
-                color: "white",
-                letterSpacing: "-.04em",
-                lineHeight: 0.9,
-                margin: "0 0 20px",
-              }}
-            >
-              Aparece primero.
-            </h3>
-            <p style={{ color: "rgba(255,255,255,.75)", fontSize: 17, lineHeight: 1.5, marginBottom: 28 }}>
-              SEO técnico, local y de IA para que aparezcas cuando tu cliente te busca.
-            </p>
-            <Link
-              href="/services#seo"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                color: "white",
-                fontSize: 15,
-                fontWeight: 600,
-                textDecoration: "none",
-              }}
-            >
-              Ver servicios SEO →
-            </Link>
-          </div>
-
-          {/* Card 2: Publicidad - Lime */}
-          <div
-            className="mk-color-card mk-color-card--tilt-right"
-            style={{
-              background: "#D9FA62",
-              marginTop: 80,
-            }}
-          >
-            <p
-              style={{
-                fontFamily: MK_MONO,
-                fontSize: 12,
-                color: "#5F6168",
-                letterSpacing: ".08em",
-                margin: "0 0 24px",
-              }}
-            >
-              02 / PUBLICIDAD DIGITAL
-            </p>
-            <h3
-              style={{
-                fontSize: "clamp(48px,5vw,72px)",
-                fontWeight: 600,
-                color: "#202124",
-                letterSpacing: "-.04em",
-                lineHeight: 0.9,
-                margin: "0 0 20px",
-              }}
-            >
-              Hazte{" "}
-              <em style={{ fontFamily: MK_SERIF, fontStyle: "italic", fontWeight: 400 }}>notar.</em>
-            </h3>
-            <p style={{ color: "#3A3B40", fontSize: 17, lineHeight: 1.5, marginBottom: 28 }}>
-              Campañas de Google, Meta y TikTok que generan resultados predecibles.
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {[
-                { label: "Google Ads", bg: "#202124", color: "white" },
-                { label: "Meta Ads", bg: "#202124", color: "white" },
-                { label: "TikTok Ads", bg: "#FF6B2C", color: "white" },
-              ].map((chip) => (
-                <span
-                  key={chip.label}
-                  style={{
-                    background: chip.bg,
-                    color: chip.color,
-                    borderRadius: "999px",
-                    padding: "6px 14px",
-                    fontSize: 13,
-                    fontWeight: 500,
-                  }}
-                >
-                  {chip.label}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Card 3: IA - Lavender */}
-          <div
-            className="mk-color-card mk-color-card--tilt-left"
-            style={{
-              background: "#E9E4FF",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: MK_MONO,
-                fontSize: 12,
-                color: "#5F6168",
-                letterSpacing: ".08em",
-                margin: "0 0 24px",
-              }}
-            >
-              03 / IA Y AUTOMATIZACIÓN
-            </p>
-            <h3
-              style={{
-                fontSize: "clamp(48px,5vw,72px)",
-                fontWeight: 600,
-                color: "#202124",
-                letterSpacing: "-.04em",
-                lineHeight: 0.9,
-                margin: "0 0 20px",
-              }}
-            >
-              Trabaja mejor.
-            </h3>
-            <p style={{ color: "#3A3B40", fontSize: 17, lineHeight: 1.5, marginBottom: 28 }}>
-              Agentes IA, automatizaciones de WhatsApp y CRM para que tu equipo se enfoque en cerrar.
-            </p>
-            {/* Mini chat */}
-            <div
-              style={{
-                background: "white",
-                borderRadius: 16,
-                padding: 16,
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
-              }}
-            >
-              <div
-                style={{
-                  background: "#F7F5EF",
-                  borderRadius: 10,
-                  padding: "8px 12px",
-                  fontSize: 13,
-                  color: "#202124",
-                  alignSelf: "flex-start",
-                  maxWidth: "80%",
-                }}
-              >
-                Hola, ¿cuánto vale el SEO?
-              </div>
-              <div
-                style={{
-                  background: "#202124",
-                  borderRadius: 10,
-                  padding: "8px 12px",
-                  fontSize: 13,
-                  color: "white",
-                  alignSelf: "flex-end",
-                  maxWidth: "80%",
-                }}
-              >
-                ¡Hola! Depende del alcance. ¿Me cuentas más sobre tu web?
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ── Section 4: Expertise ───────────────────────────────── */
-const EXPERTISE_ITEMS = [
-  { num: "01", name: "SEO técnico",             tags: ["SEO"] },
-  { num: "02", name: "SEO local",               tags: ["SEO"] },
-  { num: "03", name: "AI Search",               tags: ["SEO"] },
-  { num: "04", name: "Google Ads",              tags: ["ADS"] },
-  { num: "05", name: "Meta Ads",                tags: ["ADS"] },
-  { num: "06", name: "TikTok Ads",              tags: ["ADS"] },
-  { num: "07", name: "Automatización WhatsApp", tags: ["IA"] },
-  { num: "08", name: "Agentes IA",              tags: ["IA"] },
-  { num: "09", name: "CRM",                     tags: ["OPS"] },
-  { num: "10", name: "Soporte Meta Business",   tags: ["OPS"] },
+const SERVICES = [
+  { tag: "[SEO]", n: "01", bg: "#D6EBFF", q: "«Nadie me encuentra en Google.»", t: "SEO y búsqueda en IA", d: "SEO local, SEO técnico, Google Business y visibilidad en ChatGPT. Con reportes que entiendes." },
+  { tag: "[ADS]", n: "02", bg: "#FFDCC7", q: "«Pago anuncios y no sé qué funciona.»", t: "Meta, Google y TikTok Ads", d: "Campañas y creativos que llevan a la gente a escribirte. Reporte semanal en lenguaje humano." },
+  { tag: "[IA]", n: "03", bg: "#E4DEFF", q: "«Me escriben de noche y nadie responde.»", t: "Agentes IA y automatización", d: "El agente de IA responde, califica y te pasa al cliente listo. Tú cierras la venta." },
+  { tag: "[CHAT]", n: "04", bg: "#D3F2E3", q: "«Se me pierden los mensajes.»", t: "WhatsApp y atención", d: "WhatsApp Business, CRM y seguimiento para que ningún cliente se quede esperando." },
+  { tag: "[DEV]", n: "05", bg: "#010E25", dark: true, q: "«Mi web es lenta y no vende.»", t: "Desarrollo web y apps", d: "Páginas web, aplicaciones web, apps y landings optimizadas para convertir visitas en clientes." },
+  { tag: "[TRACKING]", n: "06", bg: "#FFF8F0", line: true, q: "«No sé de dónde vienen mis ventas.»", t: "Configuración técnica y medición", d: "API de conversiones de Meta, píxel y conversiones en Google, Meta y TikTok Ads." },
 ]
 
-function ExpertiseSection() {
-  return (
-    <section style={{ padding: "100px 0", fontFamily: MK_FONT }}>
-      <div className="mk-container">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 64, alignItems: "start" }}>
-          {/* Left sticky */}
-          <div style={{ position: "sticky", top: 100 }}>
-            <p
-              style={{
-                fontFamily: MK_MONO,
-                fontSize: 13,
-                color: "#5F6168",
-                marginBottom: 24,
-                letterSpacing: ".04em",
-              }}
-            >
-              03 — EXPERTISE ↗
-            </p>
-            <h2
-              style={{
-                fontSize: "clamp(40px,4.5vw,72px)",
-                fontWeight: 600,
-                color: "#202124",
-                letterSpacing: "-.05em",
-                lineHeight: 0.9,
-                margin: 0,
-              }}
-            >
-              Se nos dan bien{" "}
-              <em style={{ fontFamily: MK_SERIF, fontStyle: "italic", fontWeight: 400, color: "#345CFF" }}>
-                muchas
-              </em>{" "}
-              cosas.
-            </h2>
-          </div>
+const STEPS = [
+  { n: "01", tag: "[15 MIN]", bg: "#D3F2E3", t: "Te escuchamos", d: "Una llamada corta para entender tu negocio, qué vendes y qué has probado." },
+  { n: "02", tag: "[PLAN]", bg: "#D6EBFF", t: "Te explicamos el plan", d: "Qué haríamos, por qué y cuánto cuesta. Técnico, pero traducido a tu negocio." },
+  { n: "03", tag: "[EN MARCHA]", bg: "#E4DEFF", t: "Lo hacemos y lo medimos", d: "Web, SEO, campañas o agentes funcionando. Medimos lo que importa: clientes reales." },
+  { n: "04", tag: "[REPORTE]", bg: "#FFDCC7", t: "Te contamos qué pasó", d: "En lenguaje humano. Si algo no funcionó, te lo decimos y lo cambiamos." },
+]
 
-          {/* Right: list */}
-          <div>
-            {EXPERTISE_ITEMS.map((item, i) => (
-              <div key={item.num}>
-                <div className="mk-expertise-row">
-                  <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-                    <span
-                      style={{
-                        fontFamily: MK_MONO,
-                        fontSize: 13,
-                        color: "#5F6168",
-                        minWidth: 24,
-                        flexShrink: 0,
-                      }}
-                    >
-                      {item.num}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "clamp(22px,3vw,36px)",
-                        fontWeight: 600,
-                        color: "#202124",
-                        letterSpacing: "-.03em",
-                        lineHeight: 1,
-                      }}
-                    >
-                      {item.name}
-                    </span>
-                  </div>
-                  <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-                    {item.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        style={{
-                          fontFamily: MK_MONO,
-                          fontSize: 11,
-                          border: "1.5px solid #D6D2C6",
-                          borderRadius: 6,
-                          padding: "3px 8px",
-                          color: "#5F6168",
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+function Sparks({ style }: { style?: React.CSSProperties }) {
+  return (
+    <span aria-hidden="true" style={{ position: "absolute", display: "block", transformOrigin: "50% 100%", ...style }}>
+      <svg className="ck-spark" viewBox="0 0 40 26" style={{ display: "block", width: "100%", height: "100%", overflow: "visible" }}>
+        <path className="ck-sk" d="M7 23 Q5 16 2 12" />
+        <path className="ck-sk" d="M20 21 Q19.5 12 21 3" />
+        <path className="ck-sk" d="M33 23 Q36 16 38 12" />
+      </svg>
+    </span>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <MarketingLayout>
+      {/* HERO */}
+      <section className="ck-dots" style={{ position: "relative", padding: "64px 0 120px" }}>
+        <div className="ck-wrap" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 56 }}>
+          <div style={{ flex: "1 1 500px", minWidth: 0, display: "flex", flexDirection: "column", gap: 28 }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              <span className="ck-tag" style={{ background: "#D6EBFF" }}>[SEO]</span>
+              <span className="ck-tag" style={{ background: "#FFDCC7" }}>[ADS]</span>
+              <span className="ck-tag" style={{ background: "#E4DEFF" }}>[IA]</span>
+              <span className="ck-tag" style={{ background: "#D3F2E3" }}>[CHAT]</span>
+              <span className="ck-tag" style={{ background: "#fff" }}>[DEV]</span>
+              <span className="ck-tag" style={{ background: "#fff" }}>[TRACKING]</span>
+            </div>
+            <h1 style={{ fontSize: "clamp(48px, 6.6vw, 100px)", lineHeight: 0.96 }}>
+              Marketing hecho por{" "}
+              <span style={{ position: "relative", display: "inline-block", color: "#FE5C02" }}>
+                personas
+                <Sparks style={{ right: "-0.2em", top: "-0.02em", width: "0.42em", height: "0.3em", transform: "rotate(18deg)" }} />
+              </span>
+              , para personas.
+            </h1>
+            <p style={{ fontSize: "clamp(18px, 1.6vw, 21px)", color: "#3A4158", maxWidth: 520 }}>
+              SEO, anuncios, agentes de IA y webs explicados en cristiano. Hablas con nosotros, no con un ticket.
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 14 }}>
+              <Link className="ck-btn ck-btn-primary" href="/pricing">Ver precios y paquetes ↗</Link>
+              <a className="ck-btn ck-btn-wa" href={waLink("Hola, quiero más clientes")} target="_blank" rel="noopener noreferrer"><span className="ck-dot" />Escríbenos por WhatsApp</a>
+            </div>
+            <p className="ck-hand" style={{ fontSize: 26, color: "#C94400", transform: "rotate(-3deg)", transformOrigin: "left center", marginLeft: 6 }}>↳ te respondemos nosotros, no un bot</p>
+          </div>
+          <HeroScene />
+        </div>
+      </section>
+
+      <MarqueeBands />
+
+      {/* ESENCIA */}
+      <section className="ck-section">
+        <div className="ck-wrap" style={{ display: "flex", flexDirection: "column", gap: 48 }}>
+          <div className="ck-reveal" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 24 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 760 }}>
+              <span className="ck-eyebrow">01 · La máquina y la mano</span>
+              <h2 style={{ fontSize: "clamp(38px, 5vw, 68px)" }}>Tecnología precisa. <span style={{ color: "#FE5C02" }}>Trato humano.</span></h2>
+            </div>
+            <p style={{ maxWidth: 420, color: "#5A6178" }}>Todo lo que hacemos tiene dos mitades: una precisa, de datos y código; otra humana, de escuchar, explicar y decir la verdad.</p>
+          </div>
+          <div style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(420px, 100%), 1fr))", gap: 24 }}>
+            <div className="ck-tilt ck-tilt-l" style={{ background: "#010E25", color: "#fff", borderRadius: 32, padding: "clamp(28px, 4vw, 48px)", minHeight: 380, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 32 }}>
+              <div className="ck-depth" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                <span className="ck-mono" style={{ fontSize: 13, letterSpacing: ".08em", color: "rgba(255,255,255,.7)" }}>LA MÁQUINA · lo que hacemos</span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {["[IA]", "[SEO]", "[ADS]", "[AUTOMATIZACIÓN]", "[CRM]"].map((t) => <span key={t} className="ck-tag" style={{ color: "#fff", borderColor: "rgba(255,255,255,.55)" }}>{t}</span>)}
                 </div>
-                {i < EXPERTISE_ITEMS.length - 1 && (
-                  <div style={{ height: 1, background: "#D6D2C6", margin: "0 16px" }} />
-                )}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <h3 style={{ fontSize: "clamp(28px, 3vw, 40px)", color: "#fff" }}>Datos, algoritmos, campañas y código.</h3>
+                <p style={{ color: "rgba(255,255,255,.78)", maxWidth: 440 }}>Rigor, medición y confianza. Cada decisión tiene un número detrás, y ese número es real.</p>
+              </div>
+            </div>
+            <div className="ck-tilt ck-tilt-r" style={{ background: "#FFDCC7", borderRadius: 32, padding: "clamp(28px, 4vw, 48px)", minHeight: 380, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 32 }}>
+              <div className="ck-depth" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                <span className="ck-mono" style={{ fontSize: 13, letterSpacing: ".08em", color: "#8A3300" }}>LA MANO · cómo lo hacemos</span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {["atención", "comunicación", "honestidad", "calidad humana"].map((t) => <span key={t} style={{ background: "#fff", borderRadius: 999, padding: "8px 16px", fontWeight: 600, fontSize: 15 }}>{t}</span>)}
+                </div>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <h3 style={{ fontSize: "clamp(28px, 3vw, 40px)" }}>Escuchar, explicar y responder rápido.</h3>
+                <p style={{ color: "#3A4158", maxWidth: 440 }}>Hablas siempre con las mismas personas. Si algo no funciona, te lo decimos primero, sin maquillar números.</p>
+              </div>
+            </div>
+            <div aria-hidden="true" style={{ position: "absolute", left: "50%", top: "50%", width: 150, height: 150, transform: "translate(-50%, -50%)", zIndex: 5, pointerEvents: "none" }}>
+              <div style={{ position: "relative", width: 150, height: 150, background: "#FFF8F0", borderRadius: "50%", border: "1.5px solid #010E25", boxShadow: "0 20px 40px -20px rgba(1,14,37,.5)" }}>
+                <svg className="ck-ring" viewBox="0 0 200 200" style={{ position: "absolute", inset: 0, width: 150, height: 150 }}>
+                  <defs><path id="ckring" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" /></defs>
+                  <text className="ck-ring-text"><textPath href="#ckring">ESTRATEGIA · TECNOLOGÍA · CRECIMIENTO · </textPath></text>
+                </svg>
+                <span style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}><LogoSymbol size={58} /></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICIOS */}
+      <section className="ck-section" style={{ background: "#fff", borderRadius: "48px 48px 0 0" }}>
+        <div className="ck-wrap" style={{ display: "flex", flexDirection: "column", gap: 56 }}>
+          <div className="ck-reveal" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 24 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 780 }}>
+              <span className="ck-eyebrow">02 · Servicios</span>
+              <h2 style={{ fontSize: "clamp(38px, 5vw, 68px)" }}>Que te encuentren, te escriban y te <span style={{ color: "#FE5C02" }}>compren</span>.</h2>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+              <Link className="ck-btn ck-btn-dark" href="/services">Ver todos los servicios →</Link>
+              <Link className="ck-btn ck-btn-primary" href="/pricing">Precios y paquetes ↗</Link>
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(340px, 100%), 1fr))", gap: 20 }}>
+            {SERVICES.map((s) => (
+              <Link key={s.tag} href="/services" className="ck-svc" style={{ background: s.bg, border: s.line ? "1.5px solid #010E25" : undefined, color: s.dark ? "#fff" : "#010E25", borderRadius: 28, padding: 28, minHeight: 420, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 28 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span className="ck-tag" style={s.dark ? { color: "#fff", borderColor: "rgba(255,255,255,.6)" } : { background: s.line ? "#fff" : undefined }}>{s.tag}</span>
+                  <span className="ck-mono" style={{ fontSize: 13, color: s.dark ? "rgba(255,255,255,.7)" : "#3A4158" }}>{s.n}</span>
+                </div>
+                <div className="ck-q" style={{ alignSelf: "flex-start", background: "#fff", color: "#010E25", border: s.line ? "1.5px solid #010E25" : undefined, borderRadius: "18px 18px 18px 6px", padding: "12px 16px", fontSize: 16, fontWeight: 500, boxShadow: "0 18px 30px -20px rgba(1,14,37,.45)" }}>{s.q}</div>
+                <div className="ck-ttl" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  <h3 style={{ fontSize: 28, color: s.dark ? "#fff" : undefined }}>{s.t}</h3>
+                  <p style={{ fontSize: 16, color: s.dark ? "rgba(255,255,255,.8)" : "#2A3147" }}>{s.d}</p>
+                  <span style={{ fontWeight: 600, fontSize: 16, textDecoration: "underline", textUnderlineOffset: 4, color: s.dark ? "#FFDCC7" : undefined }}>Así lo hacemos <span className="ck-arrow">→</span></span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PROCESO */}
+      <section className="ck-section" style={{ background: "#010E25", color: "#fff", borderRadius: 48 }}>
+        <div className="ck-wrap" style={{ display: "flex", flexDirection: "column", gap: 64 }}>
+          <div className="ck-reveal" style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 820 }}>
+            <span className="ck-eyebrow" style={{ color: "rgba(255,255,255,.7)" }}>03 · Cómo trabajamos</span>
+            <h2 style={{ fontSize: "clamp(38px, 5vw, 68px)", color: "#fff" }}>Cuatro pasos. Cada uno, <span style={{ color: "#FE5C02" }}>un escalón</span> hacia arriba.</h2>
+            <p className="ck-hand" style={{ fontSize: 28, color: "#FFDCC7", transform: "rotate(-2deg)", transformOrigin: "left" }}>↳ sin letra pequeña</p>
+          </div>
+          <div className="ck-steps" style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(250px, 100%), 1fr))", gap: 28, alignItems: "start" }}>
+            <svg className="ck-trail" aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" style={{ position: "absolute", left: "4%", top: -20, width: "92%", height: 300, overflow: "visible", pointerEvents: "none" }}>
+              <path className="ck-trail-line" d="M0 100 C 30 92, 55 60, 100 0" vectorEffect="non-scaling-stroke" />
+            </svg>
+            {STEPS.map((s, i) => (
+              <div key={s.n} className={`ck-step ck-s${i + 1}`} style={{ position: "relative", background: "#FFF8F0", color: "#010E25", borderRadius: 26, padding: 28, display: "flex", flexDirection: "column", gap: 18, minHeight: 300 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: 56, fontWeight: 700, letterSpacing: "-0.05em", lineHeight: 1, color: "#FE5C02" }}>{s.n}</span>
+                  <span className="ck-tag" style={{ background: s.bg }}>{s.tag}</span>
+                </div>
+                <h3 style={{ fontSize: 26 }}>{s.t}</h3>
+                <p style={{ fontSize: 16, color: "#3A4158" }}>{s.d}</p>
               </div>
             ))}
           </div>
         </div>
-      </div>
-    </section>
-  )
-}
+      </section>
 
-/* ── Section 7: Proyectos (placeholder) ─────────────────── */
-function ProjectsSection() {
-  return (
-    <section style={{ padding: "100px 0", fontFamily: MK_FONT }}>
-      <div className="mk-container">
-        <p
-          style={{
-            fontFamily: MK_MONO,
-            fontSize: 13,
-            color: "#5F6168",
-            marginBottom: 24,
-            letterSpacing: ".04em",
-          }}
-        >
-          06 — TRABAJO QUE HABLA
-        </p>
+      <ValueCube />
 
-        <h2
-          style={{
-            fontSize: "clamp(40px,5.5vw,88px)",
-            fontWeight: 600,
-            color: "#202124",
-            letterSpacing: "-.05em",
-            lineHeight: 0.9,
-            margin: "0 0 56px",
-          }}
-        >
-          Buen trabajo.{" "}
-          <em style={{ fontFamily: MK_SERIF, fontStyle: "italic", fontWeight: 400, color: "#345CFF" }}>
-            Impacto
-          </em>{" "}
-          real.
-        </h2>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-          {/* Case 1 */}
-          <div>
-            <div
-              style={{
-                aspectRatio: "4 / 3",
-                background: "#345CFF",
-                borderRadius: 24,
-                marginBottom: 16,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <span
-                style={{
-                  background: "#FF6B2C",
-                  color: "white",
-                  borderRadius: "999px",
-                  padding: "6px 14px",
-                  fontFamily: MK_MONO,
-                  fontSize: 11,
-                  fontWeight: 500,
-                  letterSpacing: ".08em",
-                }}
-              >
-                RESULTADO POR VERIFICAR
-              </span>
+      {/* EQUIPO */}
+      <section id="equipo" className="ck-section" style={{ background: "#fff", borderRadius: 48 }}>
+        <div className="ck-wrap" style={{ display: "flex", flexDirection: "column", gap: 64 }}>
+          <div className="ck-reveal" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 24 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 760 }}>
+              <span className="ck-eyebrow">05 · Quiénes somos</span>
+              <h2 style={{ fontSize: "clamp(38px, 5vw, 64px)" }}>Hablas con quien <span style={{ color: "#FE5C02" }}>hace el trabajo</span>.</h2>
             </div>
-            <h3 style={{ fontSize: 22, fontWeight: 600, color: "#202124", letterSpacing: "-.03em", margin: "0 0 8px" }}>
-              Caso de estudio 01
-            </h3>
-            <p style={{ color: "#5F6168", fontSize: 15, margin: 0 }}>SEO · Automatización</p>
+            <p style={{ maxWidth: 440, fontSize: 19, color: "#3A4158" }}>Somos tres: Arnaldo, Abisai y Yoli. Un equipo pequeño a propósito: aquí no hay ejecutivos de cuenta, cada decisión te la explica quien la ejecuta.</p>
           </div>
+          <TeamGrid />
+          <div style={{ display: "flex", justifyContent: "flex-end" }}><span className="ck-hand" style={{ fontSize: 30, color: "#C94400", transform: "rotate(-3deg)" }}>— prometido, el equipo.</span></div>
+        </div>
+      </section>
 
-          {/* Case 2 — offset */}
-          <div style={{ marginTop: 120 }}>
-            <div
-              style={{
-                aspectRatio: "4 / 3",
-                background: "#D9FA62",
-                borderRadius: 24,
-                marginBottom: 16,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <span
-                style={{
-                  background: "#FF6B2C",
-                  color: "white",
-                  borderRadius: "999px",
-                  padding: "6px 14px",
-                  fontFamily: MK_MONO,
-                  fontSize: 11,
-                  fontWeight: 500,
-                  letterSpacing: ".08em",
-                }}
-              >
-                RESULTADO POR VERIFICAR
-              </span>
+      {/* CONTACTO */}
+      <section id="contacto" className="ck-section">
+        <div className="ck-wrap" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 64 }}>
+          <div className="ck-reveal" style={{ flex: "1 1 480px", minWidth: 0, background: "#fff", borderRadius: 32, padding: "clamp(24px, 4vw, 44px)", display: "flex", flexDirection: "column", gap: 20, boxShadow: "0 40px 80px -60px rgba(1,14,37,.5)" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <span className="ck-eyebrow">06 · Hablemos</span>
+              <h2 style={{ fontSize: "clamp(34px, 4vw, 52px)" }}>Cuéntanos de tu negocio</h2>
+              <p className="ck-hand" style={{ fontSize: 26, color: "#C94400" }}>te leemos nosotros, no un robot ↓</p>
             </div>
-            <h3 style={{ fontSize: 22, fontWeight: 600, color: "#202124", letterSpacing: "-.03em", margin: "0 0 8px" }}>
-              Caso de estudio 02
-            </h3>
-            <p style={{ color: "#5F6168", fontSize: 15, margin: 0 }}>Meta Ads · CRM</p>
+            <ContactForm />
+          </div>
+          <div className="ck-phone-stage" style={{ flex: "1 1 380px", minWidth: 0, display: "flex", justifyContent: "center", perspective: 1300, padding: "32px 0", position: "relative" }}>
+            <div aria-hidden="true" style={{ position: "absolute", left: "50%", top: "50%", width: "min(420px, 90%)", aspectRatio: "1 / 1", borderRadius: "50%", background: "#FFDCC7", transform: "translate(-50%, -50%)" }} />
+            <div className="ck-phone" aria-hidden="true" style={{ position: "relative", width: 320, maxWidth: "100%", height: 620, borderRadius: 46, border: "10px solid #010E25", background: "#EFE7DD", overflow: "hidden", display: "flex", flexDirection: "column", boxShadow: "30px 50px 80px -40px rgba(1,14,37,.65)" }}>
+              <div style={{ background: "#010E25", color: "#fff", padding: "22px 18px 16px", display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ width: 42, height: 42, borderRadius: "50%", background: "#FE5C02", display: "flex", alignItems: "center", justifyContent: "center", flex: "none" }}><LogoSymbol size={30} inverted /></span>
+                <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.25 }}><strong style={{ fontWeight: 600, fontSize: 16 }}>ClicKonversion</strong><span style={{ fontSize: 13, color: "rgba(255,255,255,.75)" }}>te responde una persona</span></div>
+              </div>
+              <div style={{ flex: 1, padding: "18px 14px", display: "flex", flexDirection: "column", gap: 10, justifyContent: "flex-end", fontSize: 14.5, lineHeight: 1.4 }}>
+                <div className="ck-msg" style={{ alignSelf: "flex-start", maxWidth: "84%", background: "#fff", borderRadius: "16px 16px 16px 4px", padding: "10px 14px" }}>¡Hola! Soy Arnaldo. Cuéntame de tu negocio y te digo por dónde empezaría.</div>
+                <div className="ck-msg ck-m2" style={{ alignSelf: "flex-end", maxWidth: "84%", background: "#D3F2E3", borderRadius: "16px 16px 4px 16px", padding: "10px 14px" }}>Tengo una clínica y quiero más citas.</div>
+                <div className="ck-msg ck-m3" style={{ alignSelf: "flex-start", maxWidth: "84%", background: "#fff", borderRadius: "16px 16px 16px 4px", padding: "10px 14px" }}>¡Claro! ¿Hoy cómo te llegan los pacientes: Instagram, Google o recomendados?</div>
+                <div className="ck-msg ck-m4" style={{ alignSelf: "flex-end", maxWidth: "84%", background: "#D3F2E3", borderRadius: "16px 16px 4px 16px", padding: "10px 14px" }}>Más que nada por Instagram.</div>
+                <div className="ck-msg ck-m5" style={{ alignSelf: "flex-start", maxWidth: "84%", background: "#fff", borderRadius: "16px 16px 16px 4px", padding: "10px 14px" }}>Perfecto. Te escribo hoy mismo con una propuesta.</div>
+                <div className="ck-msg ck-m6 ck-typing" style={{ alignSelf: "flex-start", background: "#fff", borderRadius: "16px 16px 16px 4px", padding: "12px 14px" }}><span /><span /><span /></div>
+              </div>
+            </div>
+            <p className="ck-hand" aria-hidden="true" style={{ position: "absolute", right: 0, bottom: 6, fontSize: 26, color: "#C94400", transform: "rotate(-6deg)" }}>así de simple ↗</p>
           </div>
         </div>
-
-        <p
-          style={{
-            fontFamily: MK_MONO,
-            fontSize: 13,
-            color: "#5F6168",
-            marginTop: 32,
-            textAlign: "center",
-          }}
-        >
-          Marcadores de posición — solo se publicarán resultados verificados.
-        </p>
-      </div>
-    </section>
-  )
-}
-
-/* ── Section 10: CTA final ──────────────────────────────── */
-function CtaSection() {
-  return (
-    <section
-      style={{
-        background: "#D9FA62",
-        margin: "0 16px",
-        borderRadius: "40px",
-        padding: "80px 0",
-        fontFamily: MK_FONT,
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Tecla decorativa */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: -60,
-          right: -60,
-          width: 280,
-          height: 200,
-          background: "#345CFF",
-          borderRadius: 56,
-          border: "5px solid #202124",
-          transform: "rotate(-12deg)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 4,
-          opacity: 0.8,
-        }}
-        aria-hidden="true"
-      >
-        <span
-          style={{
-            fontFamily: MK_FONT,
-            fontWeight: 700,
-            fontSize: 100,
-            color: "white",
-            lineHeight: 1,
-            letterSpacing: "-.04em",
-          }}
-        >
-          c
-        </span>
-        <span
-          style={{
-            fontFamily: MK_SERIF,
-            fontStyle: "italic",
-            fontWeight: 400,
-            fontSize: 112,
-            color: "#D9FA62",
-            lineHeight: 1,
-          }}
-        >
-          !
-        </span>
-      </div>
-
-      <div className="mk-container" style={{ position: "relative", zIndex: 1 }}>
-        <p
-          style={{
-            fontFamily: MK_MONO,
-            fontSize: 13,
-            color: "#5F6168",
-            marginBottom: 24,
-            letterSpacing: ".04em",
-          }}
-        >
-          09 — ¿LISTO PARA CRECER?
-        </p>
-
-        <h2
-          style={{
-            fontSize: "clamp(64px,11vw,184px)",
-            fontWeight: 600,
-            color: "#202124",
-            letterSpacing: "-.06em",
-            lineHeight: 0.84,
-            margin: "0 0 48px",
-            maxWidth: "80%",
-          }}
-        >
-          Todo empieza con un clic.
-        </h2>
-
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-          <Link
-            href="/about#contacto"
-            className="mk-btn-ink"
-            style={{
-              padding: "18px 28px",
-              borderRadius: "999px",
-              fontWeight: 600,
-              fontSize: 17,
-              textDecoration: "none",
-              display: "inline-block",
-            }}
-          >
-            Agenda una llamada gratis ↗
-          </Link>
-          <Link
-            href="/pricing"
-            className="mk-btn-outline-lime"
-            style={{
-              padding: "18px 28px",
-              borderRadius: "999px",
-              fontWeight: 600,
-              fontSize: 17,
-              textDecoration: "none",
-              display: "inline-block",
-            }}
-          >
-            Ver precios
-          </Link>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ── Page ─────────────────────────────────────────────────── */
-export default function HomePage() {
-  return (
-    <MarketingLayout>
-      <HeroSection />
-      <MarqueeStrip />
-      <ServicesCards />
-      <ExpertiseSection />
-      <HowWeWork />
-      <FeaturedServices />
-      <ProjectsSection />
-      <AiFlow />
-      <SyncLeadPreview />
-      <CtaSection />
+      </section>
     </MarketingLayout>
   )
 }

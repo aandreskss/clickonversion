@@ -5,12 +5,12 @@ const INDUSTRIES = [
   { label: "E-commerce", color: "#78E6B3" },
   { label: "Professional Services", color: "#7885FF" },
   { label: "Healthcare / Clinics", color: "#FFCB86" },
-  { label: "Real Estate", color: "#FF5A1F" },
+  { label: "Real Estate", color: "#FE5C02" },
 ]
 
 export function CaseStudiesPreview() {
   return (
-    <section className="py-24 bg-[#101827]" aria-label="Case studies">
+    <section className="py-24 bg-[#010E25]" aria-label="Case studies">
       <div className="container-wide">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
           <div>

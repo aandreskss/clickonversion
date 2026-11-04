@@ -68,12 +68,16 @@ export default function HomePage() {
               <span className="ck-tag" style={{ background: "#fff" }}>[TRACKING]</span>
             </div>
             <h1 style={{ fontSize: "clamp(48px, 6.6vw, 100px)", lineHeight: 0.96 }}>
-              Marketing hecho por{" "}
+              Marketing hecho
+              <br />
+              por{" "}
               <span style={{ position: "relative", display: "inline-block", color: "#FE5C02" }}>
                 personas
                 <Sparks style={{ right: "-0.2em", top: "-0.02em", width: "0.42em", height: "0.3em", transform: "rotate(18deg)" }} />
               </span>
-              , para personas.
+              ,
+              <br />
+              para personas.
             </h1>
             <p style={{ fontSize: "clamp(18px, 1.6vw, 21px)", color: "#3A4158", maxWidth: 520 }}>
               SEO, anuncios, agentes de IA y webs explicados en cristiano. Hablas con nosotros, no con un ticket.

@@ -24,7 +24,7 @@
 
 /* ── Base ─────────────────────────────────────────────── */
 .ck { font-family: var(--ck-sans); color: var(--ck-navy); background: var(--ck-cream); -webkit-font-smoothing: antialiased; overflow-x: clip; font-size: 18px; line-height: 1.55; }
-.ck h1, .ck h2, .ck h3, .ck h4 { margin: 0; font-weight: 600; letter-spacing: -0.04em; line-height: 1.04; text-wrap: balance; }
+.ck h1, .ck h2, .ck h3, .ck h4 { margin: 0; font-weight: 600; letter-spacing: -0.04em; line-height: 1.04; text-wrap: balance; color: var(--ck-navy); font-family: var(--ck-sans); }
 .ck p { margin: 0; text-wrap: pretty; }
 .ck a:focus-visible, .ck button:focus-visible, .ck input:focus-visible, .ck select:focus-visible, .ck textarea:focus-visible, .ck summary:focus-visible { outline: 3px solid var(--ck-orange); outline-offset: 3px; }
 .ck-wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }

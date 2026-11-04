@@ -67,17 +67,17 @@ export default function HomePage() {
               <span className="ck-tag" style={{ background: "#fff" }}>[DEV]</span>
               <span className="ck-tag" style={{ background: "#fff" }}>[TRACKING]</span>
             </div>
-            <h1 style={{ fontSize: "clamp(36px, 6.5vw, 100px)", lineHeight: 0.96 }}>
-              Marketing hecho
-              <span className="ck-br" aria-hidden="true" />
-              por{" "}
-              <span style={{ position: "relative", display: "inline-block", color: "#FE5C02" }}>
-                personas
-                <Sparks style={{ right: "-0.2em", top: "-0.02em", width: "0.42em", height: "0.3em", transform: "rotate(18deg)" }} />
+            <h1 style={{ fontSize: "clamp(28px, 4.4vw, 80px)", lineHeight: 1 }}>
+              <span style={{ display: "block" }}>Marketing hecho</span>
+              <span style={{ display: "block" }}>
+                por{" "}
+                <span style={{ position: "relative", display: "inline-block", color: "#FE5C02" }}>
+                  personas
+                  <Sparks style={{ right: "-0.2em", top: "-0.02em", width: "0.42em", height: "0.3em", transform: "rotate(18deg)" }} />
+                </span>
+                ,
               </span>
-              ,
-              <span className="ck-br" aria-hidden="true" />
-              para personas.
+              <span style={{ display: "block" }}>para personas.</span>
             </h1>
             <p style={{ fontSize: "clamp(18px, 1.6vw, 21px)", color: "#3A4158", maxWidth: 520 }}>
               SEO, anuncios, agentes de IA y webs explicados en cristiano. Hablas con nosotros, no con un ticket.

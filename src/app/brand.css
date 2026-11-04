@@ -25,9 +25,12 @@
 /* ── Base ─────────────────────────────────────────────── */
 .ck { font-family: var(--ck-sans); color: var(--ck-navy); background: var(--ck-cream); -webkit-font-smoothing: antialiased; overflow-x: clip; font-size: 18px; line-height: 1.55; }
 .ck h1, .ck h2, .ck h3, .ck h4 { margin: 0; font-weight: 600; letter-spacing: -0.04em; line-height: 1.04; text-wrap: balance; color: var(--ck-navy); font-family: var(--ck-sans); }
+.ck p { color: var(--ck-body); }
 .ck p { margin: 0; text-wrap: pretty; }
 .ck a:focus-visible, .ck button:focus-visible, .ck input:focus-visible, .ck select:focus-visible, .ck textarea:focus-visible, .ck summary:focus-visible { outline: 3px solid var(--ck-orange); outline-offset: 3px; }
 .ck-wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+.ck-br { display: none; }
+@media (min-width: 768px) { .ck-br { display: block; } }
 .ck-section { padding: clamp(72px, 9vw, 128px) 0; }
 .ck-mono { font-family: var(--ck-mono); }
 .ck-hand { font-family: var(--ck-hand); }
@@ -57,10 +60,12 @@
 .ck-navlink:hover, .ck-navlink[aria-current="page"] { background: var(--ck-peach); color: var(--ck-navy); }
 .ck-navlinks { display: flex; align-items: center; gap: 2px; }
 .ck-burger { display: none; }
+.ck-nav-cta { display: inline-flex; }
 @media (max-width: 1020px) {
   .ck-navlinks { display: none; }
   .ck-navstatus { display: none !important; }
   .ck-burger { display: inline-flex; }
+  .ck-nav-cta { display: none; }
 }
 .ck-mobile-menu { display: flex; flex-direction: column; gap: 4px; padding: 12px; }
 .ck-mobile-menu a.ck-navlink { font-size: 22px; padding: 14px 16px; }
@@ -136,8 +141,8 @@
 
 /* ── Cubo de valores ──────────────────────────────────── */
 .ck-cube-stage { perspective: 1100px; width: 300px; height: 300px; position: relative; flex: none; }
-.ck-cube { position: absolute; inset: 20px; transform-style: preserve-3d; transform: rotateX(-12deg) rotateY(-32deg); animation: ck-cube 16s cubic-bezier(.7,0,.2,1) infinite; }
-.ck-face { position: absolute; inset: 0; border-radius: 28px; border: 1.5px solid var(--ck-navy); padding: 28px; display: flex; flex-direction: column; justify-content: space-between; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.ck-cube { position: absolute; inset: 20px; transform-style: preserve-3d; transform: rotateX(-14deg) rotateY(0deg); animation: ck-cube 18s linear infinite; }
+.ck-face { position: absolute; inset: 0; border-radius: 28px; border: 2px solid var(--ck-navy); padding: 28px; display: flex; flex-direction: column; justify-content: space-between; backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 8px 24px -8px rgba(1,14,37,.22); }
 .ck-f1 { transform: translateZ(130px); }
 .ck-f2 { transform: rotateY(90deg) translateZ(130px); }
 .ck-f3 { transform: rotateY(180deg) translateZ(130px); }
@@ -147,7 +152,6 @@
 .ck-vitem-2 { animation-delay: -12s; }
 .ck-vitem-3 { animation-delay: -8s; }
 .ck-vitem-4 { animation-delay: -4s; }
-.ck-values:hover .ck-cube, .ck-values:hover .ck-vitem { animation-play-state: paused; }
 @media (max-width: 520px) { .ck-cube-stage { transform: scale(.82); } }
 
 /* ── Retratos ─────────────────────────────────────────── */
@@ -237,8 +241,8 @@ a.ck-post:hover .ck-cover-g { transform: rotate(-6deg) scale(1.08); }
 @keyframes ck-marquee { to { transform: translateX(-50%); } }
 @keyframes ck-ping { 0% { box-shadow: 0 0 0 0 rgba(31,157,85,.55); } 80%,100% { box-shadow: 0 0 0 8px rgba(31,157,85,0); } }
 @keyframes ck-march { to { stroke-dashoffset: -30; } }
-@keyframes ck-cube { 0%,20% { transform: rotateX(-12deg) rotateY(0deg); } 25%,45% { transform: rotateX(-12deg) rotateY(-90deg); } 50%,70% { transform: rotateX(-12deg) rotateY(-180deg); } 75%,95% { transform: rotateX(-12deg) rotateY(-270deg); } 100% { transform: rotateX(-12deg) rotateY(-360deg); } }
-@keyframes ck-shadow { 0%,20%,25%,45%,50%,70%,75%,95%,100% { transform: scale(1); opacity: .55; } 22%,47%,72%,97% { transform: scale(.8); opacity: .35; } }
+@keyframes ck-cube { 0% { transform: rotateX(-14deg) rotateY(0deg); } 100% { transform: rotateX(-14deg) rotateY(-360deg); } }
+@keyframes ck-shadow { 0%,100% { transform: scale(1); opacity: .5; } 25%,75% { transform: scale(.88); opacity: .3; } }
 @keyframes ck-hl { 0%,21% { background: #fff; border-color: var(--ck-navy); transform: translateX(10px); } 25%,100% { background: rgba(255,255,255,0); border-color: rgba(1,14,37,.12); transform: translateX(0); } }
 @keyframes ck-msgin { from { opacity: 0; transform: translateY(14px) scale(.96); } }
 @keyframes ck-typing { 0%,60%,100% { transform: translateY(0); opacity: .4; } 30% { transform: translateY(-4px); opacity: 1; } }

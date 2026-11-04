@@ -3,369 +3,134 @@ import Link from "next/link"
 import { MarketingLayout } from "@/components/marketing/marketing-layout"
 import { ServicesTabs } from "@/components/marketing/services-tabs"
 import { CartBar } from "@/components/marketing/cart-bar"
+import { waLink } from "@/lib/whatsapp"
 
 export const metadata: Metadata = {
-  title: "Servicios — SEO, Publicidad, IA y Soporte Meta | ClicKonversion",
+  title: "Servicios — SEO, Publicidad, IA y WhatsApp | ClicKonversion",
   description:
-    "Cuatro áreas de crecimiento digital: SEO y búsqueda IA, publicidad digital, automatización con IA y soporte Meta. Precios claros, resultados reales.",
-  alternates: {
-    canonical: "https://www.clickonversion.com/services",
-  },
+    "Cuatro áreas de crecimiento digital: SEO y búsqueda IA, publicidad digital, automatización con IA y WhatsApp Business. Precios claros, resultados reales.",
+  alternates: { canonical: "https://www.clickonversion.com/services" },
   openGraph: {
-    title: "Servicios — SEO, Publicidad, IA y Soporte Meta | ClicKonversion",
-    description:
-      "SEO, Meta Ads, agentes IA, automatización WhatsApp y soporte Meta. Todo publicado, sin letra pequeña.",
+    title: "Servicios — SEO, Publicidad, IA y WhatsApp | ClicKonversion",
+    description: "SEO, Meta Ads, agentes IA, automatización WhatsApp. Todo publicado, sin letra pequeña.",
     url: "https://www.clickonversion.com/services",
     siteName: "ClicKonversion",
-    locale: "es_ES",
+    locale: "es_419",
     type: "website",
   },
 }
 
 const STEPS = [
-  {
-    title: "Llamada de 20 min",
-    desc: "Entendemos tu negocio, tu situación y qué tiene sentido para ti.",
-    dots: 1,
-  },
-  {
-    title: "Propuesta clara",
-    desc: "Scope escrito, precio fijo, sin letra pequeña.",
-    dots: 2,
-  },
-  {
-    title: "Manos a la obra",
-    desc: "Empezamos y te mantenemos informado en cada paso.",
-    dots: 3,
-  },
-  {
-    title: "Reporte honesto",
-    desc: "Los datos que importan, explicados sin tecnicismos.",
-    dots: 4,
-  },
+  { n: "01", bg: "#D3F2E3", t: "Te escuchamos", d: "Llamada de 20 min para entender tu negocio, qué vendes y qué has probado.", dots: 1 },
+  { n: "02", bg: "#D6EBFF", t: "Propuesta clara", d: "Scope escrito, precio fijo, sin letra pequeña. Te explicamos el plan.", dots: 2 },
+  { n: "03", bg: "#E4DEFF", t: "Manos a la obra", d: "Empezamos y te mantenemos informado en cada paso.", dots: 3 },
+  { n: "04", bg: "#FFDCC7", t: "Reporte honesto", d: "Los datos que importan, explicados en lenguaje humano.", dots: 4 },
 ]
 
 const FAQS = [
-  {
-    q: "¿Cuánto tiempo tarda en verse resultados?",
-    a: "Depende del canal. SEO toma entre 3 y 6 meses. Publicidad de pago puede generar resultados desde la primera semana. Automatizaciones, desde el día de lanzamiento.",
-  },
-  {
-    q: "¿Puedo contratar servicios de más de un área?",
-    a: "Sí. Muchos clientes combinan SEO con Meta Ads, o Agente IA con Automatización WhatsApp. Añade los que necesitas al carrito y gestionamos todo desde un solo equipo.",
-  },
-  {
-    q: "¿Qué pasa si quiero cancelar un servicio mensual?",
-    a: "Sin permanencia. Puedes cancelar desde tu panel de cliente cuando quieras, sin penalización.",
-  },
-  {
-    q: "¿Trabajan con empresas fuera de España y Latinoamérica?",
-    a: "Sí. Atendemos clientes en Estados Unidos, España, México, Colombia y Venezuela, tanto en inglés como en español.",
-  },
+  { q: "¿Cuánto tiempo tarda en verse resultados?", a: "Depende del canal. SEO toma entre 3 y 6 meses. Publicidad de pago puede generar resultados desde la primera semana. Automatizaciones, desde el día de lanzamiento." },
+  { q: "¿Puedo contratar servicios de más de un área?", a: "Sí. Muchos clientes combinan SEO con Meta Ads, o Agente IA con Automatización WhatsApp. Añade los que necesitas al carrito y gestionamos todo desde un solo equipo." },
+  { q: "¿Qué pasa si quiero cancelar un servicio mensual?", a: "Sin permanencia. Puedes cancelar desde tu panel de cliente cuando quieras, sin penalización." },
+  { q: "¿Trabajan con empresas fuera de España y Latinoamérica?", a: "Sí. Atendemos clientes en Estados Unidos, España, México, Colombia y Venezuela, tanto en inglés como en español." },
 ]
 
 export default function ServicesPage() {
   return (
     <MarketingLayout active="services">
-      <div
-        style={{
-          background: "#FFF8F0",
-          fontFamily: "var(--font-mk-sans, 'General Sans', system-ui, sans-serif)",
-        }}
-      >
-        {/* Hero */}
-        <section
-          style={{
-            padding: "clamp(120px, 15vw, 180px) clamp(16px, 5vw, 80px) clamp(64px, 8vw, 96px)",
-            maxWidth: "88rem",
-            margin: "0 auto",
-          }}
-          aria-label="Servicios"
-        >
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(32px, 5vw, 80px)", alignItems: "end" }} className="hero-grid">
-            <div>
-              <p
-                style={{
-                  fontFamily: "var(--font-mk-mono, 'JetBrains Mono', monospace)",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "#5A6178",
-                  marginBottom: 24,
-                }}
-              >
-                SERVICIOS — 4 ÁREAS, UN SOLO EQUIPO
-              </p>
-              <h1
-                style={{
-                  fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
-                  fontSize: "clamp(64px, 9vw, 140px)",
-                  fontWeight: 400,
-                  lineHeight: 0.9,
-                  color: "#010E25",
-                  letterSpacing: "-0.02em",
-                  margin: 0,
-                }}
-              >
-                Cuatro<br />
-                formas de<br />
-                hacer{" "}
-                <em style={{ fontStyle: "italic" }}>clic.</em>
-              </h1>
-            </div>
-            <div>
-              <p
-                style={{
-                  fontSize: 19,
-                  lineHeight: 1.6,
-                  color: "#5A6178",
-                  maxWidth: 440,
-                }}
-              >
-                SEO, publicidad, inteligencia artificial y soporte Meta — cuatro disciplinas que se refuerzan entre sí para convertir visibilidad en clientes reales.
-              </p>
-            </div>
+
+      {/* Hero */}
+      <section className="ck-dots" style={{ padding: "clamp(72px, 10vw, 120px) 0 clamp(56px, 7vw, 88px)" }}>
+        <div className="ck-wrap" style={{ display: "flex", flexDirection: "column", gap: 28, maxWidth: 820 }}>
+          <span className="ck-eyebrow">4 áreas · Un solo equipo</span>
+          <h1 style={{ fontSize: "clamp(44px, 6.5vw, 92px)", lineHeight: 0.95 }}>
+            Cuatro formas de hacer <span style={{ color: "#FE5C02" }}>clic.</span>
+          </h1>
+          <p style={{ fontSize: "clamp(17px, 1.6vw, 20px)", color: "#3A4158", maxWidth: 540 }}>
+            SEO, publicidad, inteligencia artificial y WhatsApp Business — cuatro disciplinas que convierten visibilidad en clientes reales.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            <span className="ck-tag" style={{ background: "#D6EBFF" }}>[SEO]</span>
+            <span className="ck-tag" style={{ background: "#FFDCC7" }}>[ADS]</span>
+            <span className="ck-tag" style={{ background: "#E4DEFF" }}>[IA]</span>
+            <span className="ck-tag" style={{ background: "#D3F2E3" }}>[CHAT]</span>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Services tabs */}
-        <section
-          style={{
-            padding: "0 clamp(16px, 5vw, 80px) clamp(80px, 10vw, 120px)",
-            maxWidth: "88rem",
-            margin: "0 auto",
-          }}
-        >
-          <ServicesTabs />
-        </section>
+      {/* Services tabs */}
+      <section style={{ paddingBottom: "clamp(64px, 8vw, 100px)" }}>
+        <ServicesTabs />
+      </section>
 
-        {/* Process: Así se ve trabajar juntos */}
-        <section
-          style={{
-            background: "#010E25",
-            padding: "clamp(64px, 8vw, 96px) clamp(16px, 5vw, 80px)",
-          }}
-          aria-label="Proceso de trabajo"
-        >
-          <div style={{ maxWidth: "88rem", margin: "0 auto" }}>
-            <p
-              style={{
-                fontFamily: "var(--font-mk-mono, monospace)",
-                fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,.4)",
-                marginBottom: 16,
-              }}
-            >
-              PROCESO
-            </p>
-            <h2
-              style={{
-                fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
-                fontSize: "clamp(40px, 6vw, 80px)",
-                fontWeight: 400,
-                color: "#fff",
-                lineHeight: 1,
-                marginBottom: 56,
-              }}
-            >
-              Así se ve{" "}
-              <em style={{ fontStyle: "italic", color: "#FE5C02" }}>trabajar juntos.</em>
+      {/* Process */}
+      <section className="ck-section" style={{ background: "#010E25" }}>
+        <div className="ck-wrap">
+          <div className="ck-reveal" style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 56 }}>
+            <span className="ck-eyebrow" style={{ color: "rgba(255,255,255,.5)" }}>PROCESO</span>
+            <h2 style={{ fontSize: "clamp(36px, 5vw, 68px)", color: "#fff" }}>
+              Así se ve <span style={{ color: "#FE5C02" }}>trabajar juntos.</span>
             </h2>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                gap: 24,
-              }}
-            >
-              {STEPS.map((step) => (
-                <div
-                  key={step.title}
-                  style={{
-                    background: "rgba(255,255,255,.05)",
-                    borderRadius: 24,
-                    padding: "28px 24px",
-                    border: "1px solid rgba(255,255,255,.08)",
-                  }}
-                >
-                  {/* Progress dots */}
-                  <div style={{ display: "flex", gap: 6, marginBottom: 20 }}>
-                    {[1, 2, 3, 4].map((dot) => (
-                      <span
-                        key={dot}
-                        style={{
-                          width: 10,
-                          height: 10,
-                          borderRadius: "50%",
-                          background: dot <= step.dots ? "#FE5C02" : "rgba(255,255,255,.2)",
-                          display: "block",
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <p style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 8 }}>
-                    {step.title}
-                  </p>
-                  <p style={{ fontSize: 14, color: "rgba(255,255,255,.55)", lineHeight: 1.5 }}>
-                    {step.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
           </div>
-        </section>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 20 }}>
+            {STEPS.map((step) => (
+              <div key={step.n} style={{ background: "rgba(255,255,255,.05)", borderRadius: 24, padding: "28px 24px", border: "1px solid rgba(255,255,255,.08)" }}>
+                <div style={{ display: "flex", gap: 6, marginBottom: 20 }}>
+                  {[1, 2, 3, 4].map((d) => (
+                    <span key={d} style={{ width: 10, height: 10, borderRadius: "50%", background: d <= step.dots ? "#FE5C02" : "rgba(255,255,255,.18)", display: "block" }} />
+                  ))}
+                </div>
+                <span className="ck-mono" style={{ fontSize: 12, letterSpacing: ".08em", color: "rgba(255,255,255,.45)" }}>{step.n}</span>
+                <p style={{ fontSize: 18, fontWeight: 700, color: "#fff", margin: "8px 0 6px" }}>{step.t}</p>
+                <p style={{ fontSize: 14, color: "rgba(255,255,255,.55)", lineHeight: 1.5, margin: 0 }}>{step.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        {/* FAQ */}
-        <section
-          style={{
-            padding: "clamp(64px, 8vw, 96px) clamp(16px, 5vw, 80px)",
-            maxWidth: "88rem",
-            margin: "0 auto",
-          }}
-          aria-label="Preguntas frecuentes"
-        >
-          <h2
-            style={{
-              fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
-              fontSize: "clamp(40px, 5vw, 72px)",
-              fontWeight: 400,
-              color: "#010E25",
-              lineHeight: 1,
-              marginBottom: 48,
-            }}
-          >
-            Lo que{" "}
-            <em style={{ fontStyle: "italic" }}>siempre</em>{" "}
-            nos preguntan.
-          </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 4, maxWidth: 720 }}>
+      {/* FAQ */}
+      <section className="ck-section">
+        <div className="ck-wrap" style={{ maxWidth: 760 }}>
+          <div className="ck-reveal" style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 48 }}>
+            <span className="ck-eyebrow">FAQ</span>
+            <h2 style={{ fontSize: "clamp(36px, 5vw, 64px)" }}>
+              Lo que <span style={{ color: "#FE5C02" }}>siempre</span> nos preguntan.
+            </h2>
+          </div>
+          <div>
             {FAQS.map((faq) => (
-              <details
-                key={faq.q}
-                style={{
-                  borderBottom: "1.5px solid #EFE3D6",
-                  padding: "0 0 0 0",
-                }}
-              >
-                <summary
-                  style={{
-                    fontSize: 18,
-                    fontWeight: 600,
-                    color: "#010E25",
-                    padding: "20px 0",
-                    cursor: "pointer",
-                    listStyle: "none",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 16,
-                  }}
-                >
+              <details key={faq.q} className="ck-faq">
+                <summary>
                   {faq.q}
-                  <span
-                    style={{
-                      fontSize: 20,
-                      flexShrink: 0,
-                      color: "#5A6178",
-                    }}
-                    aria-hidden
-                  >
-                    +
-                  </span>
+                  <span className="ck-plus" aria-hidden="true">+</span>
                 </summary>
-                <p
-                  style={{
-                    fontSize: 16,
-                    color: "#5A6178",
-                    lineHeight: 1.6,
-                    paddingBottom: 20,
-                    margin: 0,
-                  }}
-                >
-                  {faq.a}
-                </p>
+                <p>{faq.a}</p>
               </details>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* CTA final */}
-        <section
-          style={{
-            padding: "0 16px clamp(64px, 8vw, 96px)",
-          }}
-        >
-          <div
-            style={{
-              background: "#FE5C02",
-              borderRadius: 40,
-              padding: "clamp(48px, 6vw, 80px) clamp(32px, 5vw, 64px)",
-              maxWidth: "88rem",
-              margin: "0 auto",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: 24,
-            }}
-          >
-            <p
-              style={{
-                fontFamily: "var(--font-mk-mono, monospace)",
-                fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "#010E25",
-                opacity: 0.6,
-              }}
-            >
-              ¿NO SABES CUÁL ELEGIR?
-            </p>
-            <h2
-              style={{
-                fontFamily: "var(--font-mk-serif, 'Instrument Serif', serif)",
-                fontSize: "clamp(36px, 5vw, 64px)",
-                fontWeight: 400,
-                color: "#010E25",
-                lineHeight: 1,
-                margin: 0,
-              }}
-            >
-              Te ayudamos a elegir<br />
-              <em style={{ fontStyle: "italic" }}>sin compromiso.</em>
+      {/* CTA */}
+      <section style={{ padding: "0 16px clamp(72px, 9vw, 112px)" }}>
+        <div style={{ background: "#FE5C02", borderRadius: 40, padding: "clamp(48px, 6vw, 72px) clamp(32px, 5vw, 64px)", maxWidth: 1240, margin: "0 auto", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 32 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <span className="ck-eyebrow" style={{ color: "rgba(1,14,37,.55)" }}>¿NO SABES CUÁL ELEGIR?</span>
+            <h2 style={{ fontSize: "clamp(30px, 4vw, 52px)", color: "#010E25" }}>
+              Te ayudamos a elegir,{" "}
+              <span style={{ fontStyle: "italic" }}>sin compromiso.</span>
             </h2>
-            <Link
-              href="/book"
-              style={{
-                background: "#010E25",
-                color: "#fff",
-                borderRadius: 999,
-                padding: "14px 28px",
-                fontSize: 15,
-                fontWeight: 700,
-                textDecoration: "none",
-                display: "inline-block",
-              }}
-            >
-              Agenda una llamada gratis →
-            </Link>
           </div>
-        </section>
-      </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+            <Link href="/audit" className="ck-btn ck-btn-dark">Pide una auditoría gratis →</Link>
+            <a className="ck-btn ck-btn-wa" href={waLink("Hola, tengo preguntas sobre los servicios")} target="_blank" rel="noopener noreferrer">
+              <span className="ck-dot" />Escríbenos por WhatsApp
+            </a>
+          </div>
+        </div>
+      </section>
 
       <CartBar />
-
-      <style>{`
-        @media (max-width: 768px) {
-          .hero-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </MarketingLayout>
   )
 }

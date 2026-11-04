@@ -39,7 +39,6 @@ export function ValueCube({ eyebrow = "04 · Lo que no negociamos" }: { eyebrow?
             </div>
           </div>
           <div className="ck-cube-shadow" aria-hidden="true" style={{ width: 240, height: 28, borderRadius: "50%", background: "radial-gradient(closest-side, rgba(1,14,37,.35), rgba(1,14,37,0))", marginTop: 24 }} />
-          <p className="ck-hand" style={{ fontSize: 24, color: "#C94400", transform: "rotate(-2deg)" }}>pasa el cursor para pausarlo</p>
         </div>
       </div>
     </section>

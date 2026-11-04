@@ -64,7 +64,7 @@ export function Navbar({ active }: NavbarProps) {
             <CartIcon />
             {count > 0 && <span className="ck-badge">{count}</span>}
           </Link>
-          <a className="ck-btn ck-btn-dark" href={waLink("Hola, quiero hablar con ustedes")} target="_blank" rel="noopener noreferrer" style={{ minHeight: 46, padding: "0 20px" }}>
+          <a className="ck-btn ck-btn-dark ck-nav-cta" href={waLink("Hola, quiero hablar con ustedes")} target="_blank" rel="noopener noreferrer" style={{ minHeight: 46, padding: "0 20px" }}>
             Hablemos →
           </a>
           <button
@@ -90,7 +90,9 @@ export function Navbar({ active }: NavbarProps) {
             <Link href="/pricing" className="ck-btn ck-btn-primary" style={{ marginTop: 8 }} onClick={() => setOpen(false)}>
               Ver precios y paquetes ↗
             </Link>
-            <span className="ck-hand" style={{ fontSize: 22, color: "#C94400", textAlign: "center" }}>te respondemos nosotros</span>
+            <a className="ck-btn ck-btn-wa" href={waLink("Hola, quiero hablar con ustedes")} target="_blank" rel="noopener noreferrer">
+              <span className="ck-dot" />Hablemos por WhatsApp
+            </a>
           </div>
         )}
       </nav>

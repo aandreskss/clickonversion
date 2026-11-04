@@ -21,10 +21,12 @@ export function HeroScene() {
 
   return (
     <div
+      className="ck-scene-wrap"
       onMouseMove={onMove}
       onMouseLeave={() => setT(REST)}
       style={{ flex: "1 1 440px", minWidth: 0, display: "flex", justifyContent: "center", perspective: 1400, padding: "24px 0" }}
     >
+      <div className="ck-scene-scaler">
       <div className="ck-scene" style={{ transform: `rotateX(${t.rx}deg) rotateY(${t.ry}deg)` }}>
 
         {/* Tarjeta detrás — LA MÁQUINA */}
@@ -83,6 +85,7 @@ export function HeroScene() {
           </div>
         </div>
 
+      </div>
       </div>
     </div>
   )

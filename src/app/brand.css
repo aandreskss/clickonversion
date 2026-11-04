@@ -104,11 +104,11 @@
 .ck-scene { position: relative; width: min(540px, 100%); aspect-ratio: 1 / 1; transform-style: preserve-3d; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
 .ck-layer { position: absolute; transform-style: preserve-3d; }
 @media (max-width: 700px) {
-  .ck-scene { transform: none !important; }
-  .ck-layer { transform: none !important; animation: none !important; }
-  .ck-layer-float { display: none !important; }
-  .ck-layer-video { position: relative !important; left: auto !important; top: auto !important; width: 100% !important; height: auto !important; aspect-ratio: 3/4; border-radius: 24px; overflow: hidden; }
-  .ck-layer-video > div { border-radius: 20px !important; height: 100% !important; }
+  .ck-scene-scaler {
+    transform: scale(0.72);
+    transform-origin: center top;
+    margin-bottom: -22%;
+  }
 }
 .ck-bob { animation: ck-bob 6s ease-in-out infinite; }
 .ck-bob-2 { animation: ck-bob 7.5s ease-in-out -2s infinite; }

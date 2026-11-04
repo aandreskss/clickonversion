@@ -65,7 +65,7 @@
   .ck-navlinks { display: none; }
   .ck-navstatus { display: none !important; }
   .ck-burger { display: inline-flex; }
-  .ck-nav-cta { display: none; }
+  .ck-nav-cta { display: none !important; }
 }
 .ck-mobile-menu { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px 14px; border-top: 1px solid rgba(1,14,37,.08); margin-top: 6px; }
 .ck-mobile-menu a.ck-navlink { font-size: 17px; padding: 11px 14px; }

@@ -108,6 +108,8 @@
   .ck-float-years { padding: 11px 14px !important; }
   .ck-float-years span:first-child { font-size: 34px !important; }
   .ck-float-chat { padding: 10px 13px !important; font-size: 13px !important; }
+  .ck-plan-hot { transform: none; }
+  .ck-plan-hot:hover { transform: none; }
 }
 .ck-bob { animation: ck-bob 6s ease-in-out infinite; }
 .ck-bob-2 { animation: ck-bob 7.5s ease-in-out -2s infinite; }

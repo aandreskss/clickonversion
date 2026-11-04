@@ -104,10 +104,8 @@
 .ck-scene { position: relative; width: min(540px, 100%); aspect-ratio: 1 / 1; transform-style: preserve-3d; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
 .ck-layer { position: absolute; transform-style: preserve-3d; }
 @media (max-width: 700px) {
-  .ck-scene-scaler {
-    transform: scale(0.72);
-    transform-origin: center top;
-    margin-bottom: -22%;
+  .ck-scene-wrap {
+    zoom: 0.72;
   }
 }
 .ck-bob { animation: ck-bob 6s ease-in-out infinite; }

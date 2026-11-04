@@ -9,9 +9,8 @@ import type { CartItem } from "@/types/catalog"
 type Svc = (typeof SERVICES)[number]
 
 const fmt = (n: number) => "$" + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-const byId = (id: string) => SERVICES.find((s) => s.id === id) as Svc
 
-/** Descuento por volumen (paquetes y "arma tu paquete"). */
+/** Descuento por volumen (usado solo en "arma tu paquete"). */
 export function volumeDiscount(n: number) {
   return n >= 5 ? 0.15 : n >= 3 ? 0.1 : 0
 }
@@ -22,34 +21,82 @@ function totals(list: Svc[], disc: number) {
   return { once, monthly, onceD: Math.round(once * (1 - disc)), monthlyD: Math.round(monthly * (1 - disc)) }
 }
 
-/** Convierte un conjunto de servicios en líneas de carrito (pago único + mensual). */
-function bundleLines(id: string, name: string, onceD: number, monthlyD: number): CartItem[] {
+/** Convierte precios en líneas de carrito. */
+function bundleLines(id: string, name: string, once: number, monthly: number): CartItem[] {
   const lines: CartItem[] = []
-  if (onceD > 0) lines.push({ key: `${id}:${id}-unico`, serviceId: id, priceId: `${id}-unico`, quantity: 1, displayName: `${name} · pago único`, displayPrice: onceD, priceType: "ONE_TIME", billingPeriod: "one_time", currency: "USD" })
-  if (monthlyD > 0) lines.push({ key: `${id}:${id}-mensual`, serviceId: id, priceId: `${id}-mensual`, quantity: 1, displayName: `${name} · mensual`, displayPrice: monthlyD, priceType: "RECURRING", billingPeriod: "monthly", currency: "USD" })
+  if (once > 0) lines.push({ key: `${id}:${id}-unico`, serviceId: id, priceId: `${id}-unico`, quantity: 1, displayName: `${name} · pago único`, displayPrice: once, priceType: "ONE_TIME", billingPeriod: "one_time", currency: "USD" })
+  if (monthly > 0) lines.push({ key: `${id}:${id}-mensual`, serviceId: id, priceId: `${id}-mensual`, quantity: 1, displayName: `${name} · mensual`, displayPrice: monthly, priceType: "RECURRING", billingPeriod: "monthly", currency: "USD" })
   return lines
 }
 
-// Paquetes armados con los servicios y precios reales del catálogo (pricing-grid).
-// Edita los ids para cambiar qué incluye cada uno.
 const PACKAGES = [
-  { id: "pkg-arranque", tag: "[ARRANQUE]", tagBg: "#D6EBFF", name: "Arranque", pitch: "Para empezar a vender con una base bien hecha y bien medida.", items: ["seo-audit", "seo-local", "waba", "meta-tech"], hot: false },
-  { id: "pkg-crecimiento", tag: "[CRECIMIENTO]", tagBg: "#FFDCC7", name: "Crecimiento", pitch: "Para llenar tu WhatsApp de conversaciones con clientes cada semana.", items: ["seo-audit", "seo-mensual", "meta-ads", "wa-auto"], hot: true },
-  { id: "pkg-escala", tag: "[ESCALA]", tagBg: "#E4DEFF", name: "Escala", pitch: "Para crecer en varios canales con un agente de IA trabajando 24/7.", items: ["seo-mensual", "google-ads", "meta-ads", "ai-agent", "crm"], hot: false },
+  {
+    id: "pkg-arranque",
+    tag: "[ARRANQUE]",
+    tagBg: "#D6EBFF",
+    name: "Arranque",
+    pitch: "Para empezar a vender con una base bien hecha y bien medida.",
+    monthly: 0,
+    once: 390,
+    setupLabel: "Sin mensualidad · tuyo para siempre",
+    features: [
+      "Landing optimizada para conversión",
+      "Píxel de Meta + API de conversiones",
+      "Conversiones de Google Ads",
+      "Google Business optimizado",
+      "WhatsApp conectado a tu web",
+    ],
+    hot: false,
+    note: null,
+  },
+  {
+    id: "pkg-crecimiento",
+    tag: "[CRECIMIENTO]",
+    tagBg: "#FFDCC7",
+    name: "Crecimiento",
+    pitch: "Para llenar tu WhatsApp de conversaciones con clientes cada semana.",
+    monthly: 590,
+    once: 150,
+    setupLabel: "Configuración inicial: $150 (pago único)",
+    features: [
+      "Gestión de Meta Ads",
+      "SEO local + Google Business",
+      "Medición en Meta / Google / TikTok",
+      "WhatsApp Business + CRM",
+      "Reporte semanal en lenguaje humano",
+    ],
+    hot: true,
+    note: "↳ con este empieza la mayoría",
+  },
+  {
+    id: "pkg-escala",
+    tag: "[ESCALA]",
+    tagBg: "#E4DEFF",
+    name: "Escala",
+    pitch: "Para crecer en varios canales con un agente de IA trabajando 24/7.",
+    monthly: 1190,
+    once: 350,
+    setupLabel: "Configuración inicial: $350 (pago único)",
+    features: [
+      "Todo lo de Crecimiento",
+      "Gestión de Google Ads",
+      "Agente IA para WhatsApp",
+      "SEO técnico + 2 artículos al mes",
+      "Reunión mensual de estrategia",
+    ],
+    hot: false,
+    note: null,
+  },
 ]
 
 export function PricingPackages() {
   const { addItem, hasItem } = useCart()
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(330px, 100%), 1fr))", gap: 24, alignItems: "start", perspective: 1400 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))", gap: 32, alignItems: "start", perspective: 1400 }}>
       {PACKAGES.map((p) => {
-        const list = p.items.map(byId).filter(Boolean)
-        const disc = volumeDiscount(list.length)
-        const t = totals(list, disc)
-        const lines = bundleLines(p.id, `Paquete ${p.name}`, t.onceD, t.monthlyD)
+        const lines = bundleLines(p.id, `Paquete ${p.name}`, p.once, p.monthly)
         const inCart = lines.length > 0 && lines.every((l) => hasItem(l.key))
-        const saving = t.once + t.monthly - (t.onceD + t.monthlyD)
         const add = () => lines.forEach((l) => { if (!hasItem(l.key)) addItem(l) })
         const dark = p.hot
         return (
@@ -62,11 +109,10 @@ export function PricingPackages() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                <span style={{ fontSize: 56, fontWeight: 700, letterSpacing: "-0.05em", lineHeight: 1 }}>{fmt(t.monthlyD || t.onceD)}</span>
-                <span className="ck-mono" style={{ fontSize: 13, color: dark ? "rgba(255,255,255,.7)" : "#5A6178" }}>{t.monthlyD ? "/mes" : "pago único"}</span>
+                <span style={{ fontSize: 56, fontWeight: 700, letterSpacing: "-0.05em", lineHeight: 1 }}>{fmt(p.monthly || p.once)}</span>
+                <span className="ck-mono" style={{ fontSize: 13, color: dark ? "rgba(255,255,255,.7)" : "#5A6178" }}>{p.monthly ? "/mes" : "pago único"}</span>
               </div>
-              {t.monthlyD > 0 && t.onceD > 0 && <span style={{ fontSize: 14, color: dark ? "rgba(255,255,255,.7)" : "#5A6178" }}>+ {fmt(t.onceD)} de pago único al empezar</span>}
-              {saving > 0 && <span className="ck-mono" style={{ fontSize: 12, color: dark ? "#FFDCC7" : "#C94400" }}>AHORRAS {fmt(saving)} VS. POR SEPARADO (−{Math.round(disc * 100)}%)</span>}
+              <span style={{ fontSize: 14, color: dark ? "rgba(255,255,255,.65)" : "#5A6178" }}>{p.setupLabel}</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <button type="button" className={`ck-btn ${inCart ? "ck-btn-added" : p.hot ? "ck-btn-primary on-dark" : "ck-btn-dark"}`} onClick={add}>{inCart ? "En el carrito ✓" : "Agregar al carrito"}</button>
@@ -74,10 +120,9 @@ export function PricingPackages() {
             </div>
             <div style={{ height: 1.5, background: dark ? "rgba(255,255,255,.14)" : "rgba(1,14,37,.1)" }} />
             <ul className={`ck-check${dark ? " on-dark" : ""}`} style={{ fontSize: 16 }}>
-              {list.map((s) => <li key={s.id}>{s.name}</li>)}
-              <li>Reporte en lenguaje humano</li>
+              {p.features.map((f) => <li key={f}>{f}</li>)}
             </ul>
-            {p.hot && <span className="ck-hand" style={{ fontSize: 24, color: "#FFDCC7", transform: "rotate(-2deg)" }}>↳ con este empieza la mayoría</span>}
+            {p.note && <span className="ck-hand" style={{ fontSize: 24, color: dark ? "#FFDCC7" : "#FE5C02", transform: "rotate(-2deg)" }}>{p.note}</span>}
           </article>
         )
       })}

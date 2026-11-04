@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { LogoWordmark } from "@/components/ui/logo-wordmark"
 import { useCart } from "@/components/shop/cart-provider"
@@ -29,6 +29,54 @@ function CartIcon() {
   )
 }
 
+/** "Apps" lleva a /apps; al pasar el cursor (o con el teclado) despliega SyncLead. */
+function AppsMenu({ active }: { active: boolean }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const close = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false) }
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false) }
+    document.addEventListener("mousedown", close)
+    document.addEventListener("keydown", esc)
+    return () => { document.removeEventListener("mousedown", close); document.removeEventListener("keydown", esc) }
+  }, [open])
+
+  return (
+    <div ref={ref} className="ck-dd" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <Link
+        href="/apps"
+        className="ck-navlink ck-dd-btn"
+        aria-current={active ? "page" : undefined}
+        aria-expanded={open}
+        aria-haspopup="true"
+        onFocus={() => setOpen(true)}
+      >
+        Apps
+        <span className="ck-dd-new">SYNCLEAD</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" style={{ transition: "transform .2s", transform: open ? "rotate(180deg)" : "none" }}><path d="M6 9l6 6 6-6" /></svg>
+      </Link>
+      {open && (
+        <div className="ck-dd-panel">
+          <Link href="/apps/synclead" className="ck-dd-item" onClick={() => setOpen(false)}>
+            <span className="ck-dd-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width={22} height={22} fill="none" stroke="#010E25" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.5" /><rect x="10" y="4" width="5" height="10" rx="1.5" /><rect x="17" y="4" width="4" height="13" rx="1.5" /></svg>
+            </span>
+            <span style={{ display: "flex", flexDirection: "column", gap: 2, lineHeight: 1.3 }}>
+              <span style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 600, fontSize: 16 }}>SyncLead <span className="ck-mono" style={{ fontSize: 10.5, background: "#FE5C02", borderRadius: 6, padding: "2px 6px" }}>CRM</span></span>
+              <span style={{ fontSize: 14, color: "#5A6178" }}>Tus leads de Meta Ads, con WhatsApp e IA</span>
+            </span>
+          </Link>
+          <Link href="/apps/synclead#planes" className="ck-dd-item ck-dd-sub" onClick={() => setOpen(false)}>Planes y precios de SyncLead <span className="ck-arrow">→</span></Link>
+          <div style={{ height: 1, background: "rgba(1,14,37,.1)", margin: "4px 0" }} />
+          <Link href="/apps" className="ck-dd-item ck-dd-sub" onClick={() => setOpen(false)}>Ver todas las apps <span className="ck-arrow">→</span></Link>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function Navbar({ active }: NavbarProps) {
   const [open, setOpen] = useState(false)
   const { count } = useCart()
@@ -49,11 +97,15 @@ export function Navbar({ active }: NavbarProps) {
         </Link>
 
         <div className="ck-navlinks">
-          {NAV_LINKS.map((l) => (
-            <Link key={l.key} href={l.href} className="ck-navlink" aria-current={active === l.key ? "page" : undefined}>
-              {l.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((l) =>
+            l.key === "apps" ? (
+              <AppsMenu key={l.key} active={active === "apps"} />
+            ) : (
+              <Link key={l.key} href={l.href} className="ck-navlink" aria-current={active === l.key ? "page" : undefined}>
+                {l.label}
+              </Link>
+            )
+          )}
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -83,9 +135,16 @@ export function Navbar({ active }: NavbarProps) {
         {open && (
           <div className="ck-mobile-menu" style={{ width: "100%" }}>
             {NAV_LINKS.map((l) => (
-              <Link key={l.key} href={l.href} className="ck-navlink" aria-current={active === l.key ? "page" : undefined} onClick={() => setOpen(false)}>
-                {l.label}
-              </Link>
+              <div key={l.key} style={{ display: "contents" }}>
+                <Link href={l.href} className="ck-navlink" aria-current={active === l.key ? "page" : undefined} onClick={() => setOpen(false)}>
+                  {l.label}
+                </Link>
+                {l.key === "apps" && (
+                  <Link href="/apps/synclead" className="ck-navlink" style={{ fontSize: 18, paddingLeft: 32, display: "flex", alignItems: "center", gap: 10 }} onClick={() => setOpen(false)}>
+                    ↳ SyncLead <span className="ck-mono" style={{ fontSize: 11, background: "#FE5C02", borderRadius: 6, padding: "2px 7px" }}>CRM</span>
+                  </Link>
+                )}
+              </div>
             ))}
             <Link href="/pricing" className="ck-btn ck-btn-primary" style={{ marginTop: 8 }} onClick={() => setOpen(false)}>
               Ver precios y paquetes ↗

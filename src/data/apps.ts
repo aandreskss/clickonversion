@@ -55,17 +55,17 @@ export const APPS: App[] = [
   {
     slug: "synclead",
     name: "SyncLead",
-    tagline: "Your Meta Ads leads, in your pipeline — automatically.",
+    tagline: "Tus leads de Meta Ads, en tu pipeline. Solos.",
     description:
-      "SyncLead centralizes leads from Meta Ads, tracks your pipeline with a visual kanban, and lets your team respond via WhatsApp — all in one place.",
+      "SyncLead reúne los leads de tus anuncios de Meta, los ordena en un pipeline visual y deja que tu equipo o un agente de IA responda por WhatsApp. Todo en un solo lugar.",
     longDescription:
       "SyncLead was built to solve a specific problem: leads from Meta Ads disappear into spreadsheets, slow down your team, and never get proper follow-up. We built SyncLead to fix that — connecting Meta directly to your sales pipeline with real-time sync, WhatsApp notifications, and AI agents that respond before your competitors do.",
-    status: "beta",
+    status: "live",
     accent: "#7885FF",
     accentMuted: "rgba(120,133,255,0.1)",
     accentBorder: "rgba(120,133,255,0.25)",
     icon: "synclead",
-    category: "CRM & Lead Management",
+    category: "CRM y gestión de leads",
     features: [
       {
         title: "Real-time lead sync from Meta Ads",

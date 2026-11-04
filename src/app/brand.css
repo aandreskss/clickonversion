@@ -104,9 +104,10 @@
 .ck-scene { position: relative; width: min(540px, 100%); aspect-ratio: 1 / 1; transform-style: preserve-3d; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
 .ck-layer { position: absolute; transform-style: preserve-3d; }
 @media (max-width: 700px) {
-  .ck-scene-wrap {
-    zoom: 0.72;
-  }
+  .ck-scene-wrap { zoom: 0.72; }
+  .ck-float-years { padding: 11px 14px !important; }
+  .ck-float-years span:first-child { font-size: 34px !important; }
+  .ck-float-chat { padding: 10px 13px !important; font-size: 13px !important; }
 }
 .ck-bob { animation: ck-bob 6s ease-in-out infinite; }
 .ck-bob-2 { animation: ck-bob 7.5s ease-in-out -2s infinite; }

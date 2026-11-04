@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { LogoSymbol } from "@/components/ui/logo-wordmark"
 import { waLink } from "@/lib/whatsapp"
 
@@ -11,10 +11,22 @@ export interface WhatsAppWidgetProps {
 
 const DEFAULT_MESSAGE = "¡Hola! Somos Arnaldo, Abisai y Yoli. ¿Te ayudamos a elegir por dónde empezar?"
 const DEFAULT_REPLIES = ["Quiero más clientes", "Quiero ver precios", "Tengo una duda"]
+const DISMISSED_KEY = "ck_wa_dismissed"
 
 /** Botón flotante de WhatsApp con un chat que "escribe" y respuestas rápidas. */
 export function WhatsAppWidget({ message = DEFAULT_MESSAGE, replies = DEFAULT_REPLIES }: WhatsAppWidgetProps) {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (localStorage.getItem(DISMISSED_KEY)) return
+    const t = setTimeout(() => setOpen(true), 5000)
+    return () => clearTimeout(t)
+  }, [])
+
+  function dismiss() {
+    setOpen(false)
+    localStorage.setItem(DISMISSED_KEY, "1")
+  }
 
   return (
     <div className="ck-wa-wrap">
@@ -30,7 +42,7 @@ export function WhatsAppWidget({ message = DEFAULT_MESSAGE, replies = DEFAULT_RE
                 <span className="ck-dot" style={{ width: 7, height: 7 }} />en línea · te responde una persona
               </span>
             </div>
-            <button className="ck-wa-x" type="button" aria-label="Cerrar mensaje" onClick={() => setOpen(false)}>
+            <button className="ck-wa-x" type="button" aria-label="Cerrar mensaje" onClick={dismiss}>
               <svg aria-hidden="true" viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
             </button>
           </div>

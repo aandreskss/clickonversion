@@ -70,10 +70,10 @@ export function HeroScene() {
           <div className="ck-bob"><span className="ck-tag" style={{ background: "#E4DEFF", fontSize: 15, padding: "8px 12px" }}>[IA]</span></div>
         </div>
         <div className="ck-layer ck-layer-float" style={{ right: "0%", bottom: "15%", width: "56%", transform: "translateZ(120px)" }}>
-          <div className="ck-bob-2" style={{ background: "#fff", border: "1.5px solid #010E25", borderRadius: "20px 20px 20px 6px", padding: "14px 18px", fontSize: 16, fontWeight: 500, boxShadow: "0 24px 40px -24px rgba(1,14,37,.5)" }}>¡Hola! Cuéntanos qué vendes y te decimos por dónde empezaríamos.</div>
+          <div className="ck-bob-2 ck-float-chat" style={{ background: "#fff", border: "1.5px solid #010E25", borderRadius: "20px 20px 20px 6px", padding: "14px 18px", fontSize: 16, fontWeight: 500, boxShadow: "0 24px 40px -24px rgba(1,14,37,.5)" }}>¡Hola! Cuéntanos qué vendes y te decimos por dónde empezaríamos.</div>
         </div>
         <div className="ck-layer ck-layer-float" style={{ left: "-1%", bottom: "4%", transform: "translateZ(150px)" }}>
-          <div className="ck-bob" style={{ background: "#fff", borderRadius: 22, padding: "18px 22px", boxShadow: "0 30px 50px -26px rgba(1,14,37,.55)", display: "flex", flexDirection: "column", gap: 2 }}>
+          <div className="ck-bob ck-float-years" style={{ background: "#fff", borderRadius: 22, padding: "18px 22px", boxShadow: "0 30px 50px -26px rgba(1,14,37,.55)", display: "flex", flexDirection: "column", gap: 2 }}>
             <span style={{ fontSize: 52, fontWeight: 700, letterSpacing: "-0.05em", lineHeight: 1 }}>8<span style={{ color: "#FE5C02" }}>+</span></span>
             <span className="ck-mono" style={{ fontSize: 11.5, letterSpacing: ".08em", color: "#5A6178" }}>AÑOS · MARKETING DIGITAL</span>
           </div>

@@ -2,15 +2,16 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { MarketingLayout } from "@/components/marketing/marketing-layout"
 import { ProjectsGrid } from "@/components/brand/projects-grid"
+import { ConsultingCases } from "@/components/brand/consulting-cases"
 import { waLink } from "@/lib/whatsapp"
 
 export const metadata: Metadata = {
-  title: "Proyectos — lo que hemos construido y medido",
-  description: "Webs, campañas, agentes de IA y configuraciones técnicas para negocios reales. Cada proyecto con su problema, lo que hicimos y lo que cambió.",
+  title: "Proyectos — portafolio web y casos de Meta y WhatsApp API",
+  description: "Tiendas en línea, sitios web y plataformas que hicimos para negocios en Venezuela y Colombia, y casos de Meta y WhatsApp Business API que resolvimos.",
   alternates: { canonical: "https://www.clickonversion.com/projects" },
   openGraph: {
     title: "Proyectos | ClicKonversion",
-    description: "Casos reales con resultados reales. Sin métricas de vanidad.",
+    description: "Sitios, tiendas y plataformas que hemos hecho, con capturas y el detalle de cada proyecto.",
     url: "https://www.clickonversion.com/projects",
     siteName: "ClicKonversion",
     locale: "es_419",
@@ -24,8 +25,9 @@ export default function ProjectsPage() {
       <section className="ck-dots" style={{ padding: "56px 0 48px" }}>
         <div className="ck-wrap" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <nav aria-label="Migas de pan"><ol className="ck-crumbs"><li><Link href="/">Inicio</Link></li><li aria-hidden="true">/</li><li aria-current="page" style={{ color: "#010E25", fontWeight: 700 }}>Proyectos</li></ol></nav>
-          <h1 style={{ fontSize: "clamp(46px, 6.4vw, 96px)", lineHeight: 0.98, maxWidth: 1000 }}>Lo que hemos <span style={{ color: "#FE5C02" }}>construido y medido</span>.</h1>
-          <p style={{ fontSize: "clamp(18px, 1.6vw, 21px)", color: "#3A4158", maxWidth: 700 }}>Webs, campañas, agentes de IA y configuraciones técnicas para negocios reales. Cada proyecto con su problema, lo que hicimos y lo que cambió.</p>
+          <h1 style={{ fontSize: "clamp(46px, 6.4vw, 96px)", lineHeight: 0.98, maxWidth: 1000 }}>Lo que hemos <span style={{ color: "#FE5C02" }}>construido</span>.</h1>
+          <p style={{ fontSize: "clamp(18px, 1.6vw, 21px)", color: "#3A4158", maxWidth: 720 }}>Tiendas en línea, sitios web y plataformas para negocios en Venezuela y Colombia. Abre cada proyecto para ver capturas, el reto y lo que hicimos. Más abajo, los casos de Meta y WhatsApp Business API que hemos resuelto.</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}><a className="ck-btn ck-btn-primary" href="#portafolio">Ver portafolio</a><a className="ck-btn ck-btn-line" href="#consultoria">Casos de Meta y WhatsApp</a></div>
         </div>
       </section>
 
@@ -62,8 +64,12 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      <section style={{ paddingBottom: "clamp(80px, 10vw, 140px)" }}>
+      <section id="portafolio" style={{ paddingBottom: "clamp(72px, 9vw, 120px)", scrollMarginTop: 100 }}>
         <div className="ck-wrap"><ProjectsGrid /></div>
+      </section>
+
+      <section id="consultoria" style={{ paddingBottom: "clamp(80px, 10vw, 140px)", scrollMarginTop: 100 }}>
+        <div className="ck-wrap"><ConsultingCases /></div>
       </section>
 
       <section style={{ padding: "0 16px clamp(48px, 6vw, 80px)" }}>

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 import { APPS } from "@/data/apps"
 import { POSTS } from "@/data/blog"
+import { PROJECTS } from "@/data/portfolio"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.clickonversion.com"
 
@@ -22,7 +23,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/catalog`,  lastModified: new Date(), changeFrequency: "weekly",  priority: 0.7 },
     { url: `${siteUrl}/services`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${siteUrl}/pricing`,  lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${siteUrl}/projects`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${siteUrl}/projects`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    ...PROJECTS.map((p) => ({ url: `${siteUrl}/projects/${p.slug}`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.6 })),
     { url: `${siteUrl}/about`,    lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${siteUrl}/blog`,     lastModified: new Date(), changeFrequency: "weekly",  priority: 0.7 },
     ...POSTS.filter((p) => p.published).map((p) => ({ url: `${siteUrl}/blog/${p.slug}`, lastModified: new Date(p.date), changeFrequency: "monthly" as const, priority: 0.6 })),

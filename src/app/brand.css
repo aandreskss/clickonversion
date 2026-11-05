@@ -293,3 +293,33 @@ a.ck-post:hover .ck-cover-g { transform: rotate(-6deg) scale(1.08); }
 
 .ck-dd-btn { position: relative; }
 .ck-dd-new { font-family: var(--ck-mono); font-size: 10px; font-weight: 700; letter-spacing: .04em; background: var(--ck-orange); color: var(--ck-navy); border: 1px solid var(--ck-navy); border-radius: 6px; padding: 1px 5px; line-height: 1.4; }
+
+/* ---------- Portafolio ---------- */
+.ck-pf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(460px, 100%), 1fr)); gap: 28px; }
+.ck-pf-card { display: flex; flex-direction: column; background: #fff; border: 1.5px solid var(--ck-navy); border-radius: 30px; overflow: hidden; color: var(--ck-navy); text-decoration: none; }
+.ck-pf-card:hover { color: var(--ck-navy); }
+.ck-pf-media { position: relative; aspect-ratio: 16 / 11; padding: 28px 28px 0; overflow: hidden; border-bottom: 1.5px solid var(--ck-navy); transform-style: preserve-3d; }
+.ck-pf-browser { position: relative; height: 100%; border: 1.5px solid var(--ck-navy); border-bottom: 0; border-radius: 14px 14px 0 0; overflow: hidden; background: #fff; box-shadow: 0 30px 50px -36px rgba(1,14,37,.55); }
+.ck-pf-bar { display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-bottom: 1.5px solid var(--ck-navy); background: var(--ck-cream); }
+.ck-pf-bar i { flex: none; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--ck-navy); }
+.ck-pf-bar i:first-child { background: var(--ck-orange); }
+.ck-pf-bar span { margin-left: 8px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--ck-mono); font-size: 11px; color: var(--ck-slate); }
+.ck-pf-shot { position: relative; height: calc(100% - 28px); background: #fff; }
+.ck-pf-phone { position: absolute; right: 22px; bottom: -40px; width: 23%; aspect-ratio: 390 / 844; border: 1.5px solid var(--ck-navy); border-radius: 18px; overflow: hidden; background: #fff; box-shadow: 0 24px 40px -18px rgba(1,14,37,.55); transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+.ck-pf-card:hover .ck-pf-phone { transform: translateY(-18px) translateZ(44px) rotate(-3deg); }
+.ck-pf-hero { position: relative; border: 1.5px solid var(--ck-navy); border-radius: 36px; padding: clamp(20px, 4vw, 56px) clamp(20px, 4vw, 56px) 0; overflow: hidden; perspective: 1600px; }
+.ck-pf-hero .ck-pf-stage { position: relative; aspect-ratio: 16 / 10; transform: rotateX(6deg); transform-origin: bottom center; }
+.ck-pf-hero .ck-pf-bar { height: 34px; }
+.ck-pf-hero .ck-pf-shot { height: calc(100% - 34px); }
+.ck-pf-hero .ck-pf-phone { width: 20%; right: 4%; bottom: 8%; border-radius: 26px; border-width: 2px; transform: rotate(-4deg); }
+.ck-pf-cases { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr)); gap: 20px; }
+.ck-pf-case { background: #fff; border: 1.5px solid var(--ck-navy); border-radius: 26px; padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+.ck-pf-step { display: grid; grid-template-columns: 104px 1fr; gap: 12px; font-size: 15.5px; line-height: 1.5; color: var(--ck-body); }
+.ck-pf-step > span:first-child { font-family: var(--ck-mono); font-size: 11.5px; padding-top: 3px; color: var(--ck-slate); }
+@media (max-width: 560px) {
+  .ck-pf-media { padding: 18px 18px 0; }
+  .ck-pf-step { grid-template-columns: 1fr; gap: 2px; }
+  .ck-pf-hero .ck-pf-stage { aspect-ratio: 4 / 3; transform: none; }
+  .ck-pf-hero .ck-pf-phone { width: 30%; }
+}
+@media (prefers-reduced-motion: reduce) { .ck-pf-phone, .ck-pf-card:hover .ck-pf-phone { transition: none; transform: none; } }

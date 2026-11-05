@@ -6,6 +6,8 @@ import { MarketingLayout } from "@/components/marketing/marketing-layout"
 import { PROJECTS, getProject } from "@/data/portfolio"
 import { CATEGORY_LABEL, ProjectMedia, StatusTag, hostOf } from "@/components/brand/portfolio-media"
 import { waLink } from "@/lib/whatsapp"
+import { getGallery } from "@/data/portfolio-gallery"
+import { ProjectGallery } from "@/components/brand/project-gallery"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.clickonversion.com"
 
@@ -111,6 +113,10 @@ export default async function ProjectPage({ params }: Props) {
         <div className="ck-pf-hero" style={{ maxWidth: 1240, margin: "0 auto", background: p.cover.bg }}>
           <div className="ck-pf-stage"><ProjectMedia p={p} priority size="hero" /></div>
         </div>
+      </section>
+
+      <section style={{ paddingBottom: "clamp(64px, 8vw, 112px)" }}>
+        <div className="ck-wrap"><ProjectGallery shots={getGallery(p.slug)} name={p.name} /></div>
       </section>
 
       <section style={{ paddingBottom: "clamp(64px, 8vw, 112px)" }}>

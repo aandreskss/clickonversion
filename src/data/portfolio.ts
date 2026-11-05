@@ -1,5 +1,5 @@
 // Portafolio de proyectos de ClicKonversion.
-// Capturas en /public/portfolio/<slug>-desktop.webp y <slug>-mobile.webp (escritorio 1440×900, celular 390×844 @2x).
+// Capturas en /public/portfolio/<slug>/ (portada: d1-hero y m1-hero). La galería completa está en portfolio-gallery.ts.
 // Si un proyecto no tiene capturas todavía, deja `shots: null` y se muestra una portada de marca.
 
 export type ProjectCategory = "web" | "ecommerce" | "plataforma"
@@ -45,7 +45,7 @@ export const PROJECTS: PortfolioProject[] = [
     deliverables: ["Tienda en línea", "Catálogo por categorías", "Checkout con pagos locales", "Plan de integración con Odoo"],
     stack: ["Next.js", "TypeScript", "PostgreSQL (Neon)", "Drizzle", "Vercel"],
     url: "https://www.savayavzla.com",
-    shots: { desktop: "/portfolio/savaya-desktop.webp", mobile: "/portfolio/savaya-mobile.webp" },
+    shots: { desktop: "/portfolio/savaya/d1-hero.webp", mobile: "/portfolio/savaya/m1-hero.webp" },
     cover: { bg: "#0A0A0A", fg: "#F7F5F0", accent: "#C9A227" },
   },
   {
@@ -66,7 +66,7 @@ export const PROJECTS: PortfolioProject[] = [
     deliverables: ["Diseño del sitio", "Versión preliminar en línea", "SEO local"],
     stack: ["Diseño web", "Netlify"],
     url: "https://losbucaros.netlify.app",
-    shots: { desktop: "/portfolio/hacienda-los-bucaros-desktop.webp", mobile: "/portfolio/hacienda-los-bucaros-mobile.webp" },
+    shots: { desktop: "/portfolio/hacienda-los-bucaros/d1-hero.webp", mobile: "/portfolio/hacienda-los-bucaros/m1-hero.webp" },
     cover: { bg: "#E8F1E4", fg: "#2F3B2A", accent: "#E9A6A6" },
   },
   {
@@ -87,7 +87,7 @@ export const PROJECTS: PortfolioProject[] = [
     deliverables: ["Propuestas de rediseño", "Prototipos en línea"],
     stack: ["HTML / Next.js", "Netlify"],
     url: "https://cheery-croquembouche-a72d65.netlify.app/version-a/?escritorio",
-    shots: { desktop: "/portfolio/dr-follicle-solutions-desktop.webp", mobile: "/portfolio/dr-follicle-solutions-mobile.webp" },
+    shots: { desktop: "/portfolio/dr-follicle-solutions/d1-hero.webp", mobile: "/portfolio/dr-follicle-solutions/m1-hero.webp" },
     cover: { bg: "#0E2A3B", fg: "#FFFFFF", accent: "#6FC3D9" },
   },
   {
@@ -107,7 +107,7 @@ export const PROJECTS: PortfolioProject[] = [
     deliverables: ["Propuesta técnica del MVP", "Plataforma SCORE (MVP)", "Web de lanzamiento · versiones A y B"],
     stack: ["Next.js", "TypeScript", "Netlify"],
     url: "https://earnest-kitsune-a6441d.netlify.app/version-a/",
-    shots: { desktop: "/portfolio/score-music-finance-pro-desktop.webp", mobile: "/portfolio/score-music-finance-pro-mobile.webp" },
+    shots: { desktop: "/portfolio/score-music-finance-pro/d1-hero.webp", mobile: "/portfolio/score-music-finance-pro/m1-hero.webp" },
     cover: { bg: "#151033", fg: "#FFFFFF", accent: "#B89CFF" },
   },
   {
@@ -129,7 +129,7 @@ export const PROJECTS: PortfolioProject[] = [
     deliverables: ["Catálogo en línea", "Panel de administración", "Integración con WhatsApp", "Guía de lanzamiento"],
     stack: ["Next.js", "TypeScript", "Supabase", "Vercel", "Vitest", "Playwright"],
     url: "https://zoecatalogo.vercel.app",
-    shots: { desktop: "/portfolio/zoe-catalogo-desktop.webp", mobile: "/portfolio/zoe-catalogo-mobile.webp" },
+    shots: { desktop: "/portfolio/zoe-catalogo/d1-hero.webp", mobile: "/portfolio/zoe-catalogo/m1-hero.webp" },
     cover: { bg: "#3B2416", fg: "#FFF8F0", accent: "#E7B07A" },
   },
   {
@@ -150,7 +150,7 @@ export const PROJECTS: PortfolioProject[] = [
     deliverables: ["Diseño y desarrollo web", "Página de inscripciones", "SEO local"],
     stack: ["Sitio a medida", "Vercel"],
     url: "https://www.medallofutbolclub.com",
-    shots: { desktop: "/portfolio/medallo-futbol-club-desktop.webp", mobile: "/portfolio/medallo-futbol-club-mobile.webp" },
+    shots: { desktop: "/portfolio/medallo-futbol-club/d1-hero.webp", mobile: "/portfolio/medallo-futbol-club/m1-hero.webp" },
     cover: { bg: "#0B3D2E", fg: "#FFFFFF", accent: "#FFD23F" },
   },
   {
@@ -172,7 +172,7 @@ export const PROJECTS: PortfolioProject[] = [
     deliverables: ["Diseño y desarrollo web", "Galería de proyectos", "SEO"],
     stack: ["Next.js", "Vercel"],
     url: "https://www.designbybc.com",
-    shots: { desktop: "/portfolio/designbybc-desktop.webp", mobile: "/portfolio/designbybc-mobile.webp" },
+    shots: { desktop: "/portfolio/design-by-bc/d1-hero.webp", mobile: "/portfolio/design-by-bc/m1-hero.webp" },
     cover: { bg: "#F4EFE8", fg: "#1C1A17", accent: "#C8956B" },
   },
   {
@@ -194,7 +194,7 @@ export const PROJECTS: PortfolioProject[] = [
     deliverables: ["Identidad de marca", "Sitio web", "Tienda y checkout", "Portal de clientes", "CRM interno", "Blog"],
     stack: ["Next.js 16", "TypeScript", "Tailwind 4", "Neon + Drizzle", "PayPal", "Resend", "Vercel"],
     url: "https://www.clickonversion.com",
-    shots: null,
+    shots: { desktop: "/portfolio/clickonversion/d1-hero.webp", mobile: "/portfolio/clickonversion/m1-hero.webp" },
     cover: { bg: "#010E25", fg: "#FFFFFF", accent: "#FE5C02" },
   },
 ]

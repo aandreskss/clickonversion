@@ -6,9 +6,9 @@
 Build a growth operating system to help ClicKonversion acquire its first 3 clients and reach $2,000 MRR.
 
 ## Current Phase
-**Phase 8 — Rediseño Marketing v3 + Checkout + Mejoras Admin** ✅ Completada
+**Phase 9 — Marca v4 + Apps SyncLead** 🚧 En progreso
 
-Design system v3 aplicado a todas las páginas de marketing. Checkout con PayPal Orders, transferencia y USDT. Admin: lista de facturas, fix perfil empresa en invoices PayPal. Build limpio, 101 páginas estáticas.
+Identidad visual v4 aplicada a toda la capa de marketing. SyncLead con suscripciones reales PayPal. Logos oficiales SVG. Mobile fixes completos. Build limpio.
 
 ---
 
@@ -24,22 +24,115 @@ Design system v3 aplicado a todas las páginas de marketing. Checkout con PayPal
 | 6 | Panel Administrativo | ✅ Completa | Dashboard métricas, cola de trabajo, especialistas, comercial, pagos, analítica |
 | 7 | Apps, QA y Lanzamiento | ✅ Completa | /apps catálogo, SyncLead landing+waitlist, Playwright E2E, SEO, docs ops |
 | 8 | Rediseño Marketing v3 + Checkout + Admin | ✅ Completa | Design system v3, 6 páginas rediseñadas, checkout PayPal Orders, lista facturas admin |
+| 9 | Marca v4 + Apps SyncLead | 🚧 En progreso | Identidad v4 completa, SyncLead con suscripciones PayPal reales, logos SVG oficiales |
 
 ---
 
-## Fase 9 — Marca v4 (manual de identidad ClicKonversion) 🚧 En prueba
+## Fase 9 — Marca v4 + Apps SyncLead 🚧 En progreso
 
 Reemplaza el design system v3 (cream/cobalt/lime) en la capa de marketing. Admin, portal y CRM no cambian.
 
+### Identidad visual v4
+
 - **Paleta:** marino `#010E25`, naranja `#FE5C02`, naranja profundo `#C94400` (texto pequeño/enlaces), crema `#FFF8F0`, pasteles de servicio: lavanda IA `#E4DEFF`, celeste SEO `#D6EBFF`, durazno Ads `#FFDCC7`, menta Chat `#D3F2E3`, pizarra `#5A6178`.
-- **Tipografía:** Outfit (voz, `--font-outfit`), Caveat (notas a mano, `--font-caveat`), JetBrains Mono (etiquetas). `--font-mk-sans` y `--font-mk-serif` apuntan a Outfit.
-- **CSS de marca:** `src/app/brand.css` (clases `.ck-*`: botones, tags, efectos 3D, cubo, escalera, widget WhatsApp, blog). Importado en `src/app/layout.tsx`.
-- **Logo:** `src/components/ui/logo-wordmark.tsx` → `LogoWordmark` (props `size`, `tone`) y `LogoSymbol` (globo con chispas).
-- **Componentes nuevos:** `src/components/brand/*` (hero-scene con video, marquee-bands, value-cube, team-grid, pricing-packages con paquetes + armador conectados a `useCart`, projects-grid, blog-list, articles/*).
-- **WhatsApp:** `src/lib/whatsapp.ts` (`waLink`) + `components/marketing/whatsapp-widget.tsx` en `MarketingLayout` (prop `whatsapp` para mensaje por página). Requiere `NEXT_PUBLIC_WHATSAPP_NUMBER`.
-- **Páginas rehechas:** `/`, `/pricing`, `/about`, `/projects`; nuevas `/blog` y `/blog/[slug]` (datos en `src/data/blog.ts`, equipo en `src/data/team.ts`). El resto de páginas de marketing recibió el remapeo de colores de v3 → v4.
-- **Video del hero:** `public/video/clickonversion-reel.mp4` + poster.
-- **Pendiente:** datos reales de Abisai y Yoli, reseñas y casos reales, número de WhatsApp, revisar precios de los paquetes (calculados con descuento por volumen sobre `SERVICES` de `pricing-grid.tsx`).
+- **Tipografía:** Outfit (voz, `--font-outfit`), Caveat (notas a mano, `--font-caveat`), JetBrains Mono (etiquetas).
+- **CSS de marca:** `src/app/brand.css` — clases `.ck-*`. Importado en `src/app/layout.tsx`.
+
+### Logos oficiales (SVG)
+
+Los logos y el isotipo son SVG vectoriales en `/public/brand/`. **No editar `logo-wordmark.tsx` para cambiar colores — usar los archivos SVG correctos.**
+
+**`src/components/ui/logo-wordmark.tsx`** — componente wrapper:
+- `LogoWordmark` — prop `size`: `sm`(22px) | `md`(28px) | `lg`(36px) | `xl`(48px); prop `tone`: `"light"` → `logo-color.svg` (sobre crema), `"dark"` → `logo-blanco.svg` (sobre marino).
+- `LogoSymbol` — prop `size` (ancho en px); prop `inverted`: `false` → `isotipo-naranja.svg`, `true` → `isotipo-blanco.svg`.
+
+**Archivos disponibles en `/public/brand/`:**
+
+| Archivo | Uso |
+|---------|-----|
+| `clickonversion-logo-color.svg` | Logo principal sobre fondos claros (navbar, checkout) |
+| `clickonversion-logo-blanco.svg` | Logo sobre fondos oscuros (footer marino) |
+| `clickonversion-logo-crema.svg` | Logo sobre fondos muy oscuros cuando se quiere calidez |
+| `clickonversion-logo-monocromo-marino.svg` | Logo monocromo marino (impresión, etc.) |
+| `clickonversion-isotipo-naranja.svg` | Isotipo naranja (hero, fondos claros) |
+| `clickonversion-isotipo-blanco.svg` | Isotipo blanco (widget WA, círculos naranja) |
+| `clickonversion-isotipo-marino.svg` | Isotipo marino |
+| `clickonversion-isotipo-crema.svg` | Isotipo crema |
+| `clickonversion-logo-largo-color.svg` | Versión extendida con lema |
+| `clickonversion-logo-largo-blanco.svg` | Versión extendida sobre oscuro |
+
+### Componentes de marca
+
+**`src/components/brand/`:**
+- `hero-scene.tsx` — Escena 3D del hero con video + flotantes. Mobile: `zoom: 0.72` en `.ck-scene-wrap` (preserva 3D). Clases `ck-float-years` y `ck-float-chat` para los elementos reducidos en mobile.
+- `value-cube.tsx` — Cubo 3D con valores (animación continua, sin pausa en hover).
+- `marquee-bands.tsx` — Bandas de texto en loop.
+- `team-grid.tsx` — Grid del equipo (datos en `src/data/team.ts`).
+- `pricing-packages.tsx` — 3 planes hardcodeados + `PackageBuilder` (arma tu paquete con descuento por volumen sobre `SERVICES`).
+- `projects-grid.tsx`, `blog-list.tsx`, `articles/*` — Portfolio y blog.
+- `service-rows.tsx` — Visualizaciones de servicios en `/services`.
+
+### Precios de los paquetes (hardcodeados)
+
+| Plan | Precio | Setup | Descripción |
+|------|--------|-------|-------------|
+| Arranque | $390 pago único | Sin mensualidad | Landing + Píxel Meta + Conversiones Google + Google Business + WhatsApp |
+| Crecimiento | $590/mes | $150 único | Meta Ads + SEO local + Medición + WhatsApp CRM + Reporte semanal |
+| Escala | $1.190/mes | $350 único | Todo Crecimiento + Google Ads + Agente IA + SEO técnico + 2 artículos/mes + Reunión mensual |
+
+### WhatsApp Widget
+
+`src/components/marketing/whatsapp-widget.tsx`:
+- Se abre automáticamente **5 segundos** después de la primera visita.
+- Si el usuario cierra el popup, se guarda `ck_wa_dismissed = "1"` en `localStorage` → nunca más se abre solo (el botón flotante siempre funciona).
+
+### Navbar (v4)
+
+`src/components/marketing/navbar.tsx`:
+- Hamburger visible desde `≤900px` (antes era 1020px).
+- En `≤1180px` los navlinks reducen padding/font.
+- En `≤1280px` el indicador "en línea" se oculta.
+- CTA "Hablemos →" oculto en mobile con `display: none !important`.
+
+### Páginas marketing (v4)
+
+| Ruta | Estado |
+|------|--------|
+| `/` | ✅ Rediseñada v4 |
+| `/services` | ✅ Rediseñada v4 con ServiceRows |
+| `/pricing` | ✅ Paquetes hardcodeados + PackageBuilder |
+| `/about` | ✅ Rediseñada v4 |
+| `/projects` | ✅ Rediseñada v4 |
+| `/blog` | ✅ Nueva |
+| `/blog/[slug]` | ✅ Nueva |
+| `/apps` | ✅ Rediseñada con SyncLead destacado |
+| `/apps/synclead` | ✅ Landing con suscripciones PayPal reales |
+| `/apps/synclead/gracias` | ✅ Confirmación de suscripción |
+
+### SyncLead — Suscripciones PayPal reales
+
+`src/components/apps/synclead-pricing.tsx` + `src/components/apps/synclead-actions.ts`:
+- 3 planes × 2 períodos (mensual/anual) = 6 planes PayPal reales.
+- El precio lo fija el plan en PayPal, no el frontend.
+- `scripts/create-synclead-paypal-plans.mjs` — crea el producto y los 6 planes en PayPal (ejecutar una sola vez en producción).
+- Env vars requeridas: `PAYPAL_PLAN_SYNCLEAD_INICIAL_MENSUAL`, `PAYPAL_PLAN_SYNCLEAD_INICIAL_ANUAL`, `PAYPAL_PLAN_SYNCLEAD_EQUIPO_MENSUAL`, `PAYPAL_PLAN_SYNCLEAD_EQUIPO_ANUAL`, `PAYPAL_PLAN_SYNCLEAD_AGENCIA_MENSUAL`, `PAYPAL_PLAN_SYNCLEAD_AGENCIA_ANUAL`.
+
+**SyncLead features:**
+- Real-time lead sync from Meta Ads ✅
+- Visual pipeline (kanban) ✅
+- WhatsApp Business integrated ✅
+- AI agents (multi-LLM: Claude/GPT/Gemini/DeepSeek/Groq) ✅
+- Automatic lead qualification ✅
+- Meta CAPI (Purchase events) ✅
+- Team collaboration with roles ✅
+- CSV import with deduplication ✅
+
+### Pendiente Fase 9
+
+- Datos reales de Abisai y Yoli en `src/data/team.ts`
+- Reseñas y casos de éxito reales
+- `NEXT_PUBLIC_WHATSAPP_NUMBER` configurado en Vercel
+- Artículos de blog reales en `src/data/blog.ts`
 
 ---
 
@@ -66,32 +159,27 @@ Reemplaza el design system v3 (cream/cobalt/lime) en la capa de marketing. Admin
 
 **IMPORTANTE:** Fontshare no es compatible con `next/font`. Se carga siempre vía CSS `@import` en `globals.css`.
 
-### Logos
+### Logos (v4 — SVG oficiales)
 
-**`src/components/ui/logo-wordmark.tsx`** — Wordmark CSS puro "clickONversion":
-- Píldora lime `#D9FA62` con texto "ON" + 3 barras spark `#FF6B2C` rotadas -35°/0°/35° encima
-- Prop `size`: `sm`(22px) | `md`(28px) | `lg`(36px) | `xl`(48px)
-- NO usa imagen — solo JSX + inline styles
+**`src/components/ui/logo-wordmark.tsx`** — wrapper de los SVG de marca:
+- `LogoWordmark`: prop `size` (`sm`/`md`/`lg`/`xl`) y prop `tone` (`"light"` → logo-color.svg, `"dark"` → logo-blanco.svg).
+- `LogoSymbol`: prop `size` (ancho px) e `inverted` (false → naranja, true → blanco).
+- Todos los SVG están en `/public/brand/` — ver sección Fase 9 para el inventario completo.
 
-**`src/components/ui/logo-key.tsx`** — Isotipo interactivo "c!" (tecla):
-- Estado rest: fondo blanco, sombra `0 14px 0 #202124`
-- Estado pressed: fondo lime, sombra `0 3px 0`, translateY 11px
-- Chispas aparecen al presionar (opacity fade-in)
+**`src/components/ui/logo-key.tsx`** — Isotipo legacy "c!" (tecla) — solo admin/portal.
 
 ### Componentes marketing nuevos/actualizados
 
-**`src/components/marketing/navbar.tsx`** — Reescrito:
-- Sticky, cream bg, border-bottom `#E2DED3`
-- LogoWordmark + desktop nav (lavender hover pill) + cart pill (lime, JetBrains Mono)
-- Cart pill solo visible cuando `useCart().count > 0`
-- CTA "Hablemos →" (ink bg → cobalt hover)
-- Hamburger mobile con animación max-height
+**`src/components/marketing/navbar.tsx`** — v4:
+- Sticky, crema bg `#FFF8F0`, borde marino suave.
+- Hamburger visible desde `≤900px`. Nav links se ocultan a `≤900px`, reducen tamaño a `≤1180px`.
+- CTA "Hablemos →" oculto en mobile (`display: none !important`).
+- Menú mobile desplegable con links + botones WhatsApp.
 
-**`src/components/marketing/footer.tsx`** — Reescrito:
-- Cobalt bg (#345CFF), margin 16px, border-radius 40px (floating footer)
-- Giant Instrument Serif italic "clic." en lime
-- 4 columnas: NAVEGA / SERVICIOS / APPS Y CUENTA / SALUDA
-- Wordmark grande al fondo, legal en JetBrains Mono
+**`src/components/marketing/footer.tsx`** — v4:
+- Navy bg `#010E25`, margin 16px, border-radius 40px (floating footer).
+- Logo blanco (`tone="dark"`), 2 columnas: SERVICIOS / ESTUDIO.
+- CTA WhatsApp y texto Caveat.
 
 **`src/components/marketing/cart-bar.tsx`** — Barra sticky inferior:
 - `position: fixed` bottom, ink bg
@@ -290,7 +378,7 @@ Build limpio. 179 tests unitarios pasan. Playwright instalado, 5 suites E2E. Doc
 - `docs/OPERATIONS.md` — guía operativa completa (13 secciones)
 - `docs/LAUNCH-CHECKLIST.md` — checklist de lanzamiento (12 stages)
 
-**SyncLead features afirmadas:**
+**SyncLead features:**
 - Real-time lead sync from Meta Ads ✅
 - Visual pipeline (kanban) ✅
 - WhatsApp Business integrated ✅
@@ -299,9 +387,8 @@ Build limpio. 179 tests unitarios pasan. Playwright instalado, 5 suites E2E. Doc
 - Meta CAPI (Purchase events) ✅
 - Team collaboration with roles ✅
 - CSV import with deduplication ✅
-- NO Stripe/pagos (no mencionar) ❌
 
-**SyncLead CTA:** Waitlist (no pagos listos). Incluido gratis con servicios de Meta Ads.
+**SyncLead CTA:** Suscripción PayPal real (3 planes × mensual/anual). Incluido gratis con servicios de Meta Ads. Ver Fase 9 para activar planes.
 
 ---
 
@@ -386,7 +473,7 @@ src/
     sitemap.ts
   components/
     ui/
-      logo-wordmark.tsx       # CSS wordmark "clickONversion" con pill lime y chispas
+      logo-wordmark.tsx       # Wrapper SVG: LogoWordmark + LogoSymbol (usa /public/brand/)
       logo-key.tsx            # Isotipo interactivo "c!" con press animation
       logo.tsx                # Logo legacy (admin/portal)
     crm/                      # app-sidebar, activity-timeline, etc.
@@ -418,24 +505,43 @@ src/
 
 ---
 
-## Brand — Marketing Design System v3
+## Brand — Marketing Design System v4 (activo)
 
-### Tokens marketing (`globals.css` `@theme`)
+### Variables CSS v4 (`:root` en `brand.css`)
 
-| Token | Valor | Uso |
-|-------|-------|-----|
-| `--color-cream` | `#F7F5EF` | Background marketing |
-| `--color-ink` | `#202124` | Texto principal |
-| `--color-muted-ink` | `#5F6368` | Texto secundario |
-| `--color-body-2` | `#8C8C8C` | Cuerpo terciario |
-| `--color-cobalt` | `#345CFF` | Acento primario, footer |
-| `--color-lime` | `#D9FA62` | Pill ON, cart, CTAs |
-| `--color-lavender` | `#E9E4FF` | Hover nav, pills |
-| `--color-spark` | `#FF6B2C` | Chispas logo, warm highlights |
-| `--color-line` | `#E2DED3` | Bordes sobre cream |
-| `--font-mk-sans` | General Sans | Cuerpo marketing |
-| `--font-mk-mono` | JetBrains Mono | Datos, precios, carrito |
-| `--font-mk-serif` | Instrument Serif | Títulos editoriales |
+| Variable | Valor | Uso |
+|----------|-------|-----|
+| `--ck-navy` | `#010E25` | Texto principal, bordes, fondos oscuros |
+| `--ck-navy-2` | `#1B2A47` | Hover de botones dark |
+| `--ck-orange` | `#FE5C02` | CTAs primarios, acentos |
+| `--ck-orange-deep` | `#C94400` | Texto en naranja pequeño, check icons |
+| `--ck-cream` | `#FFF8F0` | Background de marketing |
+| `--ck-lavender` | `#E4DEFF` | Tag IA |
+| `--ck-sky` | `#D6EBFF` | Tag SEO |
+| `--ck-peach` | `#FFDCC7` | Tag Ads, hover navlinks |
+| `--ck-mint` | `#D3F2E3` | Tag Chat, botón WA |
+| `--ck-slate` | `#5A6178` | Texto secundario |
+| `--ck-body` | `#3A4158` | Cuerpo de texto |
+| `--ck-green` | `#1F9D55` | Dot "en línea" |
+| `--ck-sans` | Outfit | Fuente principal |
+| `--ck-hand` | Caveat | Notas a mano |
+| `--ck-mono` | JetBrains Mono | Etiquetas, precios, código |
+
+### Clases CSS `.ck-*` clave
+
+- `.ck` — wrapper raíz de marketing (fondo crema, fuente Outfit, color navy)
+- `.ck-section` — padding vertical responsivo `clamp(72px, 9vw, 128px)`
+- `.ck-wrap` — contenedor centrado max-width 1240px
+- `.ck-btn`, `.ck-btn-primary`, `.ck-btn-dark`, `.ck-btn-wa` — botones
+- `.ck-tag` — etiqueta monoespacio con borde
+- `.ck-plan`, `.ck-plan-hot` — tarjetas de precios (`.ck-plan-hot` tiene `transform: none` en mobile `≤700px`)
+- `.ck-check` — lista con check naranja; `.ck-check.on-dark` — check naranja sobre oscuro
+- `.ck-scene-wrap` — wrapper del hero 3D (tiene `zoom: 0.72` en `≤700px`)
+- `.ck-float-years`, `.ck-float-chat` — elementos del hero reducidos en mobile
+
+### Design System v3 (legacy — solo tokens en globals.css)
+
+Los tokens v3 (`--color-cream`, `--color-cobalt`, `--color-lime`, etc.) siguen en `globals.css` porque los usan admin y portal. No tocar en contexto de marketing.
 
 ### Tokens admin/portal (legacy, preservados)
 
@@ -471,7 +577,8 @@ SyncLeadPreview → CTA Lime
 | `/pricing` | ✅ | Grid de precios filtrable |
 | `/projects` | ✅ | Portfolio |
 | `/apps` | ✅ | Catálogo apps |
-| `/apps/synclead` | ✅ | Landing SyncLead |
+| `/apps/synclead` | ✅ | Landing SyncLead con suscripciones PayPal |
+| `/apps/synclead/gracias` | ❌ noindex | Confirmación post-suscripción |
 | `/about` | ✅ | Historia y contacto |
 | `/resources` | ✅ | Recursos descargables |
 | `/checkout` | ❌ noindex | Checkout |
@@ -618,6 +725,14 @@ Org ID: `db071585-6652-4d2a-87fd-ec4670c44c93` → env var `SUPABASE_ORG_ID`
 | `TURNSTILE_SECRET_KEY` | Cloudflare captcha | ❌ |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare captcha | ✅ |
 | `CAL_API_KEY` | Cal.com bookings | ❌ |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Número WA sin + ni espacios | ✅ |
+| `PAYPAL_PLAN_SYNCLEAD_INICIAL_MENSUAL` | ID plan PayPal SyncLead Inicial mensual | ❌ |
+| `PAYPAL_PLAN_SYNCLEAD_INICIAL_ANUAL` | ID plan PayPal SyncLead Inicial anual | ❌ |
+| `PAYPAL_PLAN_SYNCLEAD_EQUIPO_MENSUAL` | ID plan PayPal SyncLead Equipo mensual | ❌ |
+| `PAYPAL_PLAN_SYNCLEAD_EQUIPO_ANUAL` | ID plan PayPal SyncLead Equipo anual | ❌ |
+| `PAYPAL_PLAN_SYNCLEAD_AGENCIA_MENSUAL` | ID plan PayPal SyncLead Agencia mensual | ❌ |
+| `PAYPAL_PLAN_SYNCLEAD_AGENCIA_ANUAL` | ID plan PayPal SyncLead Agencia anual | ❌ |
+| `PAYPAL_MODE` | `sandbox` o `live` para SyncLead | ❌ |
 
 ---
 

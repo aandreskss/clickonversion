@@ -49,7 +49,7 @@ export function HeroScene() {
               loop
               playsInline
               preload="auto"
-              aria-label="Video de ClicKonversion: del clic al chat"
+              aria-label="Video de ClicKonversion: logo y servicios"
               style={{ display: "block", width: "100%", height: "100%", objectFit: "cover" }}
             />
           </div>

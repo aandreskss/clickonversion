@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useCart } from "@/components/shop/cart-provider"
 import type { CartItem } from "@/types/catalog"
+import { waLink } from "@/lib/whatsapp"
 
 export const SERVICES = [
   { id: "seo-audit",    cat: 0, name: "Auditoría SEO",            desc: "Revisión técnica y de contenido con una lista de mejoras priorizada.",       price: 120, prefix: "",      type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
@@ -12,6 +13,7 @@ export const SERVICES = [
   { id: "google-ads",   cat: 1, name: "Google Ads",               desc: "Búsqueda, Shopping y Performance Max con seguimiento de conversiones.",       price: 150, prefix: "desde", type: "mensual" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
   { id: "meta-ads",     cat: 1, name: "Meta Ads",                 desc: "Campañas en Facebook e Instagram con pruebas creativas semanales.",           price: 150, prefix: "desde", type: "mensual" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
   { id: "tiktok-ads",   cat: 1, name: "TikTok Ads",               desc: "Campañas y creatividades pensadas para el formato nativo.",                   price: 150, prefix: "desde", type: "mensual" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
+  { id: "ad-creatives", cat: 1, name: "Creación de anuncios (4 piezas)", desc: "Pack de 4 piezas (Reels, Stories o posts) para Meta, TikTok o Google: guion, diseño, edición y textos.", price: 120, prefix: "", type: "único" as const, priceType: "ONE_TIME" as const, billing: "one_time" as const, quote: false },
   { id: "ai-agent",     cat: 2, name: "Agente IA",                desc: "Un agente entrenado en WhatsApp o web que responde, califica y agenda.",     price: 350, prefix: "desde", type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
   { id: "wa-auto",      cat: 2, name: "Automatización WhatsApp",  desc: "Flujos de bienvenida, seguimiento y recordatorios.",                         price: 280, prefix: "desde", type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
   { id: "crm",          cat: 2, name: "Integración CRM",          desc: "Conectamos formularios, anuncios y chats con tu CRM.",                       price: 220, prefix: "desde", type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
@@ -202,6 +204,12 @@ export function PricingGrid() {
               <p style={{ fontSize: 15, color: "#5A6178", lineHeight: 1.5, flex: 1 }}>{svc.desc}</p>
 
               {/* Price */}
+              {svc.quote ? (
+                <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 4 }}>
+                  <span style={{ fontSize: 30, fontWeight: 600, color: "#010E25", lineHeight: 1 }}>A cotizar</span>
+                  <span style={{ fontSize: 14, color: "#5A6178" }}>según piezas y formatos</span>
+                </div>
+              ) : (
               <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginTop: 4 }}>
                 {svc.prefix && (
                   <span
@@ -222,7 +230,19 @@ export function PricingGrid() {
                 </span>
               </div>
 
+              )}
+
               {/* Button */}
+              {svc.quote ? (
+                <a
+                  href={waLink(`Hola, quiero cotizar: ${svc.name}`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ marginTop: 8, padding: "10px 20px", borderRadius: 999, fontSize: 14, fontWeight: 700, textAlign: "center", textDecoration: "none", background: "#D3F2E3", color: "#010E25", border: "1.5px solid #010E25" }}
+                >
+                  Cotizar por WhatsApp ↗
+                </a>
+              ) : (
               <button
                 onClick={() => toggleService(svc)}
                 aria-label={added ? `Quitar ${svc.name}` : `Añadir ${svc.name}`}
@@ -242,6 +262,7 @@ export function PricingGrid() {
               >
                 {added ? "✓ Añadido" : "Añadir"}
               </button>
+              )}
             </article>
           )
         })}

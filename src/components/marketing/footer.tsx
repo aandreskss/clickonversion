@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { LogoWordmark } from "@/components/ui/logo-wordmark"
+import { AnimatedLogo } from "@/components/ui/animated-logo"
 import { waLink } from "@/lib/whatsapp"
 
 const COLS = [
@@ -8,6 +8,7 @@ const COLS = [
     links: [
       { href: "/services#seo", label: "SEO local y técnico" },
       { href: "/services#ads", label: "Meta, Google y TikTok Ads" },
+      { href: "/services#creativos", label: "Creación de anuncios" },
       { href: "/services#ia", label: "Agentes IA y automatización" },
       { href: "/services", label: "Webs, apps y landings" },
       { href: "/services", label: "Configuración y medición" },
@@ -33,7 +34,7 @@ export function Footer() {
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", gap: 28 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <Link href="/" aria-label="ClicKonversion, ir al inicio" style={{ textDecoration: "none" }}>
-              <LogoWordmark size="xl" tone="dark" />
+              <AnimatedLogo size="xl" tone="dark" />
             </Link>
             <span className="ck-mono" style={{ fontSize: 12, letterSpacing: ".32em", color: "rgba(255,255,255,.8)" }}>¡CONVERTIMOS CLICS EN VENTAS!</span>
           </div>

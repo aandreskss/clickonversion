@@ -3,6 +3,7 @@ import Link from "next/link"
 import { MarketingLayout } from "@/components/marketing/marketing-layout"
 import { ContactForm } from "@/components/marketing/contact-form"
 import { HeroScene } from "@/components/brand/hero-scene"
+import { FreeAuditSection, AdsSellSection } from "@/components/brand/home-promos"
 import { MarqueeBands } from "@/components/brand/marquee-bands"
 import { ValueCube } from "@/components/brand/value-cube"
 import { TeamGrid } from "@/components/brand/team-grid"
@@ -81,6 +82,8 @@ export default function HomePage() {
       </section>
 
       <MarqueeBands />
+
+      <FreeAuditSection />
 
       {/* ESENCIA */}
       <section className="ck-section">
@@ -161,6 +164,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <AdsSellSection />
 
       {/* PROCESO */}
       <section className="ck-section" style={{ background: "#010E25", color: "#fff", borderRadius: 48 }}>

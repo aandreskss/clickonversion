@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { LogoWordmark } from "@/components/ui/logo-wordmark"
+import { AnimatedLogo } from "@/components/ui/animated-logo"
 import { useCart } from "@/components/shop/cart-provider"
 import { waLink } from "@/lib/whatsapp"
 
@@ -93,7 +93,7 @@ export function Navbar({ active }: NavbarProps) {
         }}
       >
         <Link href="/" aria-label="ClicKonversion, ir al inicio" style={{ textDecoration: "none", padding: "2px 0" }}>
-          <LogoWordmark size="md" />
+          <AnimatedLogo size="md" />
         </Link>
 
         <div className="ck-navlinks">

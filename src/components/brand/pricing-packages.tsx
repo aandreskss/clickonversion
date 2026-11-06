@@ -55,11 +55,12 @@ const PACKAGES = [
     tagBg: "#FFDCC7",
     name: "Crecimiento",
     pitch: "Para llenar tu WhatsApp de conversaciones con clientes cada semana.",
-    monthly: 590,
+    monthly: 630,
     once: 150,
     setupLabel: "Configuración inicial: $150 (pago único)",
     features: [
       "Gestión de Meta Ads",
+      "4 anuncios creados al mes (Reels o posts)",
       "SEO local + Google Business",
       "Medición en Meta / Google / TikTok",
       "WhatsApp Business + CRM",
@@ -79,6 +80,7 @@ const PACKAGES = [
     setupLabel: "Configuración inicial: $350 (pago único)",
     features: [
       "Todo lo de Crecimiento",
+      "8 anuncios al mes con variantes A/B",
       "Gestión de Google Ads",
       "Agente IA para WhatsApp",
       "SEO técnico + 2 artículos al mes",
@@ -133,7 +135,7 @@ export function PricingPackages() {
 export function PackageBuilder() {
   const { addItem, hasItem } = useCart()
   const [picked, setPicked] = useState<Record<string, boolean>>({})
-  const chosen = useMemo(() => SERVICES.filter((s) => picked[s.id]), [picked])
+  const chosen = useMemo(() => SERVICES.filter((s) => picked[s.id] && !s.quote), [picked])
   const n = chosen.length
   const disc = volumeDiscount(n)
   const t = totals(chosen, disc)
@@ -150,7 +152,7 @@ export function PackageBuilder() {
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: 32, alignItems: "flex-start" }}>
       <div style={{ flex: "999 1 520px", minWidth: 0, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))", gap: 10 }}>
-        {SERVICES.map((s) => {
+        {SERVICES.filter((s) => !s.quote).map((s) => {
           const on = !!picked[s.id]
           return (
             <button key={s.id} type="button" className="ck-opt" aria-pressed={on} onClick={() => setPicked((p) => ({ ...p, [s.id]: !p[s.id] }))}>

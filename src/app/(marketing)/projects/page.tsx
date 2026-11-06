@@ -3,6 +3,8 @@ import Link from "next/link"
 import { MarketingLayout } from "@/components/marketing/marketing-layout"
 import { ProjectsGrid } from "@/components/brand/projects-grid"
 import { ConsultingCases } from "@/components/brand/consulting-cases"
+import { AdsShowcase } from "@/components/brand/ads-showcase"
+import { ADS } from "@/data/ads"
 import { waLink } from "@/lib/whatsapp"
 
 export const metadata: Metadata = {
@@ -27,7 +29,7 @@ export default function ProjectsPage() {
           <nav aria-label="Migas de pan"><ol className="ck-crumbs"><li><Link href="/">Inicio</Link></li><li aria-hidden="true">/</li><li aria-current="page" style={{ color: "#010E25", fontWeight: 700 }}>Proyectos</li></ol></nav>
           <h1 style={{ fontSize: "clamp(46px, 6.4vw, 96px)", lineHeight: 0.98, maxWidth: 1000 }}>Lo que hemos <span style={{ color: "#FE5C02" }}>construido</span>.</h1>
           <p style={{ fontSize: "clamp(18px, 1.6vw, 21px)", color: "#3A4158", maxWidth: 720 }}>Tiendas en línea, sitios web y plataformas para negocios en Venezuela y Colombia. Abre cada proyecto para ver capturas, el reto y lo que hicimos. Más abajo, los casos de Meta y WhatsApp Business API que hemos resuelto.</p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}><a className="ck-btn ck-btn-primary" href="#portafolio">Ver portafolio</a><a className="ck-btn ck-btn-line" href="#consultoria">Casos de Meta y WhatsApp</a></div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}><a className="ck-btn ck-btn-primary" href="#portafolio">Ver portafolio</a><a className="ck-btn ck-btn-line" href="#anuncios">Anuncios</a><a className="ck-btn ck-btn-line" href="#consultoria">Casos de Meta y WhatsApp</a></div>
         </div>
       </section>
 
@@ -67,6 +69,12 @@ export default function ProjectsPage() {
       <section id="portafolio" style={{ paddingBottom: "clamp(72px, 9vw, 120px)", scrollMarginTop: 100 }}>
         <div className="ck-wrap"><ProjectsGrid /></div>
       </section>
+
+      {ADS.length > 0 && (
+        <section id="anuncios" style={{ paddingBottom: "clamp(72px, 9vw, 120px)", scrollMarginTop: 100 }}>
+          <div className="ck-wrap"><AdsShowcase /></div>
+        </section>
+      )}
 
       <section id="consultoria" style={{ paddingBottom: "clamp(80px, 10vw, 140px)", scrollMarginTop: 100 }}>
         <div className="ck-wrap"><ConsultingCases /></div>

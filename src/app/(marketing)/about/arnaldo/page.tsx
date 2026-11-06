@@ -71,13 +71,19 @@ export default function ArnaldoPage() {
 </div>
 <span className="ck-hand" style={{ fontSize: "26px", color: "#C94400", transform: "rotate(-2deg)", alignSelf: "flex-start" }}>↳ te respondo yo, no un bot</span>
 </div>
-<div className="cv-stage" style={{ flex: "1 1 440px", minWidth: "0" }} aria-hidden="true">
-<div className="cv-photo cv-back" style={{ backgroundImage: "url(/team/arnaldo/02-lobby-verde.webp)" }}></div>
-<div className="cv-photo cv-front" style={{ backgroundImage: "url(/team/arnaldo/06-sonrisa-gris.webp)" }}></div>
+<div className="cv-stage cv-pop" style={{ flex: "1 1 440px", minWidth: "0" }}>
+<div className="cv-pop-bg" aria-hidden="true"></div>
+<div className="cv-pop-clip"><img className="cv-pop-me" src="/team/arnaldo/cut-06.webp" alt="Arnaldo Casadiego sonriendo" /></div>
 <div className="cv-bubble">¡Hola! Cuéntame qué vendes y te digo por dónde empezaría 👋</div>
-<div className="cv-chip"><span className="ck-dot" style={{ width: "7px", height: "7px" }}></span>respondo hoy</div>
 <div className="cv-stat"><span style={{ fontSize: "44px", fontWeight: "700", letterSpacing: "-0.05em", lineHeight: "1" }}>8<span style={{ color: "#FE5C02" }}>+</span></span><span className="ck-mono" style={{ fontSize: "11px", letterSpacing: ".08em", color: "#5A6178" }}>AÑOS · MARKETING DIGITAL</span></div>
-<div className="cv-iso"><svg viewBox="-20 -20 1040 524" style={{ width: "56px", height: "28px" }}><path fill="#FE5C02" fillRule="evenodd" d="M214.4 477.5 C238.9 474.6 260.5 467.9 281.1 456.7 C303.8 444.4 326.1 424.8 339.9 404.8 C341.3 402.8 342.6 401.2 342.9 401.2 C343.3 401.2 343.6 406.5 343.8 415.7 L344.0 430.3 L347.1 430.1 C355.1 429.7 369.3 425.3 380.8 419.5 C404.3 407.9 421.6 389.5 431.3 365.9 C434.4 358.3 436.3 351.9 437.8 343.8 C438.9 337.8 439.0 335.1 439.3 296.8 C439.7 257.1 439.7 256.1 440.9 251.8 C442.6 245.7 444.0 241.9 446.3 237.8 C455.7 220.5 474.4 209.8 495.0 209.8 C501.8 209.8 506.1 210.4 512.4 212.5 C518.8 214.5 523.8 217.5 529.1 222.5 C536.7 229.7 540.4 236.5 544.8 251.8 C550.8 273.1 571.1 332.3 588.1 378.4 C591.2 386.7 594.8 396.4 596.1 400.1 C602.6 418.3 607.8 428.3 616.8 439.7 C632.3 459.5 654.2 471.9 679.7 475.3 C687.2 476.3 691.8 476.3 699.7 475.3 C720.5 472.7 738.3 464.3 753.6 449.8 C763.0 440.9 768.7 432.2 781.4 407.5 C793.4 384.2 796.3 378.5 810.8 350.6 C825.5 322.4 831.5 311.1 833.7 307.0 C834.8 305.0 838.7 297.7 842.4 290.8 C846.1 283.8 856.9 263.6 866.5 245.7 C876.0 227.9 885.8 209.5 888.3 204.8 C890.7 200.2 894.4 193.2 896.5 189.5 C898.5 185.7 902.1 179.0 904.4 174.6 C906.8 170.2 916.4 152.5 925.7 135.1 C949.7 90.6 954.8 81.1 957.6 75.8 C958.9 73.2 961.5 68.5 963.2 65.3 C965.0 62.2 969.4 53.9 973.1 47.0 C976.8 40.0 983.0 28.4 986.9 21.1 C990.8 13.9 993.9 7.7 993.7 7.4 C993.5 6.6 995.0 6.4 962.7 12.4 C950.1 14.7 938.8 16.8 937.4 17.0 C934.4 17.5 907.1 22.5 869.3 29.4 C853.7 32.2 838.8 35.0 836.1 35.5 C833.3 36.0 830.7 36.8 830.2 37.3 C829.7 37.8 823.7 48.4 816.8 61.0 C810.0 73.5 802.3 87.5 799.8 92.0 C793.1 104.2 770.1 146.4 765.9 154.0 C764.0 157.7 755.8 172.7 747.7 187.5 C729.1 221.6 718.5 241.2 706.6 263.0 C703.8 268.3 698.5 278.0 695.0 284.6 C691.4 291.2 688.2 296.5 687.9 296.4 C687.6 296.3 686.1 292.5 684.6 288.0 C672.3 250.9 651.8 191.3 649.0 184.9 C641.2 166.6 631.5 152.1 617.9 138.6 C606.0 126.7 593.6 118.0 578.0 110.4 C558.4 100.8 540.3 96.1 516.5 94.4 C498.8 93.2 476.9 95.9 458.3 101.5 C419.9 113.1 384.8 138.7 364.5 169.8 C362.0 173.6 359.7 176.8 359.3 176.8 C358.9 176.8 356.4 173.6 353.7 169.5 C318.2 117.1 253.6 88.3 186.4 95.1 C151.5 98.6 115.3 112.7 86.9 134.0 C57.0 156.3 35.4 183.6 21.2 216.6 C11.1 240.4 6.6 262.4 6.6 288.3 C6.6 304.7 8.1 316.8 12.1 332.9 C21.5 370.2 42.4 404.6 71.4 430.2 C102.0 457.3 139.0 473.4 180.1 477.5 C189.9 478.5 206.0 478.5 214.4 477.5Z M187.8 363.5 C182.4 362.8 171.9 360.0 166.7 357.8 C140.7 347.1 121.0 321.3 117.5 293.6 C116.7 286.9 117.1 273.1 118.4 267.4 C120.7 256.8 125.1 246.5 131.3 237.0 C134.9 231.5 146.4 219.9 152.2 215.9 C171.7 202.6 196.1 198.1 218.0 203.6 C228.4 206.3 234.7 209.2 244.7 215.9 C261.6 227.2 274.0 246.3 278.1 267.4 C279.6 274.7 279.8 285.8 278.7 293.1 C277.5 301.3 276.7 304.2 273.5 312.5 C262.9 339.3 238.1 358.9 209.4 363.3 C203.6 364.1 193.6 364.2 187.8 363.5Z" /></svg></div>
+<div className="cv-iso" aria-hidden="true"><svg viewBox="-20 -20 1040 524" style={{ width: "56px", height: "28px" }}><path fill="#FE5C02" fillRule="evenodd" d="M214.4 477.5 C238.9 474.6 260.5 467.9 281.1 456.7 C303.8 444.4 326.1 424.8 339.9 404.8 C341.3 402.8 342.6 401.2 342.9 401.2 C343.3 401.2 343.6 406.5 343.8 415.7 L344.0 430.3 L347.1 430.1 C355.1 429.7 369.3 425.3 380.8 419.5 C404.3 407.9 421.6 389.5 431.3 365.9 C434.4 358.3 436.3 351.9 437.8 343.8 C438.9 337.8 439.0 335.1 439.3 296.8 C439.7 257.1 439.7 256.1 440.9 251.8 C442.6 245.7 444.0 241.9 446.3 237.8 C455.7 220.5 474.4 209.8 495.0 209.8 C501.8 209.8 506.1 210.4 512.4 212.5 C518.8 214.5 523.8 217.5 529.1 222.5 C536.7 229.7 540.4 236.5 544.8 251.8 C550.8 273.1 571.1 332.3 588.1 378.4 C591.2 386.7 594.8 396.4 596.1 400.1 C602.6 418.3 607.8 428.3 616.8 439.7 C632.3 459.5 654.2 471.9 679.7 475.3 C687.2 476.3 691.8 476.3 699.7 475.3 C720.5 472.7 738.3 464.3 753.6 449.8 C763.0 440.9 768.7 432.2 781.4 407.5 C793.4 384.2 796.3 378.5 810.8 350.6 C825.5 322.4 831.5 311.1 833.7 307.0 C834.8 305.0 838.7 297.7 842.4 290.8 C846.1 283.8 856.9 263.6 866.5 245.7 C876.0 227.9 885.8 209.5 888.3 204.8 C890.7 200.2 894.4 193.2 896.5 189.5 C898.5 185.7 902.1 179.0 904.4 174.6 C906.8 170.2 916.4 152.5 925.7 135.1 C949.7 90.6 954.8 81.1 957.6 75.8 C958.9 73.2 961.5 68.5 963.2 65.3 C965.0 62.2 969.4 53.9 973.1 47.0 C976.8 40.0 983.0 28.4 986.9 21.1 C990.8 13.9 993.9 7.7 993.7 7.4 C993.5 6.6 995.0 6.4 962.7 12.4 C950.1 14.7 938.8 16.8 937.4 17.0 C934.4 17.5 907.1 22.5 869.3 29.4 C853.7 32.2 838.8 35.0 836.1 35.5 C833.3 36.0 830.7 36.8 830.2 37.3 C829.7 37.8 823.7 48.4 816.8 61.0 C810.0 73.5 802.3 87.5 799.8 92.0 C793.1 104.2 770.1 146.4 765.9 154.0 C764.0 157.7 755.8 172.7 747.7 187.5 C729.1 221.6 718.5 241.2 706.6 263.0 C703.8 268.3 698.5 278.0 695.0 284.6 C691.4 291.2 688.2 296.5 687.9 296.4 C687.6 296.3 686.1 292.5 684.6 288.0 C672.3 250.9 651.8 191.3 649.0 184.9 C641.2 166.6 631.5 152.1 617.9 138.6 C606.0 126.7 593.6 118.0 578.0 110.4 C558.4 100.8 540.3 96.1 516.5 94.4 C498.8 93.2 476.9 95.9 458.3 101.5 C419.9 113.1 384.8 138.7 364.5 169.8 C362.0 173.6 359.7 176.8 359.3 176.8 C358.9 176.8 356.4 173.6 353.7 169.5 C318.2 117.1 253.6 88.3 186.4 95.1 C151.5 98.6 115.3 112.7 86.9 134.0 C57.0 156.3 35.4 183.6 21.2 216.6 C11.1 240.4 6.6 262.4 6.6 288.3 C6.6 304.7 8.1 316.8 12.1 332.9 C21.5 370.2 42.4 404.6 71.4 430.2 C102.0 457.3 139.0 473.4 180.1 477.5 C189.9 478.5 206.0 478.5 214.4 477.5Z M187.8 363.5 C182.4 362.8 171.9 360.0 166.7 357.8 C140.7 347.1 121.0 321.3 117.5 293.6 C116.7 286.9 117.1 273.1 118.4 267.4 C120.7 256.8 125.1 246.5 131.3 237.0 C134.9 231.5 146.4 219.9 152.2 215.9 C171.7 202.6 196.1 198.1 218.0 203.6 C228.4 206.3 234.7 209.2 244.7 215.9 C261.6 227.2 274.0 246.3 278.1 267.4 C279.6 274.7 279.8 285.8 278.7 293.1 C277.5 301.3 276.7 304.2 273.5 312.5 C262.9 339.3 238.1 358.9 209.4 363.3 C203.6 364.1 193.6 364.2 187.8 363.5Z" /></svg></div>
+<div className="cv-hold">
+<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px" }}><span className="ck-mono" style={{ fontSize: "11.5px", color: "#5A6178" }}>HABLEMOS DE TU NEGOCIO</span><span style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: "600" }}><span className="ck-dot" style={{ width: "7px", height: "7px" }}></span>respondo hoy</span></div>
+<strong style={{ fontSize: "20px", letterSpacing: "-0.02em", lineHeight: "1.2" }}>¿Qué quieres mejorar primero?</strong>
+<div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}><span className="ck-tag" style={{ background: "#D6EBFF" }}>[SEO]</span><span className="ck-tag" style={{ background: "#FFDCC7" }}>[ADS]</span><span className="ck-tag" style={{ background: "#D3F2E3" }}>[WHATSAPP]</span><span className="ck-tag" style={{ background: "#E4DEFF" }}>[IA]</span></div>
+<a className="ck-btn ck-btn-primary" href={waLink("Hola Arnaldo, vi tu CV")} target="_blank" rel="noopener noreferrer" style={{ minHeight: "44px", fontSize: "15px" }}>Agenda 15 min ↗</a>
+</div>
+<svg className="cv-arrow" viewBox="0 0 120 90" aria-hidden="true"><path d="M8 8 C 40 10, 86 26, 100 72" fill="none" stroke="#C94400" strokeWidth="3.4" strokeLinecap="round" /><path d="M86 62 L101 76 L108 56" fill="none" stroke="#C94400" strokeWidth="3.4" strokeLinecap="round" stroke-linejoin="round" /></svg>
 </div>
 </div>
 </section>
@@ -92,9 +98,19 @@ export default function ArnaldoPage() {
 
 <section style={{ padding: "clamp(80px, 9vw, 130px) 0" }}>
 <div style={{ maxWidth: "1240px", margin: "0 auto", padding: "0 24px", display: "flex", flexWrap: "wrap", gap: "64px", alignItems: "center" }}>
-<div style={{ flex: "1 1 400px", minWidth: "0", position: "relative", padding: "0 18px 40px 0" }}>
-<div className="cv-tall" style={{ backgroundImage: "url(/team/arnaldo/08-escritorio-negra.webp)" }} role="img" aria-label="Arnaldo en un espacio de trabajo"></div>
-<div className="cv-note" style={{ right: "0", bottom: "0" }}>“No solo diseño estrategias. También construyo la tecnología que las hace posibles.”</div>
+<div className="cv-about-stage" style={{ flex: "1 1 460px", minWidth: "0" }}>
+<img className="cv-about-me" src="/team/arnaldo/pose-present.webp" alt="Arnaldo presentando el sistema" />
+<div className="cv-sys" role="img" aria-label="Cómo conecto anuncios, WhatsApp, CRM e IA hasta la venta">
+<div className="cv-sys-top"><span className="ck-mono" style={{ fontSize: "11.5px", color: "rgba(255,255,255,.65)" }}>EL SISTEMA QUE CONSTRUYO</span><span style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "rgba(255,255,255,.8)" }}><span className="ck-dot" style={{ width: "7px", height: "7px" }}></span>en vivo</span></div>
+<div className="cv-sys-row"><span className="cv-sys-step" style={{ background: "#D6EBFF" }}><span className="ck-mono">01 · ATRAER</span><strong>SEO</strong></span><span className="cv-sys-step" style={{ background: "#FFDCC7" }}><span className="ck-mono">01 · ATRAER</span><strong>Meta y Google Ads</strong></span></div>
+<div className="cv-sys-line"><span className="cv-sys-pulse"></span></div>
+<div className="cv-sys-row"><span className="cv-sys-step" style={{ background: "#FFF8F0" }}><span className="ck-mono">02 · MEDIR</span><strong>Pixel + CAPI</strong></span><span className="cv-sys-step" style={{ background: "#D3F2E3" }}><span className="ck-mono">03 · CONVERSAR</span><strong>WhatsApp API</strong></span></div>
+<div className="cv-sys-line"><span className="cv-sys-pulse" style={{ animationDelay: "1.2s" }}></span></div>
+<div className="cv-sys-row"><span className="cv-sys-step" style={{ background: "#E4DEFF" }}><span className="ck-mono">04 · RESPONDER</span><strong>Agente de IA</strong></span><span className="cv-sys-step" style={{ background: "#fff" }}><span className="ck-mono">05 · ORDENAR</span><strong>CRM</strong></span></div>
+<div className="cv-sys-line"><span className="cv-sys-pulse" style={{ animationDelay: "2.4s" }}></span></div>
+<div className="cv-sys-win"><span className="ck-mono" style={{ fontSize: "11px", color: "#5A6178" }}>RESULTADO</span><strong>Lead → conversación → venta <span>✓</span></strong><span className="ck-mono" style={{ fontSize: "11px", color: "#1F6B45" }}>y la venta vuelve a Meta para que aprenda</span></div>
+</div>
+<div className="cv-note" style={{ left: "0", bottom: "0" }}>“No solo diseño estrategias. También construyo la tecnología que las hace posibles.”</div>
 </div>
 <div style={{ flex: "1 1 520px", minWidth: "0", display: "flex", flexDirection: "column", gap: "20px" }}>
 <span className="ck-eyebrow">01 · Sobre mí</span>
@@ -112,8 +128,11 @@ export default function ArnaldoPage() {
 </section>
 
 
-<section style={{ padding: "0 16px clamp(80px, 9vw, 120px)" }}>
-<div style={{ maxWidth: "1240px", margin: "0 auto", background: "#010E25", color: "#fff", borderRadius: "44px", padding: "clamp(28px, 5vw, 64px)", display: "flex", flexDirection: "column", gap: "36px" }}>
+<section style={{ padding: "120px 16px clamp(80px, 9vw, 120px)" }}>
+<div className="cv-peek-wrap" style={{ maxWidth: "1240px", margin: "0 auto" }}>
+<img className="cv-peek" src="/team/arnaldo/cut-07.webp" alt="" aria-hidden="true" />
+<div className="cv-peek-bubble"><span className="ck-hand" style={{ fontSize: "24px", color: "#C94400" }}>esto es lo que hago hoy ↓</span></div>
+<div style={{ position: "relative", zIndex: "1", background: "#010E25", color: "#fff", borderRadius: "44px", padding: "clamp(28px, 5vw, 64px)", display: "flex", flexDirection: "column", gap: "36px" }}>
 <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", gap: "16px" }}>
 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}><span className="ck-eyebrow" style={{ color: "rgba(255,255,255,.65)" }}>02 · Dónde estoy hoy</span><h2 style={{ fontSize: "clamp(34px, 4vw, 54px)", color: "#fff" }}>Tres frentes, <span style={{ color: "#FE5C02" }}>una misma idea</span>.</h2></div>
 <span className="ck-hand" style={{ fontSize: "26px", color: "#FE5C02", transform: "rotate(-3deg)" }}>crecer con sistemas, no con suerte</span>
@@ -122,6 +141,7 @@ export default function ArnaldoPage() {
 <article className="cv-now" style={{ background: "#D6EBFF" }}><span className="ck-tag">[GROWTH &amp; MARKETING]</span><h3>Callbell</h3><p>Formo parte del equipo de Growth &amp; Marketing de una plataforma de WhatsApp y CRM: contenido y video tutoriales, SEO, investigación de partners y estrategia de visibilidad en IA.</p><span className="ck-mono cv-when">HOY</span></article>
 <article className="cv-now" style={{ background: "#FFDCC7" }}><span className="ck-tag">[FUNDADOR]</span><h3>ClicKonversion</h3><p>Fundé la agencia con Abisai y Yoli. SEO, anuncios, agentes de IA, webs y configuración técnica para negocios que quieren más clientes.</p><Link className="cv-link" href="/">Ver la agencia →</Link></article>
 <article className="cv-now" style={{ background: "#E4DEFF" }}><span className="ck-tag">[PRODUCTO PROPIO]</span><h3>SyncLead y más</h3><p>Desarrollo proyectos tecnológicos propios de automatización, CRM e IA. SyncLead es un CRM multiempresa donde los leads de Meta Ads llegan solos y se ordenan por etapa.</p><Link className="cv-link" href="/apps/synclead">Conocer SyncLead →</Link></article>
+</div>
 </div>
 </div>
 </section>
@@ -149,7 +169,7 @@ export default function ArnaldoPage() {
 <div className="cv-cert"><span className="ck-tag" style={{ background: "#D6EBFF" }}>[SEO + AEO]</span><span>Aprendo SEO</span></div>
 <div className="cv-cert"><span className="ck-tag" style={{ background: "#FFDCC7" }}>[META ADS]</span><span>Felipe Vergara</span></div>
 </div>
-<div className="cv-photo-sm" style={{ backgroundImage: "url(/team/arnaldo/07-lobby-verde-sonrisa.webp)" }} role="img" aria-label="Arnaldo sonriendo en una oficina"></div>
+<div className="cv-aside-me"><img src="/team/arnaldo/pose-arms.webp" alt="Arnaldo con los brazos cruzados" /><div className="cv-aside-bubble"><strong>¿Te sirve mi perfil?</strong><a className="cv-link" href={waLink("Hola Arnaldo, me interesa tu perfil")} target="_blank" rel="noopener noreferrer">Hablemos →</a></div></div>
 </aside>
 </div>
 </section>
@@ -158,13 +178,17 @@ export default function ArnaldoPage() {
 <section style={{ padding: "clamp(72px, 8vw, 110px) 0", background: "#fff", borderTop: "1.5px solid rgba(1,14,37,.08)", borderBottom: "1.5px solid rgba(1,14,37,.08)" }}>
 <div style={{ maxWidth: "1240px", margin: "0 auto", padding: "0 24px", display: "flex", flexDirection: "column", gap: "36px" }}>
 <div style={{ display: "flex", flexWrap: "wrap", gap: "40px", alignItems: "flex-end", justifyContent: "space-between" }}>
-<div style={{ display: "flex", flexDirection: "column", gap: "14px", maxWidth: "760px" }}>
+<div style={{ display: "flex", flexDirection: "column", gap: "14px", flex: "1 1 560px", maxWidth: "720px" }}>
 <span className="ck-eyebrow">04 · Marketing Technology, CRM, WhatsApp &amp; AI Automation</span>
 <h2 style={{ fontSize: "clamp(34px, 4.4vw, 58px)" }}>Conecto publicidad, datos, conversaciones y tecnología para construir <span style={{ color: "#FE5C02" }}>sistemas de crecimiento</span>.</h2>
 <p style={{ fontSize: "18px", color: "#3A4158" }}>Mi experiencia no se limita a crear campañas o generar tráfico. También configuro la infraestructura digital que permite captar clientes, medir resultados, automatizar conversaciones y optimizar procesos comerciales.</p>
 </div>
-<span className="ck-hand" style={{ fontSize: "26px", color: "#C94400", transform: "rotate(-3deg)" }}>toca cada área ↓</span>
+<div className="cv-ask">
+<div className="cv-ask-bubble"><strong>¿Tienes un problema con alguna de estas?</strong><span>Pregúntame. Seguro ya lo resolví antes.</span><a className="ck-btn ck-btn-dark" href={waLink("Hola Arnaldo, tengo una pregunta")} target="_blank" rel="noopener noreferrer" style={{ minHeight: "42px", fontSize: "14px", padding: "0 16px" }}>Pregúntame →</a></div>
+<img className="cv-ask-me" src="/team/arnaldo/pose-think.webp" alt="" aria-hidden="true" />
 </div>
+</div>
+<span className="ck-hand" style={{ fontSize: "26px", color: "#C94400", transform: "rotate(-2deg)", marginTop: "-12px" }}>toca cada área ↓</span>
 <div className="cv-areas">
 <details className="cv-area" style={{ "--bg": "#D6EBFF" } as React.CSSProperties} open>
 <summary><span className="cv-num ck-mono">01</span><span className="cv-sum"><span className="ck-tag">[SEO]</span><strong>SEO, SEO técnico &amp; SEO local</strong><span className="cv-sub">Que te encuentren en Google, en Google Maps y en las respuestas de la IA.</span></span><span className="cv-count ck-mono">18 PUNTOS</span><span className="cv-plus" aria-hidden="true">+</span></summary>
@@ -198,6 +222,8 @@ export default function ArnaldoPage() {
 <div className="cv-consult-in"><span className="cv-num ck-mono">08</span><div style={{ display: "flex", flexDirection: "column", gap: "12px" }}><span className="ck-tag" style={{ color: "#FFF8F0", borderColor: "rgba(255,248,240,.6)" }}>[CONSULTORÍA]</span><strong style={{ fontSize: "clamp(24px, 2.4vw, 32px)", letterSpacing: "-0.03em", lineHeight: "1.1" }}>Consultoría técnica y estratégica</strong>
 <p>Asesoro a empresas en la selección, configuración y optimización de herramientas digitales. Analizo cómo funciona el negocio, identifico sus problemas operativos y comerciales, y propongo soluciones que conectan marketing, tecnología y automatización.</p>
 <div className="cv-chips dark"><span>Meta Ads</span><span>Activos empresariales</span><span>Infraestructura de medición</span><span>WhatsApp Business API</span><span>CRM</span><span>Automatización de ventas</span><span>Agentes de IA</span><span>Procesos digitales</span></div></div></div>
+<div className="cv-consult-me" aria-hidden="true"><img src="/team/arnaldo/pose-point.webp" alt="" /></div>
+<div className="cv-consult-bubble"><span className="ck-hand" style={{ fontSize: "25px", color: "#C94400", lineHeight: "1.1" }}>¡esto es lo que más me piden!</span><a className="ck-btn ck-btn-primary" href={waLink("Hola Arnaldo, quiero una consultoría")} target="_blank" rel="noopener noreferrer" style={{ minHeight: "40px", fontSize: "14px", padding: "0 16px" }}>Pide tu consultoría ↗</a></div>
 </div>
 </div>
 </div>
@@ -222,11 +248,12 @@ export default function ArnaldoPage() {
 <div style={{ maxWidth: "1240px", margin: "0 auto", padding: "0 24px", display: "flex", flexDirection: "column", gap: "28px" }}>
 <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", gap: "12px" }}><div style={{ display: "flex", flexDirection: "column", gap: "10px" }}><span className="ck-eyebrow">06 · Detrás de la pantalla</span><h2 style={{ fontSize: "clamp(32px, 3.8vw, 50px)" }}>Una persona real detrás de cada configuración.</h2></div><span className="ck-hand" style={{ fontSize: "26px", color: "#C94400", transform: "rotate(-2deg)" }}>sí, soy yo el que responde</span></div>
 <div className="cv-polas">
-<figure className="cv-pola" style={{ "--r": "-4deg" } as React.CSSProperties}><div style={{ backgroundImage: "url(/team/arnaldo/03-cowork-negra.webp)" }}></div><figcaption className="ck-mono">01</figcaption></figure>
-<figure className="cv-pola" style={{ "--r": "3deg" } as React.CSSProperties}><div style={{ backgroundImage: "url(/team/arnaldo/10-calle-selfie.webp)" }}></div><figcaption className="ck-mono">02</figcaption></figure>
-<figure className="cv-pola" style={{ "--r": "-2deg" } as React.CSSProperties}><div style={{ backgroundImage: "url(/team/arnaldo/05-vidrio-marino.webp)" }}></div><figcaption className="ck-mono">03</figcaption></figure>
-<figure className="cv-pola" style={{ "--r": "4deg" } as React.CSSProperties}><div style={{ backgroundImage: "url(/team/arnaldo/04-oficina-gris.webp)" }}></div><figcaption className="ck-mono">04</figcaption></figure>
-<figure className="cv-pola" style={{ "--r": "-3deg" } as React.CSSProperties}><div style={{ backgroundImage: "url(/team/arnaldo/01-piedra-negra.webp)" }}></div><figcaption className="ck-mono">05</figcaption></figure>
+<figure className="cv-pola" style={{ "--r": "-4deg" } as React.CSSProperties}><div style={{ backgroundImage: "url(/team/arnaldo/life-palmas.webp)" }}></div><figcaption className="ck-mono">01</figcaption></figure>
+<figure className="cv-pola" style={{ "--r": "3deg" } as React.CSSProperties}><div style={{ backgroundImage: "url(/team/arnaldo/life-cerro.webp)" }}></div><figcaption className="ck-mono">02</figcaption></figure>
+<figure className="cv-pola" style={{ "--r": "-2deg" } as React.CSSProperties}><video autoPlay muted loop playsInline preload="metadata" poster="/team/arnaldo/life-gym-poster.jpg" aria-label="Arnaldo entrenando en el gimnasio"><source src="/team/arnaldo/life-gym.mp4" type="video/mp4" /></video><figcaption className="ck-mono">03 · VIDEO</figcaption></figure>
+<figure className="cv-pola" style={{ "--r": "4deg" } as React.CSSProperties}><div style={{ backgroundImage: "url(/team/arnaldo/life-cascada-bandera.webp)" }}></div><figcaption className="ck-mono">04</figcaption></figure>
+<figure className="cv-pola" style={{ "--r": "-3deg" } as React.CSSProperties}><div style={{ backgroundImage: "url(/team/arnaldo/10-calle-selfie.webp)" }}></div><figcaption className="ck-mono">05</figcaption></figure>
+<figure className="cv-pola" style={{ "--r": "2deg" } as React.CSSProperties}><div style={{ backgroundImage: "url(/team/arnaldo/life-cascada.webp)" }}></div><figcaption className="ck-mono">06</figcaption></figure>
 </div>
 </div>
 </section>
@@ -247,7 +274,7 @@ export default function ArnaldoPage() {
 
 <section style={{ padding: "0 16px clamp(48px, 6vw, 80px)" }}>
 <div className="ck-reveal ck-cta-dark" style={{ maxWidth: "1240px", margin: "0 auto", border: "1.5px solid #010E25", borderRadius: "44px", padding: "clamp(32px, 6vw, 72px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "40px" }}>
-<img src="/team/arnaldo/09-vidrio-marino-sonrisa.webp" alt="Arnaldo Casadiego" className="cv-cta-photo" />
+<div className="cv-cta-me"><img src="/team/arnaldo/cut-04.webp" alt="Arnaldo Casadiego" /><div className="cv-cta-card"><span className="ck-mono" style={{ fontSize: "11px", color: "#5A6178" }}>15 MIN · SIN COMPROMISO</span><strong>Tu negocio, mi primera idea.</strong><a className="ck-btn ck-btn-primary" href={waLink("Hola Arnaldo, vi tu CV")} target="_blank" rel="noopener noreferrer" style={{ minHeight: "42px", fontSize: "14px", padding: "0 18px" }}>Agendar ↗</a></div></div>
 <div style={{ flex: "1 1 420px", minWidth: "0", display: "flex", flexDirection: "column", gap: "14px" }}>
 <span className="ck-hand" style={{ fontSize: "28px", color: "#FE5C02", transform: "rotate(-2deg)", alignSelf: "flex-start" }}>¿hablamos? te leo yo</span>
 <h2 style={{ fontSize: "clamp(36px, 4.6vw, 64px)" }}>¿Hablamos 15 minutos?</h2>

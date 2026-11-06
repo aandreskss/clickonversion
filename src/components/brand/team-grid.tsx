@@ -19,7 +19,7 @@ export function TeamGrid() {
                   {!m.photo && <span className="ck-mono" style={{ fontSize: 11.5, color: "#5A6178", background: "#fff", padding: "6px 10px", borderRadius: 8 }}>FOTO · {first}, luz natural</span>}
                   {m.photo && <Image src={m.photo} alt={m.name} fill sizes="(max-width: 760px) 100vw, 400px" style={{ objectFit: "cover", objectPosition: "50% 22%", borderRadius: 29 }} />}
                 </div>
-                <div style={{ position: "absolute", right: -16, top: 24, background: "#010E25", borderRadius: 999, padding: "8px 16px", transform: `rotate(${m.sticker}deg)`, boxShadow: "0 16px 30px -16px rgba(1,14,37,.6)" }}>
+                <div style={{ position: "absolute", right: -16, top: -22, zIndex: 2, background: "#010E25", borderRadius: 999, padding: "8px 16px", transform: `rotate(${m.sticker}deg)`, boxShadow: "0 16px 30px -16px rgba(1,14,37,.6)" }}>
                   <span className="ck-hand" style={{ fontSize: 22, color: "#fff" }}>¡hola, soy {first}!</span>
                 </div>
                 <div style={{ position: "absolute", left: -14, bottom: 64, background: "#fff", border: "1.5px solid #010E25", borderRadius: 18, padding: "12px 16px", display: "flex", flexDirection: "column", gap: 2, boxShadow: "0 20px 40px -24px rgba(1,14,37,.5)" }}>

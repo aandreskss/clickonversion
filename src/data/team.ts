@@ -29,7 +29,7 @@ export const TEAM: TeamMember[] = [
       { label: "[META ADS]", bg: "#E4DEFF" },
     ],
     linkedin: "https://www.linkedin.com/in/arnaldocasadiego/",
-    photo: "/team/arnaldo/07-lobby-verde-sonrisa.webp",
+    photo: "/team/arnaldo/06-sonrisa-gris.webp",
     cv: "/about/arnaldo",
     stripes: ["#FFDCC7", "#FFE7D8"],
     tilt: "",

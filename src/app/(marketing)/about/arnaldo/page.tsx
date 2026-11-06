@@ -100,6 +100,7 @@ export default function ArnaldoPage() {
 <div style={{ maxWidth: "1240px", margin: "0 auto", padding: "0 24px", display: "flex", flexWrap: "wrap", gap: "64px", alignItems: "center" }}>
 <div className="cv-about-stage" style={{ flex: "1 1 460px", minWidth: "0" }}>
 <img className="cv-about-me" src="/team/arnaldo/pose-present.webp" alt="Arnaldo presentando el sistema" />
+<img className="cv-about-me-m" src="/team/arnaldo/pose-down.webp" alt="Arnaldo señalando el sistema" />
 <div className="cv-sys" role="img" aria-label="Cómo conecto anuncios, WhatsApp, CRM e IA hasta la venta">
 <div className="cv-sys-top"><span className="ck-mono" style={{ fontSize: "11.5px", color: "rgba(255,255,255,.65)" }}>EL SISTEMA QUE CONSTRUYO</span><span style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "rgba(255,255,255,.8)" }}><span className="ck-dot" style={{ width: "7px", height: "7px" }}></span>en vivo</span></div>
 <div className="cv-sys-row"><span className="cv-sys-step" style={{ background: "#D6EBFF" }}><span className="ck-mono">01 · ATRAER</span><strong>SEO</strong></span><span className="cv-sys-step" style={{ background: "#FFDCC7" }}><span className="ck-mono">01 · ATRAER</span><strong>Meta y Google Ads</strong></span></div>
@@ -222,7 +223,7 @@ export default function ArnaldoPage() {
 <div className="cv-consult-in"><span className="cv-num ck-mono">08</span><div style={{ display: "flex", flexDirection: "column", gap: "12px" }}><span className="ck-tag" style={{ color: "#FFF8F0", borderColor: "rgba(255,248,240,.6)" }}>[CONSULTORÍA]</span><strong style={{ fontSize: "clamp(24px, 2.4vw, 32px)", letterSpacing: "-0.03em", lineHeight: "1.1" }}>Consultoría técnica y estratégica</strong>
 <p>Asesoro a empresas en la selección, configuración y optimización de herramientas digitales. Analizo cómo funciona el negocio, identifico sus problemas operativos y comerciales, y propongo soluciones que conectan marketing, tecnología y automatización.</p>
 <div className="cv-chips dark"><span>Meta Ads</span><span>Activos empresariales</span><span>Infraestructura de medición</span><span>WhatsApp Business API</span><span>CRM</span><span>Automatización de ventas</span><span>Agentes de IA</span><span>Procesos digitales</span></div></div></div>
-<div className="cv-consult-me" aria-hidden="true"><img src="/team/arnaldo/pose-point.webp" alt="" /></div>
+<div className="cv-consult-me" aria-hidden="true"><img className="d-only" src="/team/arnaldo/pose-point.webp" alt="" /><img className="m-only" src="/team/arnaldo/pose-up.webp" alt="" /></div>
 <div className="cv-consult-bubble"><span className="ck-hand" style={{ fontSize: "25px", color: "#C94400", lineHeight: "1.1" }}>¡esto es lo que más me piden!</span><a className="ck-btn ck-btn-primary" href={waLink("Hola Arnaldo, quiero una consultoría")} target="_blank" rel="noopener noreferrer" style={{ minHeight: "40px", fontSize: "14px", padding: "0 16px" }}>Pide tu consultoría ↗</a></div>
 </div>
 </div>

@@ -370,7 +370,6 @@ a:hover > .ck-alogo .ck-alogo-iso, .ck-alogo:hover .ck-alogo-iso { animation: ck
 @keyframes ck-logo-ping { 0%, 82%, 100% { transform: scale(1) rotate(0); } 88% { transform: scale(1.35) rotate(-10deg); } 94% { transform: scale(.92) rotate(6deg); } }
 @keyframes ck-logo-hop { 0%, 84%, 100% { transform: translateY(0); } 90% { transform: translateY(-14%); } 95% { transform: translateY(3%); } }
 @media (prefers-reduced-motion: reduce) { .ck-alogo-l, .ck-alogo-dot, .ck-alogo-iso { animation: none !important; } }
-
 /* ---------- CV de Arnaldo ---------- */
 .cv-dots{background-image:radial-gradient(rgba(1,14,37,.09) 1.1px, transparent 1.4px);background-size:24px 24px}
 .cv-avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;object-position:50% 20%;border:2px solid #010E25;box-shadow:0 0 0 4px #FFF8F0,0 0 0 5.5px #FE5C02}
@@ -493,17 +492,19 @@ a:hover > .ck-alogo .ck-alogo-iso, .ck-alogo:hover .ck-alogo-iso { animation: ck
 .cv-consult-in{padding-left:min(330px, 31%)!important}
 .cv-consult-me{position:absolute;left:2%;bottom:0;height:calc(100% + 140px);width:min(300px, 28%);overflow:hidden;border-radius:0 0 0 26px;pointer-events:none}
 .cv-consult-me img{position:absolute;left:46%;bottom:-5%;height:98%;width:auto;transform:translateX(-50%);transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.cv-consult-me .m-only{display:none}
 .cv-consult:hover .cv-consult-me img{transform:translateX(-46%) translateY(-8px)}
 .cv-consult-bubble{position:absolute;left:auto;right:28px;top:-58px;z-index:2;background:#fff;border:1.5px solid #010E25;border-radius:22px 22px 22px 6px;padding:12px 16px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;box-shadow:0 24px 40px -26px rgba(1,14,37,.55);transform:rotate(-2deg)}
 .cv-about-stage{position:relative;padding:0 0 70px}
 .cv-about-stage .cv-sys{width:60%;margin-bottom:0;padding:20px}
 .cv-about-stage .cv-sys-step strong{font-size:15px}
 .cv-about-me{position:absolute;right:-12%;bottom:0;height:min(480px, 92%);width:auto;z-index:2;pointer-events:none;-webkit-mask-image:linear-gradient(#000 86%,transparent);mask-image:linear-gradient(#000 86%,transparent)}
+.cv-about-me-m{display:none}
 .cv-aside-me{position:relative;display:flex;justify-content:center;align-items:flex-end;margin-top:8px}
 .cv-aside-me img{height:380px;width:auto;-webkit-mask-image:linear-gradient(#000 80%,transparent);mask-image:linear-gradient(#000 80%,transparent)}
 .cv-aside-bubble{position:absolute;left:0;top:30px;background:#E4DEFF;border:1.5px solid #010E25;border-radius:20px 20px 6px 20px;padding:12px 16px;display:flex;flex-direction:column;gap:6px;transform:rotate(-3deg);box-shadow:0 20px 34px -22px rgba(1,14,37,.5)}
 .cv-aside-bubble strong{font-weight:600;font-size:16px}
-@media (max-width:860px){.cv-consult{margin-top:24px}.cv-consult-in{padding-left:28px!important;padding-bottom:8px!important}.cv-consult-me{left:50%;transform:translateX(-50%);width:260px;height:330px}.cv-about-stage .cv-sys{width:100%}.cv-about-me{position:relative;display:block;right:auto;height:420px;margin:-40px 0 0 auto}.cv-about-stage{padding-bottom:0}.cv-about-stage .cv-note{position:relative;left:auto;bottom:auto;margin-top:-90px}.cv-consult-bubble{position:relative;right:auto;left:auto;top:auto;margin:4px 24px 330px 24px;align-self:flex-start;width:fit-content;transform:rotate(-2deg)}.cv-consult-arrow{display:none}}
+@media (max-width:860px){.cv-consult{margin-top:24px}.cv-consult-in{padding-left:28px!important;padding-bottom:8px!important}.cv-consult-me{left:50%;transform:translateX(-50%);width:260px;height:330px}.cv-consult-me .d-only{display:none}.cv-consult-me .m-only{display:block;left:50%}.cv-about-stage .cv-sys{width:100%}.cv-about-me{display:none}.cv-about-me-m{display:block;position:relative;z-index:1;height:360px;width:auto;margin:0 auto -84px}.cv-about-stage .cv-sys{position:relative;z-index:2;transform:none}.cv-about-stage{padding-bottom:0}.cv-about-stage .cv-note{position:relative;left:auto;bottom:auto;margin-top:-90px}.cv-consult-bubble{position:relative;right:auto;left:auto;top:auto;margin:4px 24px 330px 24px;align-self:flex-start;width:fit-content;transform:rotate(-2deg)}.cv-consult-arrow{display:none}}
 .cv-sys{position:relative;background:#010E25;border:1.5px solid #010E25;border-radius:36px;padding:26px;display:flex;flex-direction:column;gap:0;box-shadow:0 50px 80px -50px rgba(1,14,37,.6);transform:rotate(1.2deg);margin-bottom:64px}
 .cv-sys-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
 .cv-sys-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}

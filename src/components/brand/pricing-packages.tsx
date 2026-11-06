@@ -16,8 +16,8 @@ export function volumeDiscount(n: number) {
 }
 
 function totals(list: Svc[], disc: number) {
-  const once = list.filter((s) => s.type !== "mensual").reduce((a, s) => a + s.price, 0)
-  const monthly = list.filter((s) => s.type === "mensual").reduce((a, s) => a + s.price, 0)
+  const once = list.filter((s) => s.type !== "monthly").reduce((a, s) => a + s.price, 0)
+  const monthly = list.filter((s) => s.type === "monthly").reduce((a, s) => a + s.price, 0)
   return { once, monthly, onceD: Math.round(once * (1 - disc)), monthlyD: Math.round(monthly * (1 - disc)) }
 }
 
@@ -161,9 +161,9 @@ export function PackageBuilder() {
               </span>
               <span style={{ flex: 1, display: "flex", flexDirection: "column", lineHeight: 1.3 }}>
                 <span style={{ fontWeight: 600 }}>{s.name}</span>
-                <span className="ck-mono" style={{ fontSize: 12, color: "#5A6178" }}>{s.type === "mensual" ? "MENSUAL" : "PAGO ÚNICO"}</span>
+                <span className="ck-mono" style={{ fontSize: 12, color: "#5A6178" }}>{s.type === "monthly" ? "MENSUAL" : "PAGO ÚNICO"}</span>
               </span>
-              <span style={{ fontWeight: 700, whiteSpace: "nowrap" }}>{s.prefix ? "desde " : ""}{fmt(s.price)}{s.type === "mensual" ? "/mes" : ""}</span>
+              <span style={{ fontWeight: 700, whiteSpace: "nowrap" }}>{s.prefix ? "desde " : ""}{fmt(s.price)}{s.type === "monthly" ? "/mes" : ""}</span>
             </button>
           )
         })}

@@ -6,7 +6,7 @@ export interface CheckoutItem {
   id: string
   name: string
   price: number
-  type: "único" | "mensual"
+  type: "one-time" | "monthly"
 }
 
 export interface CreatePayPalOrderInput {
@@ -52,7 +52,7 @@ async function getPayPalAccessToken(): Promise<string> {
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET
 
   if (!clientId || !clientSecret) {
-    throw new Error("PAYPAL_CLIENT_ID y PAYPAL_CLIENT_SECRET son requeridos.")
+    throw new Error("Missing required env vars: PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET")
   }
 
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString("base64")
@@ -109,7 +109,7 @@ export async function createPayPalOrderAction(
           },
           items: items.map((item) => ({
             name: item.name,
-            description: item.type === "mensual" ? "Servicio mensual (primer mes)" : "Pago único",
+            description: item.type === "monthly" ? "Monthly service (first month)" : "One-time payment",
             quantity: "1",
             unit_amount: {
               currency_code: "USD",

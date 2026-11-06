@@ -6,9 +6,9 @@
 Build a growth operating system to help ClicKonversion acquire its first 3 clients and reach $2,000 MRR.
 
 ## Current Phase
-**Phase 9 — Marca v4 + Apps SyncLead** 🚧 En progreso
+**Phase 9 — Marca v4 + Apps SyncLead + CV** 🚧 En progreso
 
-Identidad visual v4 aplicada a toda la capa de marketing. SyncLead con suscripciones reales PayPal. Logos oficiales SVG. Mobile fixes completos. Build limpio.
+Identidad visual v4 aplicada a toda la capa de marketing. SyncLead con suscripciones reales PayPal. Logos oficiales SVG. Mobile fixes completos. CV de Arnaldo en `/about/arnaldo` con galería de fotos reales. Build limpio.
 
 ---
 
@@ -102,12 +102,40 @@ Los logos y el isotipo son SVG vectoriales en `/public/brand/`. **No editar `log
 | `/services` | ✅ Rediseñada v4 con ServiceRows |
 | `/pricing` | ✅ Paquetes hardcodeados + PackageBuilder |
 | `/about` | ✅ Rediseñada v4 |
-| `/projects` | ✅ Rediseñada v4 |
+| `/projects` | ✅ Grid filtrable + páginas de caso individuales + galería |
+| `/projects/[slug]` | ✅ Página de caso por proyecto con galería desktop/mobile |
 | `/blog` | ✅ Nueva |
 | `/blog/[slug]` | ✅ Nueva |
 | `/apps` | ✅ Rediseñada con SyncLead destacado |
 | `/apps/synclead` | ✅ Landing con suscripciones PayPal reales |
 | `/apps/synclead/gracias` | ✅ Confirmación de suscripción |
+
+### Portafolio — `/projects`
+
+**Datos:** `src/data/portfolio.ts` — array `PROJECTS` (8 proyectos).
+**Galería:** `src/data/portfolio-gallery.ts` — capturas adicionales por proyecto.
+**Capturas:** `/public/portfolio/<slug>/` — `d1-hero.webp` (desktop) y `m1-hero.webp` (mobile). Si `shots: null`, se muestra portada de marca con color.
+
+**Proyectos actuales (8):**
+
+| Slug | Nombre | Estado |
+|------|--------|--------|
+| `savaya` | Savaya · tienda en línea | En línea |
+| `hacienda-los-bucaros` | Hacienda Hotel Los Búcaros | En aprobación |
+| `dr-follicle-solutions` | Dr. Follicle Solutions | — |
+| `score-music-finance-pro` | SCORE Music Finance Pro | — |
+| `zoe-catalogo` | Zoe Catálogo | — |
+| `medallo-futbol-club` | Medallo Fútbol Club | — |
+| `design-by-bc` | Design by BC | — |
+| `clickonversion` | ClicKonversion | — |
+
+**Componentes:**
+- `src/components/brand/projects-grid.tsx` — grid filtrable por categoría (`web` / `ecommerce` / `plataforma`), Client Component
+- `src/components/brand/portfolio-media.tsx` — `ProjectMedia`, `StatusTag`, `hostOf`, `CATEGORY_LABEL`
+- `src/components/brand/project-gallery.tsx` — `ProjectGallery` con capturas desktop y mobile
+- `src/app/(marketing)/projects/[slug]/page.tsx` — Server Component estático (`dynamicParams = false`), genera rutas en build, metadata + JSON-LD por proyecto
+
+**Para agregar un proyecto:** añadir entrada en `PROJECTS` en `portfolio.ts`, subir capturas a `/public/portfolio/<slug>/`, y si hay galería extendida agregar en `portfolio-gallery.ts`.
 
 ### SyncLead — Suscripciones PayPal reales
 
@@ -414,11 +442,70 @@ Always communicate in this order. Do not lead with Level 4.
 | Framework | Next.js | 16 (App Router) |
 | Language | TypeScript | Strict — no `any` |
 | Styling | Tailwind CSS | 4 (CSS-first `@theme`) |
-| Database | Supabase | PostgreSQL + Auth |
-| Auth adapter | `@supabase/ssr` | NOT `auth-helpers-nextjs` |
+| Database | Neon (PostgreSQL) | via `@neondatabase/serverless` |
+| ORM | Drizzle ORM | 0.45.4 — cliente en `src/lib/db/index.ts` |
+| Auth | Auth.js v5 | `next-auth@beta` + CredentialsProvider + DrizzleAdapter |
+| Storage | Vercel Blob | `@vercel/blob` — documentos privados portal |
+| Email | Resend | via `src/lib/email/service.ts` |
 | Validation | Zod | 3.x — all forms + API payloads |
-| Package manager | pnpm | 9.x |
+| Package manager | pnpm | 11.x |
 | Hosting | Vercel | — |
+
+---
+
+## Internationalization Standards (i18n)
+
+All code identifiers, logic, and infrastructure use **English**. Spanish is reserved for user-facing content only.
+
+### Rule table
+
+| Layer | Language | Examples |
+|-------|----------|---------|
+| Variable / function / type names | English | `serviceType`, `billingPeriod`, `orgId` |
+| Type union discriminators | English | `"one-time"` not `"único"`, `"monthly"` not `"mensual"` |
+| Enum values used in logic | English | `status: "active" \| "cancelled"` |
+| Constants / named exports | English | `const FILTER_CATS`, `const CAT_LABELS` |
+| CSS class names | English | `.service-card`, `.price-tag` (`.ck-*` brand classes are intentional) |
+| DB schema fields | English | `billingPeriod`, `firstName`, `createdAt` |
+| Environment variables | English, SCREAMING_SNAKE_CASE | `PAYPAL_CLIENT_ID`, `BLOB_READ_WRITE_TOKEN` |
+| API route paths | English, kebab-case | `/api/admin/queue`, `/api/portal/requests` |
+| API request/response keys | English, camelCase | `{ orderId, totalAmount, lineItems }` |
+| Internal error messages (throws, console) | English | `throw new Error("Missing required field: email")` |
+| Code comments | English | `// append-only — no updates allowed` |
+| User-facing UI text (labels, placeholders, toasts) | Spanish | `"Nombre del cliente"`, `"Guardando…"` |
+| User-facing error messages (shown in UI) | Spanish | `"El email es requerido."` |
+| Content / marketing copy | Spanish | Product descriptions, blog, landing pages |
+
+### Networking
+- Always use **HTTPS** for external API calls — never `http://`
+- PayPal, Stripe, Cal.com, Resend endpoints must use their HTTPS base URLs
+- Internal Next.js server actions and API routes are HTTPS automatically via Vercel
+
+### Migration plan (pending)
+
+The following must be refactored to comply with these standards:
+
+#### 1. Type discriminators — `"único"` → `"one-time"`, `"mensual"` → `"monthly"`
+
+Files to update:
+- `src/app/(marketing)/checkout/actions.ts` — `CheckoutItem.type` union + conditional checks
+- `src/components/marketing/pricing-grid.tsx` — `type` field in service objects + filter logic
+- `src/components/marketing/services-tabs.tsx` — `type` field in service objects
+- `src/types/catalog.ts` — `CartItem.type` if present
+
+Change: `type: "único" | "mensual"` → `type: "one-time" | "monthly"`
+
+#### 2. Internal error messages — translate throws/console to English
+
+File: `src/app/(marketing)/checkout/actions.ts`
+
+Change all `throw`/`return { error: "..." }` that are internal (not shown directly in UI) to English. Keep Spanish only for messages rendered in the UI via toast or form feedback.
+
+#### 3. Category label keys — keep values Spanish, make keys English
+
+In `pricing-grid.tsx` and `services-tabs.tsx`:
+- Object keys in `CAT_LABELS` must be English identifiers
+- Display values (shown to user) stay Spanish
 
 ---
 
@@ -432,7 +519,6 @@ Always communicate in this order. Do not lead with Level 4.
 ### Next.js 16 Specifics
 - The auth middleware file is `proxy.ts` (not `middleware.ts`) and exports `proxy` not `middleware`
 - `"use client"` pages cannot export `metadata` — create a `layout.tsx` in the same route for noindex/metadata
-- Supabase FK joins return arrays — always normalize: `Array.isArray(x) ? x[0] : x`
 
 ### File Structure
 ```
@@ -442,7 +528,8 @@ src/
       page.tsx                # Homepage /
       services/page.tsx       # /services — ServicesTabs + CartBar
       pricing/page.tsx        # /pricing — PricingGrid filtrable + CartBar
-      projects/page.tsx       # /projects — portfolio de proyectos
+      projects/page.tsx       # /projects — grid filtrable de proyectos
+      projects/[slug]/page.tsx # /projects/[slug] — caso de estudio individual
       apps/page.tsx           # /apps — catálogo de apps
       apps/[slug]/page.tsx    # /apps/[slug] — landing individual
       about/page.tsx          # /about — historia, equipo, ContactForm
@@ -491,13 +578,20 @@ src/
     admin/                    # StatusBadge, MetricCard, QueueTable, etc.
     forms/
       audit-form.tsx
+  data/
+    portfolio.ts              # PROJECTS array (8 proyectos), tipos PortfolioProject/ProjectCategory/ProjectStatus
+    portfolio-gallery.ts      # Galería extendida de capturas por slug
   lib/
     analytics.ts
     validations.ts
-    supabase/
-      client.ts
-      server.ts
-      middleware.ts
+    db/
+      index.ts              # Cliente Drizzle + Neon
+      schema/               # Barrel exports + schema por dominio
+    auth.ts                 # Auth.js v5 config (exporta auth, signIn, signOut, handlers)
+    portal/auth.ts          # getPortalSession()
+    admin/auth.ts           # requireAdminSession()
+    email/service.ts        # Resend
+    rate-limit.ts
   types/
     database.ts
     catalog.ts                # CartItem interface, tipos catálogo
@@ -627,16 +721,16 @@ Do NOT add a second gtag snippet. Check `src/app/layout.tsx` before touching GA4
 
 ## Security Rules
 
-1. **RLS on every table** — no table is readable or writable without a policy.
-2. **Never use `NEXT_PUBLIC_` prefix for secrets** — `SUPABASE_SERVICE_ROLE_KEY`, `PAYPAL_CLIENT_SECRET`, `RESEND_API_KEY` son server-only.
+1. **Org isolation explícita** — no hay RLS en Neon; toda query `pf_*` DEBE incluir filtro `orgId`.
+2. **Never use `NEXT_PUBLIC_` prefix for secrets** — `DATABASE_URL`, `AUTH_SECRET`, `PAYPAL_CLIENT_SECRET`, `RESEND_API_KEY` son server-only.
 3. **Always validate server-side** — Zod validation in API routes. Client validation is UX only.
 4. **Honeypot + Turnstile on audit form** — both verified server-side before any DB write.
 5. **Rate limiting on public routes** — audit form y waitlist API rate-limited por IP.
 6. **No PII in GA4** — events contain only non-sensitive marketing context.
-7. **Public API routes must use `createAdminClient()`** — service role para writes de confianza.
-8. **`internal_notes` e `is_internal` NUNCA se exponen al portal cliente** — filtrar a nivel de query.
-9. **Org isolation** — toda query a tablas `pf_*` debe incluir filtro explícito `orgId` (no RLS).
-10. **Signed URLs server-side** — nunca exponer raw blob URLs a clientes sin auth check.
+7. **`internal_notes` e `is_internal` NUNCA se exponen al portal cliente** — filtrar a nivel de query.
+8. **Signed URLs server-side** — nunca exponer raw blob URLs a clientes sin auth check.
+9. **404 indistinguible** — not-found vs wrong-org nunca revelan diferencia (enumeration prevention).
+10. **Tablas append-only** — `pfRequestStatusLog`, `pfPaymentAudit`, `pfCatalogPriceHistory` — solo insert.
 
 ---
 
@@ -646,16 +740,15 @@ Do NOT add a second gtag snippet. Check `src/app/layout.tsx` before touching GA4
 - `"strict": true` — do not weaken
 - No `any` — use `unknown` and narrow
 
-### Supabase Clients
-- `createClient()` — session-aware, uses anon key, subject to RLS.
-- `createAdminClient()` — service role, bypasses RLS. For trusted server-side API routes.
-
-### organizations table — must have exactly one row
-Org ID: `db071585-6652-4d2a-87fd-ec4670c44c93` → env var `SUPABASE_ORG_ID`
-
-### Database
-- Schema changes via SQL migrations in `supabase/migrations/`
-- Never use Supabase Dashboard for schema changes
+### Database (Neon + Drizzle)
+- Cliente: `db` de `@/lib/db` — usar en server components, API routes, server actions
+- Auth: `auth()` de `@/lib/auth` — NUNCA usar createClient/supabase
+- Schema changes via Drizzle: `pnpm drizzle-kit generate` → `pnpm drizzle-kit migrate`
+- No hay RLS en Neon — toda query `pf_*` DEBE incluir filtro explícito de `orgId`
+- Org ID: env var `ORG_ID` (UUID de la organización interna)
+- Session: `session.user.id`, `session.user.email`, `session.user.platformRole`, `session.user.adminRole`
+- Portal session: `getPortalSession()` desde `@/lib/portal/auth`
+- Admin session: `requireAdminSession()` desde `@/lib/admin/auth`
 
 ### Favicon
 - `src/app/icon.tsx` — 32×32 PNG via `ImageResponse`. Next.js auto-inyecta el `<link>`.
@@ -708,10 +801,12 @@ Org ID: `db071585-6652-4d2a-87fd-ec4670c44c93` → env var `SUPABASE_ORG_ID`
 | Variable | Propósito | Público |
 |----------|-----------|---------|
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | GA4 | ✅ |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase URL | ✅ |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon | ✅ |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase admin | ❌ |
-| `SUPABASE_ORG_ID` | UUID org interna | ❌ |
+| `DATABASE_URL` | Neon pooled connection string | ❌ |
+| `DATABASE_URL_UNPOOLED` | Neon direct (para drizzle-kit migrate) | ❌ |
+| `AUTH_SECRET` | Auth.js JWT secret | ❌ |
+| `AUTH_URL` | URL base del sitio (https://www.clickonversion.com) | ❌ |
+| `ORG_ID` | UUID de la organización interna | ❌ |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob — documentos privados portal | ❌ |
 | `RESEND_API_KEY` | Email transaccional | ❌ |
 | `EMAIL_FROM` | From header emails | ❌ |
 | `NOTIFICATION_EMAIL` | Destino notificaciones | ❌ |
@@ -725,6 +820,7 @@ Org ID: `db071585-6652-4d2a-87fd-ec4670c44c93` → env var `SUPABASE_ORG_ID`
 | `TURNSTILE_SECRET_KEY` | Cloudflare captcha | ❌ |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare captcha | ✅ |
 | `CAL_API_KEY` | Cal.com bookings | ❌ |
+| `CALCOM_WEBHOOK_SECRET` | Cal.com webhook | ❌ |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | Número WA sin + ni espacios | ✅ |
 | `PAYPAL_PLAN_SYNCLEAD_INICIAL_MENSUAL` | ID plan PayPal SyncLead Inicial mensual | ❌ |
 | `PAYPAL_PLAN_SYNCLEAD_INICIAL_ANUAL` | ID plan PayPal SyncLead Inicial anual | ❌ |
@@ -753,18 +849,22 @@ Org ID: `db071585-6652-4d2a-87fd-ec4670c44c93` → env var `SUPABASE_ORG_ID`
 
 ```bash
 # Development
-pnpm dev                    # Start dev server at localhost:3000
+pnpm dev                                # Start dev server at localhost:3000
 
-# Database
-pnpm supabase start         # Start local Supabase
-pnpm supabase db push       # Apply migrations
-pnpm supabase db diff       # Preview pending diffs
-pnpm supabase gen types typescript --local > src/types/database.ts
+# Database (Drizzle + Neon)
+pnpm drizzle-kit generate               # Generar migración desde schema
+pnpm drizzle-kit migrate                # Aplicar migraciones en Neon
+pnpm drizzle-kit studio                 # UI para inspeccionar DB
+
+# Tests
+pnpm test                               # Vitest unit tests (157 tests)
+pnpm playwright test                    # E2E tests
+pnpm playwright install --with-deps chromium  # Instalar browsers E2E
 
 # Build & Lint
-pnpm build                  # Production build — must pass with 0 errors
-pnpm lint                   # ESLint check
+pnpm build                              # Production build — must pass with 0 errors
+pnpm lint                               # ESLint check
 
 # Deploy
-pnpm vercel --prod          # Deploy to production
+npx vercel --prod                       # Deploy to production (no auto-deploy via GitHub)
 ```

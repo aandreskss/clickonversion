@@ -23,7 +23,7 @@ function toCheckoutItem(item: CartItem): CheckoutItem {
     id: item.priceId,
     name: item.displayName,
     price: item.displayPrice * item.quantity,
-    type: item.priceType === "RECURRING" ? "mensual" : "único",
+    type: item.priceType === "RECURRING" ? "monthly" : "one-time",
   }
 }
 

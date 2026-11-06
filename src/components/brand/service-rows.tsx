@@ -26,7 +26,7 @@ export function ServiceRows({ ids, dark = false }: { ids: string[]; dark?: boole
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 12, flex: "none" }}>
               <span style={{ fontWeight: 700, fontSize: 17, whiteSpace: "nowrap", color: dark ? "#fff" : "#010E25" }}>
-                {svc.prefix && <span style={{ fontWeight: 400, fontSize: 13, marginRight: 4 }}>desde</span>}${svc.price}{svc.type === "mensual" && <span style={{ fontWeight: 400, fontSize: 13 }}>/mes</span>}
+                {svc.prefix && <span style={{ fontWeight: 400, fontSize: 13, marginRight: 4 }}>desde</span>}${svc.price}{svc.type === "monthly" && <span style={{ fontWeight: 400, fontSize: 13 }}>/mes</span>}
               </span>
               <button type="button" onClick={toggle} aria-pressed={inCart} aria-label={inCart ? `Quitar ${svc.name} del carrito` : `Agregar ${svc.name} al carrito`} className={`ck-btn ${inCart ? "ck-btn-added" : dark ? "ck-btn-primary on-dark" : "ck-btn-dark"}`} style={{ minHeight: 44, padding: "0 16px", fontSize: 14 }}>
                 {inCart ? "Agregado ✓" : "Agregar +"}

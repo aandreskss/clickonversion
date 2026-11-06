@@ -6,20 +6,20 @@ import type { CartItem } from "@/types/catalog"
 import { waLink } from "@/lib/whatsapp"
 
 export const SERVICES = [
-  { id: "seo-audit",    cat: 0, name: "Auditoría SEO",            desc: "Revisión técnica y de contenido con una lista de mejoras priorizada.",       price: 120, prefix: "",      type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
-  { id: "seo-mensual",  cat: 0, name: "SEO mensual",              desc: "Optimización continua, contenido y enlaces, con reporte cada mes.",           price: 250, prefix: "desde", type: "mensual" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
-  { id: "seo-local",    cat: 0, name: "SEO local",                desc: "Google Business Profile, reseñas y presencia en mapas.",                     price: 180, prefix: "",      type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
-  { id: "ai-search",    cat: 0, name: "Visibilidad en IA",        desc: "Que tu marca aparezca en las respuestas de ChatGPT, Gemini y Perplexity.",    price: 200, prefix: "desde", type: "mensual" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
-  { id: "google-ads",   cat: 1, name: "Google Ads",               desc: "Búsqueda, Shopping y Performance Max con seguimiento de conversiones.",       price: 150, prefix: "desde", type: "mensual" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
-  { id: "meta-ads",     cat: 1, name: "Meta Ads",                 desc: "Campañas en Facebook e Instagram con pruebas creativas semanales.",           price: 150, prefix: "desde", type: "mensual" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
-  { id: "tiktok-ads",   cat: 1, name: "TikTok Ads",               desc: "Campañas y creatividades pensadas para el formato nativo.",                   price: 150, prefix: "desde", type: "mensual" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
+  { id: "seo-audit",    cat: 0, name: "Auditoría SEO",            desc: "Revisión técnica y de contenido con una lista de mejoras priorizada.",       price: 120, prefix: "",      type: "one-time" as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
+  { id: "seo-mensual",  cat: 0, name: "SEO mensual",              desc: "Optimización continua, contenido y enlaces, con reporte cada mes.",           price: 250, prefix: "desde", type: "monthly" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
+  { id: "seo-local",    cat: 0, name: "SEO local",                desc: "Google Business Profile, reseñas y presencia en mapas.",                     price: 180, prefix: "",      type: "one-time" as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
+  { id: "ai-search",    cat: 0, name: "Visibilidad en IA",        desc: "Que tu marca aparezca en las respuestas de ChatGPT, Gemini y Perplexity.",    price: 200, prefix: "desde", type: "monthly" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
+  { id: "google-ads",   cat: 1, name: "Google Ads",               desc: "Búsqueda, Shopping y Performance Max con seguimiento de conversiones.",       price: 150, prefix: "desde", type: "monthly" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
+  { id: "meta-ads",     cat: 1, name: "Meta Ads",                 desc: "Campañas en Facebook e Instagram con pruebas creativas semanales.",           price: 150, prefix: "desde", type: "monthly" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
+  { id: "tiktok-ads",   cat: 1, name: "TikTok Ads",               desc: "Campañas y creatividades pensadas para el formato nativo.",                   price: 150, prefix: "desde", type: "monthly" as const, priceType: "RECURRING" as const, billing: "monthly"   as const },
   { id: "ad-creatives", cat: 1, name: "Creación de anuncios (4 piezas)", desc: "Pack de 4 piezas (Reels, Stories o posts) para Meta, TikTok o Google: guion, diseño, edición y textos.", price: 120, prefix: "", type: "único" as const, priceType: "ONE_TIME" as const, billing: "one_time" as const, quote: false },
-  { id: "ai-agent",     cat: 2, name: "Agente IA",                desc: "Un agente entrenado en WhatsApp o web que responde, califica y agenda.",     price: 350, prefix: "desde", type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
-  { id: "wa-auto",      cat: 2, name: "Automatización WhatsApp",  desc: "Flujos de bienvenida, seguimiento y recordatorios.",                         price: 280, prefix: "desde", type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
-  { id: "crm",          cat: 2, name: "Integración CRM",          desc: "Conectamos formularios, anuncios y chats con tu CRM.",                       price: 220, prefix: "desde", type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
-  { id: "meta-consult", cat: 3, name: "Consultoría Meta Business", desc: "Sesión 1:1 para resolver Business Manager, píxeles o accesos.",             price: 60,  prefix: "",      type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
-  { id: "meta-tech",    cat: 3, name: "Soporte técnico Meta",     desc: "WABA, cuentas bloqueadas, verificación y configuración de API.",              price: 90,  prefix: "desde", type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
-  { id: "waba",         cat: 3, name: "Alta WhatsApp Business API", desc: "Verificación, número y plantillas listas para enviar.",                    price: 120, prefix: "",      type: "único"   as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
+  { id: "ai-agent",     cat: 2, name: "Agente IA",                desc: "Un agente entrenado en WhatsApp o web que responde, califica y agenda.",     price: 350, prefix: "desde", type: "one-time" as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
+  { id: "wa-auto",      cat: 2, name: "Automatización WhatsApp",  desc: "Flujos de bienvenida, seguimiento y recordatorios.",                         price: 280, prefix: "desde", type: "one-time" as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
+  { id: "crm",          cat: 2, name: "Integración CRM",          desc: "Conectamos formularios, anuncios y chats con tu CRM.",                       price: 220, prefix: "desde", type: "one-time" as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
+  { id: "meta-consult", cat: 3, name: "Consultoría Meta Business", desc: "Sesión 1:1 para resolver Business Manager, píxeles o accesos.",             price: 60,  prefix: "",      type: "one-time" as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
+  { id: "meta-tech",    cat: 3, name: "Soporte técnico Meta",     desc: "WABA, cuentas bloqueadas, verificación y configuración de API.",              price: 90,  prefix: "desde", type: "one-time" as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
+  { id: "waba",         cat: 3, name: "Alta WhatsApp Business API", desc: "Verificación, número y plantillas listas para enviar.",                    price: 120, prefix: "",      type: "one-time" as const, priceType: "ONE_TIME"  as const, billing: "one_time"  as const },
 ]
 
 const CAT_LABELS: Record<number, string> = {
@@ -40,8 +40,8 @@ export function PricingGrid() {
     const catMatch = catFilter === "Todos" || CAT_LABELS[s.cat] === catFilter
     const typeMatch =
       typeFilter === "Todos" ||
-      (typeFilter === "Pago único" && s.type === "único") ||
-      (typeFilter === "Mensual" && s.type === "mensual")
+      (typeFilter === "Pago único" && s.type === "one-time") ||
+      (typeFilter === "Mensual" && s.type === "monthly")
     return catMatch && typeMatch
   })
 
@@ -184,12 +184,12 @@ export function PricingGrid() {
                   {CAT_LABELS[svc.cat]}
                 </span>
                 <span
-                  title={svc.type === "mensual" ? "Mensual" : "Pago único"}
+                  title={svc.type === "monthly" ? "Mensual" : "Pago único"}
                   style={{
                     width: 8,
                     height: 8,
                     borderRadius: "50%",
-                    background: svc.type === "mensual" ? "#FE5C02" : "#C94400",
+                    background: svc.type === "monthly" ? "#FE5C02" : "#C94400",
                     flexShrink: 0,
                   }}
                 />
@@ -226,7 +226,7 @@ export function PricingGrid() {
                   ${svc.price}
                 </span>
                 <span style={{ fontSize: 14, color: "#5A6178" }}>
-                  {svc.type === "mensual" ? "/mes" : "pago único"}
+                  {svc.type === "monthly" ? "/mes" : "pago único"}
                 </span>
               </div>
 

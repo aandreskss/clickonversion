@@ -6,9 +6,9 @@
 Build a growth operating system to help ClicKonversion acquire its first 3 clients and reach $2,000 MRR.
 
 ## Current Phase
-**Phase 9 — Marca v4 + Apps SyncLead + CV + SEO + Seguridad** 🚧 En progreso
+**Phase 9 — Marca v5 + SEO + Seguridad + i18n** 🚧 En progreso
 
-Identidad visual v4 completa. SyncLead con suscripciones PayPal reales. CV de Arnaldo en `/about/arnaldo`. Audit de seguridad completo aplicado (Next.js actualizado, CSP, bcrypt, admin role check). SEO técnico auditado y corregido (OG image, apple-icon, manifest, twitter card, sitemap, robots).
+Identidad visual v5 completa (ONV isotipo). SyncLead con suscripciones PayPal reales. CV de Arnaldo en `/about/arnaldo`. Audit de seguridad completo aplicado (Next.js 16.4.5, CSP, bcrypt, admin role check, JSON-LD sanitizado). SEO técnico auditado y corregido (OG image dinámica, apple-icon, manifest PWA, twitter card, sitemap, robots). i18n standards aplicados (todos los discriminadores de tipo en inglés). Favicon y app icons actualizados al isotipo ONV v5 (naranja sobre marino).
 
 ---
 
@@ -24,17 +24,19 @@ Identidad visual v4 completa. SyncLead con suscripciones PayPal reales. CV de Ar
 | 6 | Panel Administrativo | ✅ Completa | Dashboard métricas, cola de trabajo, especialistas, comercial, pagos, analítica |
 | 7 | Apps, QA y Lanzamiento | ✅ Completa | /apps catálogo, SyncLead landing+waitlist, Playwright E2E, SEO, docs ops |
 | 8 | Rediseño Marketing v3 + Checkout + Admin | ✅ Completa | Design system v3, 6 páginas rediseñadas, checkout PayPal Orders, lista facturas admin |
-| 9 | Marca v4 + Apps SyncLead | 🚧 En progreso | Identidad v4 completa, SyncLead con suscripciones PayPal reales, logos SVG oficiales |
+| 9 | Marca v5 + SEO + Seguridad | 🚧 En progreso | Identidad v5 (ONV isotipo), favicon/icons actualizados, SEO técnico completo, audit seguridad, i18n standards |
 
 ---
 
-## Fase 9 — Marca v4 + Apps SyncLead 🚧 En progreso
+## Fase 9 — Marca v5 + SEO + Seguridad 🚧 En progreso
 
-Reemplaza el design system v3 (cream/cobalt/lime) en la capa de marketing. Admin, portal y CRM no cambian.
+Reemplaza el design system v3 (cream/cobalt/lime) en la capa de marketing. Admin, portal y CRM no cambian. Brand manual v5 con isotipo ONV en `/public/brand/`. Ver sección "Pendiente Fase 9 ✅ Completado" para el resumen de lo hecho.
 
-### Identidad visual v4
+### Identidad visual v5
 
-- **Paleta:** marino `#010E25`, naranja `#FE5C02`, naranja profundo `#C94400` (texto pequeño/enlaces), crema `#FFF8F0`, pasteles de servicio: lavanda IA `#E4DEFF`, celeste SEO `#D6EBFF`, durazno Ads `#FFDCC7`, menta Chat `#D3F2E3`, pizarra `#5A6178`.
+- **Isotipo:** ONV (O = click/inicio, N = conexión, V = crecimiento/check) — forma orgánica continua, NO el símbolo CK anterior. SVGs oficiales en `/public/brand/clickonversion-isotipo-*.svg`.
+- **Combinaciones aprobadas:** Naranja/marino (primaria), marino/crema, marino/lavanda, marino/menta, crema/índigo. NUNCA ONV sobre fondo naranja.
+- **Paleta:** marino `#010E25`, naranja `#FE5C02`, naranja profundo `#C94400` (texto pequeño/enlaces), crema `#FFF8F0`, índigo `#5142EB`, pasteles de servicio: lavanda IA `#E4DEFF`, celeste SEO `#D6EBFF`, durazno Ads `#FFDCC7`, menta Chat `#D3F2E3`, pizarra `#5A6178`.
 - **Tipografía:** Outfit (voz, `--font-outfit`), Caveat (notas a mano, `--font-caveat`), JetBrains Mono (etiquetas).
 - **CSS de marca:** `src/app/brand.css` — clases `.ck-*`. Importado en `src/app/layout.tsx`.
 
@@ -170,10 +172,16 @@ Los logos y el isotipo son SVG vectoriales en `/public/brand/`. **No editar `log
 - **OG images por página** — actualmente todas usan la misma imagen genérica (`/opengraph-image`). Cuando haya screenshots o fotos disponibles, crear OG images específicas por página clave (homepage, services, synclead)
 - **Google Search Console** — agregar `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` en Vercel y hacer submit de `/sitemap.xml` en GSC
 - **`twitter.site`** — si se crea cuenta Twitter/X, agregar el handle en root `layout.tsx` metadata
-- **Verificar OG image en producción** — usar [opengraph.xyz](https://opengraph.xyz) o `npx og-preview` para confirmar que el preview se ve bien en WhatsApp/LinkedIn/Twitter
+- **Verificar OG image en producción** — usar opengraph.xyz para confirmar que el preview se ve bien en WhatsApp/LinkedIn/Twitter
 
 #### Seguridad pendiente
 - **Rate limiting persistente** — el limiter actual es en memoria por instancia serverless (suficiente para volumen actual). Escalar a **Vercel KV (Upstash Redis)** cuando el tráfico crezca: instalar desde Vercel Storage, agregar `@vercel/kv`, reemplazar el `Map` en `src/lib/rate-limit.ts`
+
+#### ✅ Completado en esta fase
+- Favicon + app icons actualizados a identidad v5 (ONV isotipo naranja sobre marino)
+- i18n standards: todos los discriminadores `"único"/"mensual"` → `"one-time"/"monthly"` en 6 archivos
+- Audit de seguridad: CSP headers, Next.js 16.4.5 (4 CVE RCE parchados), JSON-LD sanitizado, admin role check, console.log limpiado de IDs internos, validación GA ID
+- SEO técnico: OG image dinámica 1200×630, apple-icon, manifest PWA, sitemap completo, robots.txt explícito, JSON-LD en todas las páginas clave, twitter card
 
 ---
 
@@ -494,32 +502,6 @@ All code identifiers, logic, and infrastructure use **English**. Spanish is rese
 - PayPal, Stripe, Cal.com, Resend endpoints must use their HTTPS base URLs
 - Internal Next.js server actions and API routes are HTTPS automatically via Vercel
 
-### Migration plan (pending)
-
-The following must be refactored to comply with these standards:
-
-#### 1. Type discriminators — `"único"` → `"one-time"`, `"mensual"` → `"monthly"`
-
-Files to update:
-- `src/app/(marketing)/checkout/actions.ts` — `CheckoutItem.type` union + conditional checks
-- `src/components/marketing/pricing-grid.tsx` — `type` field in service objects + filter logic
-- `src/components/marketing/services-tabs.tsx` — `type` field in service objects
-- `src/types/catalog.ts` — `CartItem.type` if present
-
-Change: `type: "único" | "mensual"` → `type: "one-time" | "monthly"`
-
-#### 2. Internal error messages — translate throws/console to English
-
-File: `src/app/(marketing)/checkout/actions.ts`
-
-Change all `throw`/`return { error: "..." }` that are internal (not shown directly in UI) to English. Keep Spanish only for messages rendered in the UI via toast or form feedback.
-
-#### 3. Category label keys — keep values Spanish, make keys English
-
-In `pricing-grid.tsx` and `services-tabs.tsx`:
-- Object keys in `CAT_LABELS` must be English identifiers
-- Display values (shown to user) stay Spanish
-
 ---
 
 ## Architecture Rules
@@ -763,8 +745,16 @@ Do NOT add a second gtag snippet. Check `src/app/layout.tsx` before touching GA4
 - Portal session: `getPortalSession()` desde `@/lib/portal/auth`
 - Admin session: `requireAdminSession()` desde `@/lib/admin/auth`
 
-### Favicon
-- `src/app/icon.tsx` — 32×32 PNG via `ImageResponse`. Next.js auto-inyecta el `<link>`.
+### Favicon y App Icons
+
+Los tres archivos de icono usan el isotipo ONV v5 (naranja `#FE5C02` sobre marino `#010E25`):
+
+- `src/app/icon.svg` — Favicon SVG vectorial (browser tabs). Contiene el path del isotipo naranja (`clickonversion-isotipo-naranja.svg`) recortado con `viewBox="0 80 365 405"` para mostrar solo el elemento "O" del ONV en un cuadrado. Next.js auto-inyecta `<link rel="icon" type="image/svg+xml">`.
+- `src/app/icon.tsx` — PNG 32×32 fallback via `ImageResponse`. O-ring naranja sobre fondo marino.
+- `src/app/apple-icon.tsx` — PNG 180×180 para iOS home screen via `ImageResponse`. O-ring naranja 128px sobre fondo marino con `borderRadius: 40px`.
+- `public/favicon.svg` — Mismo SVG del isotipo ONV (sirve como fallback en `/favicon.svg`).
+
+**NUNCA** usar los archivos numerados (`01_ClicKonversion_Isotipo.svg`, `06_ClicKonversion_App_Icon.svg`) para el favicon — esos son el símbolo CK viejo (v3). Usar siempre los archivos con nombre descriptivo (`clickonversion-isotipo-naranja.svg`).
 
 ### Icons
 - Use `lucide-react` for icons

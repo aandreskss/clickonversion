@@ -6,9 +6,9 @@
 Build a growth operating system to help ClicKonversion acquire its first 3 clients and reach $2,000 MRR.
 
 ## Current Phase
-**Phase 9 — Marca v4 + Apps SyncLead + CV** 🚧 En progreso
+**Phase 9 — Marca v4 + Apps SyncLead + CV + SEO + Seguridad** 🚧 En progreso
 
-Identidad visual v4 aplicada a toda la capa de marketing. SyncLead con suscripciones reales PayPal. Logos oficiales SVG. Mobile fixes completos. CV de Arnaldo en `/about/arnaldo` con galería de fotos reales. Build limpio.
+Identidad visual v4 completa. SyncLead con suscripciones PayPal reales. CV de Arnaldo en `/about/arnaldo`. Audit de seguridad completo aplicado (Next.js actualizado, CSP, bcrypt, admin role check). SEO técnico auditado y corregido (OG image, apple-icon, manifest, twitter card, sitemap, robots).
 
 ---
 
@@ -157,10 +157,23 @@ Los logos y el isotipo son SVG vectoriales en `/public/brand/`. **No editar `log
 
 ### Pendiente Fase 9
 
+#### Contenido
 - Datos reales de Abisai y Yoli en `src/data/team.ts`
 - Reseñas y casos de éxito reales
-- `NEXT_PUBLIC_WHATSAPP_NUMBER` configurado en Vercel
 - Artículos de blog reales en `src/data/blog.ts`
+
+#### Configuración Vercel (env vars pendientes)
+- `NEXT_PUBLIC_WHATSAPP_NUMBER` — número WA sin + ni espacios
+- Verificar que `NEXT_PUBLIC_SITE_URL=https://www.clickonversion.com` esté configurado
+
+#### SEO pendiente
+- **OG images por página** — actualmente todas usan la misma imagen genérica (`/opengraph-image`). Cuando haya screenshots o fotos disponibles, crear OG images específicas por página clave (homepage, services, synclead)
+- **Google Search Console** — agregar `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` en Vercel y hacer submit de `/sitemap.xml` en GSC
+- **`twitter.site`** — si se crea cuenta Twitter/X, agregar el handle en root `layout.tsx` metadata
+- **Verificar OG image en producción** — usar [opengraph.xyz](https://opengraph.xyz) o `npx og-preview` para confirmar que el preview se ve bien en WhatsApp/LinkedIn/Twitter
+
+#### Seguridad pendiente
+- **Rate limiting persistente** — el limiter actual es en memoria por instancia serverless (suficiente para volumen actual). Escalar a **Vercel KV (Upstash Redis)** cuando el tráfico crezca: instalar desde Vercel Storage, agregar `@vercel/kv`, reemplazar el `Map` en `src/lib/rate-limit.ts`
 
 ---
 

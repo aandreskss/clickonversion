@@ -51,7 +51,7 @@ export default function PricingPage() {
       active="pricing"
       whatsapp={{ message: "¿Dudas entre dos paquetes? Escríbenos y te decimos cuál te conviene, sin venderte de más.", replies: ["¿Qué paquete me conviene?", "Ayúdenme a armarlo", "Quiero pagar por transferencia"] }}
     >
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c") }} />
 
       <section className="ck-dots" style={{ padding: "56px 0 40px" }}>
         <div className="ck-wrap" style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 24 }}>

@@ -185,7 +185,7 @@ const faqJsonLd = {
 export default function ServicesPage() {
   return (
     <MarketingLayout active="services" whatsapp={{ message: "¿No sabes qué servicio necesitas? Cuéntanos qué vendes y te recomendamos por dónde empezar.", replies: ["Quiero más clientes", "Necesito una web", "Quiero configurar mi píxel"] }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c") }} />
 
       <section className="ck-dots" style={{ padding: "56px 0 72px" }}>
         <div className="ck-wrap" style={{ display: "flex", flexDirection: "column", gap: 28 }}>

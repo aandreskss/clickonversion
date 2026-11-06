@@ -56,7 +56,7 @@ export function SyncLeadPage({ app, cancelled = false }: { app: App; cancelled?:
 
   return (
     <MarketingLayout active="apps" whatsapp={{ message: "¿Quieres ver SyncLead por dentro? Te hacemos una demo de 15 minutos por WhatsApp o videollamada.", replies: ["Quiero una demo de SyncLead", "¿Qué plan me conviene?", "Tengo una duda"] }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
       {/* HERO */}
       <section className="ck-dots" style={{ padding: "56px 0 96px" }}>

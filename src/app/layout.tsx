@@ -46,8 +46,10 @@ const caveat = Caveat({
 })
 
 const siteUrl   = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.clickonversion.com"
-const gaId      = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 const gscVerify = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+// Validate GA ID format to prevent injection via env var
+const rawGaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? ""
+const gaId = /^G-[A-Z0-9]{4,12}$/.test(rawGaId) ? rawGaId : undefined
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -141,7 +143,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
         />
       </head>
       <body style={{ fontFamily: "var(--font-inter, var(--font-sans))" }}>

@@ -13,8 +13,7 @@ function optionalEnv(key: string, fallback?: string): string | undefined {
 export const SITE_URL        = optionalEnv("NEXT_PUBLIC_SITE_URL", "http://localhost:3000")!
 export const APP_URL         = optionalEnv("NEXT_PUBLIC_APP_URL",  "http://localhost:3000/app")!
 export const BOOKING_URL     = optionalEnv("NEXT_PUBLIC_BOOKING_URL")
-export const SUPABASE_URL    = optionalEnv("NEXT_PUBLIC_SUPABASE_URL", "")!
-export const SUPABASE_KEY    = optionalEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "")!
+// Supabase removed — migrated to Neon + Drizzle
 export const GA_ID           = optionalEnv("NEXT_PUBLIC_GA_MEASUREMENT_ID")
 export const GSC_VERIFY      = optionalEnv("NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION")
 export const TURNSTILE_SITE  = optionalEnv("NEXT_PUBLIC_TURNSTILE_SITE_KEY")
@@ -54,7 +53,6 @@ export function warnMissingIntegrations() {
   if (!GA_ID)          warnings.push("GA4 not configured (NEXT_PUBLIC_GA_MEASUREMENT_ID)")
   if (!BOOKING_URL)    warnings.push("Booking URL not configured (NEXT_PUBLIC_BOOKING_URL)")
   if (!TURNSTILE_SITE) warnings.push("Turnstile not configured — audit form uses honeypot only")
-  if (!SUPABASE_URL)   warnings.push("Supabase not configured — CRM will not function")
 
   if (warnings.length && process.env.NODE_ENV === "development") {
     console.warn("[ClicKonversion] Missing optional integrations:")

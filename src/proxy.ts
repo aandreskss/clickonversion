@@ -6,7 +6,9 @@ export const proxy = auth((request) => {
   const path = nextUrl.pathname
 
   // ── Admin panel — /admin ─────────────────────────────────────────────────
-  if (path.startsWith("/admin") && !session) {
+  // Requires active session AND an internal admin role (not just portal client)
+  const adminRole = (session?.user as { adminRole?: string } | undefined)?.adminRole
+  if (path.startsWith("/admin") && (!session || !adminRole)) {
     const loginUrl = new URL("/login", nextUrl)
     loginUrl.searchParams.set("next", path)
     return NextResponse.redirect(loginUrl)

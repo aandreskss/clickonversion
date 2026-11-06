@@ -126,7 +126,6 @@ export async function POST(request: NextRequest) {
     try {
       const { orgId } = getServerEnv()
       if (!orgId) throw new Error("ORG_ID not configured")
-      console.log("[audit] orgId:", orgId)
 
       // Find or create company based on normalized domain
       let companyId: string | null = null
@@ -140,7 +139,6 @@ export async function POST(request: NextRequest) {
 
         if (existing) {
           companyId = existing.id
-          console.log("[audit] existing company:", companyId)
         } else {
           const [newCompany] = await db
             .insert(companies)
@@ -157,10 +155,8 @@ export async function POST(request: NextRequest) {
             })
             .returning({ id: companies.id })
           if (newCompany) companyId = newCompany.id
-          console.log("[audit] new companyId:", companyId)
         }
       } else {
-        console.log("[audit] normalizedDomain is null, skipping company creation")
       }
 
       // Create contact
@@ -179,7 +175,6 @@ export async function POST(request: NextRequest) {
           })
           .returning({ id: contacts.id })
         if (contact) contactId = contact.id
-        console.log("[audit] contactId:", contactId)
       }
 
       // Create opportunity
@@ -198,7 +193,6 @@ export async function POST(request: NextRequest) {
           })
           .returning({ id: opportunities.id })
         if (opp) opportunityId = opp.id
-        console.log("[audit] opportunityId:", opportunityId)
       }
 
       // Update audit request with CRM links

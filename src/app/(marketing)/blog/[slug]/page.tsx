@@ -53,7 +53,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <MarketingLayout active="blog" whatsapp={{ message: "¿Te trabaste con algún paso? Mándanos una captura y te decimos qué falta.", replies: ["Me trabé en un paso", "Quiero que lo hagan por mí", "Tengo otra duda"] }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <div className="ck-progress" aria-hidden="true" />
 
       <section style={{ padding: "48px 0 56px" }}>

@@ -178,7 +178,7 @@ Los logos y el isotipo son SVG vectoriales en `/public/brand/`. **No editar `log
 - **Rate limiting persistente** — el limiter actual es en memoria por instancia serverless (suficiente para volumen actual). Escalar a **Vercel KV (Upstash Redis)** cuando el tráfico crezca: instalar desde Vercel Storage, agregar `@vercel/kv`, reemplazar el `Map` en `src/lib/rate-limit.ts`
 
 #### ✅ Completado en esta fase
-- Favicon + app icons actualizados a identidad v5 (ONV isotipo naranja sobre marino)
+- Favicon + app icons actualizados a identidad v5 usando kit oficial (`01_naranja_marino`): `favicon.ico`, `icon.svg`, `icon.png`, `apple-icon.png`, ICO en `src/app/` (fix del default de Next.js que sobreescribía el favicon)
 - i18n standards: todos los discriminadores `"único"/"mensual"` → `"one-time"/"monthly"` en 6 archivos
 - Audit de seguridad: CSP headers, Next.js 16.4.5 (4 CVE RCE parchados), JSON-LD sanitizado, admin role check, console.log limpiado de IDs internos, validación GA ID
 - SEO técnico: OG image dinámica 1200×630, apple-icon, manifest PWA, sitemap completo, robots.txt explícito, JSON-LD en todas las páginas clave, twitter card
@@ -747,14 +747,22 @@ Do NOT add a second gtag snippet. Check `src/app/layout.tsx` before touching GA4
 
 ### Favicon y App Icons
 
-Los tres archivos de icono usan el isotipo ONV v5 (naranja `#FE5C02` sobre marino `#010E25`):
+Todos los archivos de icono vienen del kit oficial `Clickonversion_ONV_Kit_Final/01_favicons/01_naranja_marino/` (naranja `#FE5C02` sobre marino `#010E25`). **No regenerar con ImageResponse — usar los archivos del kit directamente.**
 
-- `src/app/icon.svg` — Favicon SVG vectorial (browser tabs). Contiene el path del isotipo naranja (`clickonversion-isotipo-naranja.svg`) recortado con `viewBox="0 80 365 405"` para mostrar solo el elemento "O" del ONV en un cuadrado. Next.js auto-inyecta `<link rel="icon" type="image/svg+xml">`.
-- `src/app/icon.tsx` — PNG 32×32 fallback via `ImageResponse`. O-ring naranja sobre fondo marino.
-- `src/app/apple-icon.tsx` — PNG 180×180 para iOS home screen via `ImageResponse`. O-ring naranja 128px sobre fondo marino con `borderRadius: 40px`.
-- `public/favicon.svg` — Mismo SVG del isotipo ONV (sirve como fallback en `/favicon.svg`).
+| Archivo | Origen | Propósito |
+|---------|--------|-----------|
+| `src/app/favicon.ico` | `favicon.ico` del kit | **Crítico** — browsers hacen request automático a `/favicon.ico`; debe estar en `src/app/` para que Next.js lo declare en `<head>`. El default de Next.js (que viene al crear el proyecto) debe reemplazarse. |
+| `src/app/icon.svg` | `favicon.svg` del kit | SVG vectorial 1000×1000, isotipo ONV con fondo marino redondeado |
+| `src/app/icon.png` | `favicon_32.png` del kit | PNG 32×32 fallback para browsers sin soporte SVG |
+| `src/app/apple-icon.png` | `favicon_180.png` del kit | PNG 180×180 iOS home screen (apple-touch-icon) |
+| `public/favicon.svg` | `favicon.svg` del kit | Copia en public para servir en `/favicon.svg` |
+| `public/favicon.ico` | `favicon.ico` del kit | Copia en public (redundante pero no hace daño) |
+| `public/brand/favicon_192.png` | `favicon_192.png` del kit | PWA manifest icon 192×192 |
+| `public/brand/favicon_512.png` | `favicon_512.png` del kit | PWA manifest icon 512×512 / splash |
 
-**NUNCA** usar los archivos numerados (`01_ClicKonversion_Isotipo.svg`, `06_ClicKonversion_App_Icon.svg`) para el favicon — esos son el símbolo CK viejo (v3). Usar siempre los archivos con nombre descriptivo (`clickonversion-isotipo-naranja.svg`).
+**Bug conocido y fix:** Next.js crea `src/app/favicon.ico` al inicializar el proyecto con su ícono default. Los browsers hacen un request autónomo a `/favicon.ico` **después** de leer los `<link>` tags — si ese ICO es el default, sobreescribe visualmente el favicon correcto. Siempre reemplazar `src/app/favicon.ico` al configurar marca nueva.
+
+**NUNCA** usar los archivos numerados (`01_ClicKonversion_Isotipo.svg`, `06_ClicKonversion_App_Icon.svg`) — son el símbolo CK viejo (v3).
 
 ### Icons
 - Use `lucide-react` for icons

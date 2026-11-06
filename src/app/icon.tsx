@@ -8,7 +8,7 @@ export default function Icon() {
     (
       <div
         style={{
-          background: "#0B0D0F",
+          background: "#010E25",
           width: "100%",
           height: "100%",
           display: "flex",
@@ -27,7 +27,7 @@ export default function Icon() {
           }}
         >
           <span style={{ color: "#FFFFFF" }}>C</span>
-          <span style={{ color: "#FF5A1F" }}>K</span>
+          <span style={{ color: "#FE5C02" }}>K</span>
         </div>
       </div>
     ),

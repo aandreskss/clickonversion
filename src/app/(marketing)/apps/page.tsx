@@ -5,7 +5,7 @@ import { SYNCLEAD_PLANS } from "@/data/synclead-plans"
 import { waLink } from "@/lib/whatsapp"
 
 export const metadata: Metadata = {
-  title: "Apps — software hecho por ClicKonversion: SyncLead CRM para Meta Ads",
+  title: "Apps: SyncLead CRM para leads de Meta Ads",
   description: "Las herramientas que construimos para vender más por WhatsApp. SyncLead: CRM para leads de Meta Ads con pipeline, WhatsApp, agentes de IA y API de conversiones. Planes desde $29 al mes.",
   alternates: { canonical: "https://www.clickonversion.com/apps" },
   openGraph: {

@@ -11,7 +11,7 @@ import { LogoSymbol } from "@/components/ui/logo-wordmark"
 import { waLink } from "@/lib/whatsapp"
 
 export const metadata: Metadata = {
-  title: "ClicKonversion — Marketing hecho por personas: SEO, Ads, IA y WhatsApp",
+  title: { absolute: "ClicKonversion — Marketing hecho por personas: SEO, Ads, IA y WhatsApp" },
   description:
     "SEO local y técnico, Meta y Google Ads, agentes de IA para WhatsApp, desarrollo web y medición de conversiones. Un equipo de tres personas que te explica cada decisión.",
   alternates: { canonical: "https://www.clickonversion.com" },

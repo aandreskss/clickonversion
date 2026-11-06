@@ -26,9 +26,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/projects`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     ...PROJECTS.map((p) => ({ url: `${siteUrl}/projects/${p.slug}`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.6 })),
     { url: `${siteUrl}/about`,    lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${siteUrl}/about/arnaldo`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${siteUrl}/about/arnaldo`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${siteUrl}/blog`,     lastModified: new Date(), changeFrequency: "weekly",  priority: 0.7 },
-    ...POSTS.filter((p) => p.published).map((p) => ({ url: `${siteUrl}/blog/${p.slug}`, lastModified: new Date(p.date), changeFrequency: "monthly" as const, priority: 0.6 })),
+    ...POSTS.filter((p) => p.published).map((p) => ({ url: `${siteUrl}/blog/${p.slug}`, lastModified: new Date(p.date), changeFrequency: "monthly" as const, priority: 0.7 })),
+    { url: `${siteUrl}/resources`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${siteUrl}/privacy`,  lastModified: new Date(), changeFrequency: "yearly",  priority: 0.3 },
     { url: `${siteUrl}/terms`,    lastModified: new Date(), changeFrequency: "yearly",  priority: 0.3 },
   ]

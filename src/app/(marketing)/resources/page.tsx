@@ -3,7 +3,7 @@ import { MarketingLayout } from "@/components/marketing/marketing-layout"
 import { ResourcesNewsletterForm } from "@/components/marketing/resources-newsletter-form"
 
 export const metadata: Metadata = {
-  title: "Recursos para crecer | ClicKonversion",
+  title: "Recursos para crecer",
   description:
     "Artículos, guías y casos de uso sobre SEO, publicidad digital, IA y automatización. Recursos prácticos para negocios en crecimiento.",
   alternates: {
@@ -11,11 +11,10 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Recursos para crecer | ClicKonversion",
-    description:
-      "Recursos prácticos de marketing digital: SEO, Meta Ads, agentes IA y automatización.",
+    description: "Recursos prácticos de marketing digital: SEO, Meta Ads, agentes IA y automatización.",
     url: "https://www.clickonversion.com/resources",
     siteName: "ClicKonversion",
-    locale: "es_ES",
+    locale: "es_419",
     type: "website",
   },
 }

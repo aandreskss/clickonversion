@@ -59,7 +59,7 @@ const jsonLd = {
       "@id": `${siteUrl}/#organization`,
       name: "ClicKonversion",
       url: siteUrl,
-      logo: { "@type": "ImageObject", url: `${siteUrl}/logos/01_logo_horizontal_claro.png` },
+      logo: { "@type": "ImageObject", url: `${siteUrl}/brand/clickonversion-logo-color.svg` },
       founder: {
         "@type": "Person",
         name: "Arnaldo Casadiego",
@@ -119,13 +119,13 @@ export const metadata: Metadata = {
     title: "More Visibility. Better Leads. Smarter Growth. | ClicKonversion",
     description:
       "Full-stack growth systems combining SEO, paid media, AI automation, and CRM — for ambitious businesses worldwide.",
-    images: [{ url: `${siteUrl}/og-image.png`, width: 1200, height: 630 }],
+    images: [{ url: `${siteUrl}/opengraph-image`, width: 1200, height: 630, alt: "ClicKonversion — More Visibility. Better Leads. Smarter Growth." }],
   },
   twitter: {
     card: "summary_large_image",
     title: "More Visibility. Better Leads. Smarter Growth. | ClicKonversion",
-    description:
-      "Full-stack growth systems combining SEO, paid media, AI automation, and CRM.",
+    description: "Full-stack growth systems combining SEO, paid media, AI automation, and CRM.",
+    images: [`${siteUrl}/opengraph-image`],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   ...(gscVerify ? { verification: { google: gscVerify } } : {}),

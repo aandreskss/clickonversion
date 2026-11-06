@@ -3,9 +3,23 @@ import { MarketingLayout } from "@/components/marketing/marketing-layout"
 import { AuditForm }       from "@/components/forms/audit-form"
 
 export const metadata: Metadata = {
-  title: "Get a Free Growth Audit",
+  title: "Free Growth Audit — Find Where You're Losing Customers",
   description:
-    "Find out where your website and marketing system are losing customers. Request your free Growth Audit — we look at search, conversion, acquisition and follow-up.",
+    "Find out where your website and marketing system are losing customers. Request your free Growth Audit — we review search visibility, conversion path, paid acquisition, follow-up, and tracking.",
+  alternates: { canonical: "https://www.clickonversion.com/audit" },
+  openGraph: {
+    title: "Free Growth Audit | ClicKonversion",
+    description: "We review your SEO, ads, conversion path, follow-up and tracking. No strings attached.",
+    url: "https://www.clickonversion.com/audit",
+    siteName: "ClicKonversion",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Free Growth Audit | ClicKonversion",
+    description: "We review your SEO, ads, conversion path, follow-up and tracking. No strings attached.",
+  },
 }
 
 const VALUE_PROPS = [

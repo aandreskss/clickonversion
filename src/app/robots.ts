@@ -7,7 +7,24 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/audit", "/apps", "/privacy", "/terms"],
+        allow: [
+          "/",
+          "/services",
+          "/services/",
+          "/pricing",
+          "/projects",
+          "/projects/",
+          "/apps",
+          "/apps/synclead",
+          "/about",
+          "/about/arnaldo",
+          "/blog",
+          "/blog/",
+          "/audit",
+          "/resources",
+          "/privacy",
+          "/terms",
+        ],
         disallow: [
           "/app/",
           "/admin/",
@@ -19,6 +36,7 @@ export default function robots(): MetadataRoute.Robots {
           "/onboarding/",
           "/checkout/",
           "/book/",
+          "/catalog/",
         ],
       },
     ],

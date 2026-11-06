@@ -6,6 +6,10 @@ export interface TeamMember {
   yearsArea: string
   tags: { label: string; bg: string }[]
   linkedin?: string
+  /** Foto real (opcional). Sin foto se muestra el marcador rayado. */
+  photo?: string
+  /** Página de CV (opcional) */
+  cv?: string
   stripes: [string, string]
   tilt: "" | "ck-p2" | "ck-p3"
   sticker: number
@@ -15,7 +19,7 @@ export interface TeamMember {
 export const TEAM: TeamMember[] = [
   {
     name: "Arnaldo Casadiego",
-    role: "ESTRATEGIA · SEO · ADS · IA",
+    role: "SEO & GROWTH · MARTECH · IA",
     bio: "Soy licenciado en Mercadeo y llevo más de 8 años en marketing digital. Vengo del soporte y las ventas B2B: sé lo que vale responder rápido y explicar claro.",
     years: "8",
     yearsArea: "MARKETING DIGITAL",
@@ -25,6 +29,8 @@ export const TEAM: TeamMember[] = [
       { label: "[META ADS]", bg: "#E4DEFF" },
     ],
     linkedin: "https://www.linkedin.com/in/arnaldocasadiego/",
+    photo: "/team/arnaldo/07-lobby-verde-sonrisa.webp",
+    cv: "/about/arnaldo",
     stripes: ["#FFDCC7", "#FFE7D8"],
     tilt: "",
     sticker: 6,

@@ -73,7 +73,7 @@ export default function ProjectsPage() {
       </section>
 
       <section style={{ padding: "0 16px clamp(48px, 6vw, 80px)" }}>
-        <div className="ck-reveal" style={{ maxWidth: 1240, margin: "0 auto", background: "#FE5C02", border: "1.5px solid #010E25", borderRadius: 44, padding: "clamp(32px, 6vw, 80px)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 32 }}>
+        <div className="ck-reveal ck-cta-dark" style={{ maxWidth: 1240, margin: "0 auto", background: "#010E25", border: "1.5px solid #010E25", borderRadius: 44, padding: "clamp(32px, 6vw, 80px)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 32 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 680 }}>
             <h2 style={{ fontSize: "clamp(36px, 4.6vw, 64px)" }}>¿El próximo proyecto es el tuyo?</h2>
             <p style={{ fontSize: 20 }}>Cuéntanos qué quieres lograr y te decimos cómo lo haríamos.</p>

@@ -40,17 +40,6 @@ const STEPS = [
   { n: "04", tag: "[REPORTE]", bg: "#FFDCC7", t: "Te contamos qué pasó", d: "En lenguaje humano. Si algo no funcionó, te lo decimos y lo cambiamos." },
 ]
 
-function Sparks({ style }: { style?: React.CSSProperties }) {
-  return (
-    <span aria-hidden="true" style={{ position: "absolute", display: "block", transformOrigin: "50% 100%", ...style }}>
-      <svg className="ck-spark" viewBox="0 0 40 26" style={{ display: "block", width: "100%", height: "100%", overflow: "visible" }}>
-        <path className="ck-sk" d="M7 23 Q5 16 2 12" />
-        <path className="ck-sk" d="M20 21 Q19.5 12 21 3" />
-        <path className="ck-sk" d="M33 23 Q36 16 38 12" />
-      </svg>
-    </span>
-  )
-}
 
 export default function HomePage() {
   return (
@@ -73,7 +62,6 @@ export default function HomePage() {
                 por{" "}
                 <span style={{ position: "relative", display: "inline-block", color: "#FE5C02" }}>
                   personas
-                  <Sparks style={{ right: "-0.2em", top: "-0.02em", width: "0.42em", height: "0.3em", transform: "rotate(18deg)" }} />
                 </span>
                 ,
               </span>
@@ -133,7 +121,7 @@ export default function HomePage() {
               <div style={{ position: "relative", width: 150, height: 150, background: "#FFF8F0", borderRadius: "50%", border: "1.5px solid #010E25", boxShadow: "0 20px 40px -20px rgba(1,14,37,.5)" }}>
                 <svg className="ck-ring" viewBox="0 0 200 200" style={{ position: "absolute", inset: 0, width: 150, height: 150 }}>
                   <defs><path id="ckring" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" /></defs>
-                  <text className="ck-ring-text"><textPath href="#ckring">ESTRATEGIA · TECNOLOGÍA · CRECIMIENTO · </textPath></text>
+                  <text className="ck-ring-text"><textPath href="#ckring">¡CONVERTIMOS CLICS EN VENTAS! · </textPath></text>
                 </svg>
                 <span style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}><LogoSymbol size={58} /></span>
               </div>

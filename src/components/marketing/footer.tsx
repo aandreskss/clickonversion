@@ -35,7 +35,7 @@ export function Footer() {
             <Link href="/" aria-label="ClicKonversion, ir al inicio" style={{ textDecoration: "none" }}>
               <LogoWordmark size="xl" tone="dark" />
             </Link>
-            <span className="ck-mono" style={{ fontSize: 12, letterSpacing: ".32em", color: "rgba(255,255,255,.8)" }}>ESTRATEGIA · TECNOLOGÍA · CRECIMIENTO</span>
+            <span className="ck-mono" style={{ fontSize: 12, letterSpacing: ".32em", color: "rgba(255,255,255,.8)" }}>¡CONVERTIMOS CLICS EN VENTAS!</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 12 }}>
             <span className="ck-hand" style={{ fontSize: 30, color: "#FE5C02", transform: "rotate(-3deg)" }}>¿hablamos? te leemos</span>

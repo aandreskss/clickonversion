@@ -2,7 +2,7 @@ const VALUES = [
   { n: "01", t: "Cercanía", d: "Hablas con quien hace el trabajo. Siempre las mismas personas.", short: "Hablas con quien hace el trabajo.", face: { background: "#FFDCC7" }, lbl: "#8A3300" },
   { n: "02", t: "Claridad", d: "Si no se entiende, no está terminado. Cero jerga innecesaria.", short: "Si no se entiende, no está terminado.", face: { background: "#fff" }, lbl: "#5A6178" },
   { n: "03", t: "Precisión", d: "Decisiones con datos. Medimos lo que importa: clientes reales.", short: "Decisiones con datos reales.", face: { background: "#010E25", color: "#fff" }, lbl: "rgba(255,255,255,.7)" },
-  { n: "04", t: "Honestidad", d: "Si algo no funciona, lo decimos primero. Sin maquillar números.", short: "Sin maquillar números.", face: { background: "#FE5C02" }, lbl: "#010E25" },
+  { n: "04", t: "Honestidad", d: "Si algo no funciona, lo decimos primero. Sin maquillar números.", short: "Sin maquillar números.", face: { background: "#5142EB", color: "#FFF8F0" }, lbl: "#FFF8F0" },
 ]
 
 /** Sección de valores con un cubo 3D que gira cara por cara y resalta la lista en sincronía. */

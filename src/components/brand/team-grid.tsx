@@ -1,3 +1,5 @@
+import Image from "next/image"
+import Link from "next/link"
 import { TEAM } from "@/data/team"
 
 /** Fichas del equipo: retrato inclinado (placeholder hasta tener fotos reales), dato y bio. */
@@ -14,7 +16,8 @@ export function TeamGrid() {
                   className="ck-stripes"
                   style={{ position: "absolute", inset: 0, borderRadius: 30, border: "1.5px solid #010E25", display: "flex", alignItems: "flex-end", padding: 20, boxShadow: "0 50px 80px -50px rgba(1,14,37,.6)", ["--a" as string]: m.stripes[0], ["--b" as string]: m.stripes[1] } as React.CSSProperties}
                 >
-                  <span className="ck-mono" style={{ fontSize: 11.5, color: "#5A6178", background: "#fff", padding: "6px 10px", borderRadius: 8 }}>FOTO · {first}, luz natural</span>
+                  {!m.photo && <span className="ck-mono" style={{ fontSize: 11.5, color: "#5A6178", background: "#fff", padding: "6px 10px", borderRadius: 8 }}>FOTO · {first}, luz natural</span>}
+                  {m.photo && <Image src={m.photo} alt={m.name} fill sizes="(max-width: 760px) 100vw, 400px" style={{ objectFit: "cover", objectPosition: "50% 22%", borderRadius: 29 }} />}
                 </div>
                 <div style={{ position: "absolute", right: -16, top: 24, background: "#010E25", borderRadius: 999, padding: "8px 16px", transform: `rotate(${m.sticker}deg)`, boxShadow: "0 16px 30px -16px rgba(1,14,37,.6)" }}>
                   <span className="ck-hand" style={{ fontSize: 22, color: "#fff" }}>¡hola, soy {first}!</span>
@@ -28,7 +31,10 @@ export function TeamGrid() {
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "baseline", gap: "8px 12px" }}>
                 <h3 style={{ fontSize: 30 }}>{m.name}</h3>
-                {m.linkedin && <a href={m.linkedin} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600, fontSize: 15, color: "#C94400" }}>LinkedIn ↗</a>}
+                <span style={{ display: "inline-flex", gap: 14 }}>
+                  {m.cv && <Link href={m.cv} style={{ fontWeight: 600, fontSize: 15, color: "#C94400" }}>Ver mi CV →</Link>}
+                  {m.linkedin && <a href={m.linkedin} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600, fontSize: 15, color: "#C94400" }}>LinkedIn ↗</a>}
+                </span>
               </div>
               <span className="ck-mono" style={{ fontSize: 13, letterSpacing: ".06em", color: "#C94400" }}>{m.role}</span>
               <p style={{ fontSize: 17, color: "#3A4158" }}>{m.bio}</p>

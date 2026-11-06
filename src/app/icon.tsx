@@ -19,16 +19,12 @@ export default function Icon() {
       >
         <div
           style={{
-            display: "flex",
-            fontFamily: "sans-serif",
-            fontWeight: 800,
-            fontSize: 16,
-            letterSpacing: "-1px",
+            width: 22,
+            height: 22,
+            borderRadius: "50%",
+            border: "6px solid #FE5C02",
           }}
-        >
-          <span style={{ color: "#FFFFFF" }}>C</span>
-          <span style={{ color: "#FE5C02" }}>K</span>
-        </div>
+        />
       </div>
     ),
     { ...size }

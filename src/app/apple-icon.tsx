@@ -19,17 +19,12 @@ export default function AppleIcon() {
       >
         <div
           style={{
-            display: "flex",
-            fontFamily: "sans-serif",
-            fontWeight: 800,
-            fontSize: 72,
-            letterSpacing: "-4px",
-            color: "#FFF8F0",
+            width: 128,
+            height: 128,
+            borderRadius: "50%",
+            border: "32px solid #FE5C02",
           }}
-        >
-          <span style={{ color: "#FFF8F0" }}>C</span>
-          <span style={{ color: "#FE5C02" }}>K</span>
-        </div>
+        />
       </div>
     ),
     { ...size }

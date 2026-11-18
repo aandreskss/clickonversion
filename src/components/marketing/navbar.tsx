@@ -91,12 +91,6 @@ function WhatsappCrmMenu({ active }: { active: boolean }) {
     return () => { document.removeEventListener("mousedown", close); document.removeEventListener("keydown", esc) }
   }, [open])
 
-  const tools = [
-    { href: "/services/callbell", icon: "🔔", name: "Callbell CRM", desc: "WhatsApp multicanal para equipos de ventas" },
-    { href: "/services/kommo", icon: "💼", name: "Kommo CRM", desc: "CRM conversacional con pipeline y WhatsApp" },
-    { href: "/services/manychat", icon: "⚡", name: "Manychat", desc: "Automatiza Instagram, WhatsApp y Messenger" },
-  ]
-
   return (
     <div ref={ref} className="ck-dd" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
       <Link
@@ -112,15 +106,52 @@ function WhatsappCrmMenu({ active }: { active: boolean }) {
       </Link>
       {open && (
         <div className="ck-dd-panel">
-          {tools.map((t) => (
-            <Link key={t.href} href={t.href} className="ck-dd-item" onClick={() => setOpen(false)}>
-              <span className="ck-dd-icon" aria-hidden="true" style={{ fontSize: 18 }}>{t.icon}</span>
-              <span style={{ display: "flex", flexDirection: "column", gap: 2, lineHeight: 1.3 }}>
-                <span style={{ fontWeight: 600, fontSize: 15 }}>{t.name}</span>
-                <span style={{ fontSize: 13, color: "#5A6178" }}>{t.desc}</span>
-              </span>
-            </Link>
-          ))}
+          {/* Callbell — bandeja compartida: burbuja con dos agentes */}
+          <Link href="/services/callbell" className="ck-dd-item" onClick={() => setOpen(false)}>
+            <span className="ck-dd-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width={22} height={22} fill="none" stroke="#010E25" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                <circle cx="9" cy="10" r="1.5" fill="#010E25" stroke="none" />
+                <circle cx="15" cy="10" r="1.5" fill="#010E25" stroke="none" />
+              </svg>
+            </span>
+            <span style={{ display: "flex", flexDirection: "column", gap: 2, lineHeight: 1.3 }}>
+              <span style={{ fontWeight: 600, fontSize: 15 }}>Callbell CRM</span>
+              <span style={{ fontSize: 13, color: "#5A6178" }}>WhatsApp multicanal para equipos de ventas</span>
+            </span>
+          </Link>
+          {/* Kommo — pipeline CRM: tres columnas descendentes */}
+          <Link href="/services/kommo" className="ck-dd-item" onClick={() => setOpen(false)}>
+            <span className="ck-dd-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width={22} height={22} fill="none" stroke="#010E25" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="4" width="5" height="16" rx="1.5" />
+                <rect x="9.5" y="7.5" width="5" height="12.5" rx="1.5" />
+                <rect x="17" y="11" width="5" height="9" rx="1.5" />
+              </svg>
+            </span>
+            <span style={{ display: "flex", flexDirection: "column", gap: 2, lineHeight: 1.3 }}>
+              <span style={{ fontWeight: 600, fontSize: 15 }}>Kommo CRM</span>
+              <span style={{ fontSize: 13, color: "#5A6178" }}>CRM conversacional con pipeline y WhatsApp</span>
+            </span>
+          </Link>
+          {/* Manychat — automatización: nodo que se bifurca en dos respuestas */}
+          <Link href="/services/manychat" className="ck-dd-item" onClick={() => setOpen(false)}>
+            <span className="ck-dd-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width={22} height={22} fill="none" stroke="#010E25" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="4" cy="12" r="2" />
+                <path d="M6 10.5 10 7M6 13.5 10 17" />
+                <rect x="10" y="4.5" width="5.5" height="5" rx="1.5" />
+                <rect x="10" y="14.5" width="5.5" height="5" rx="1.5" />
+                <path d="M15.5 7h2.5M15.5 17h2.5" />
+                <circle cx="20" cy="7" r="1.5" />
+                <circle cx="20" cy="17" r="1.5" />
+              </svg>
+            </span>
+            <span style={{ display: "flex", flexDirection: "column", gap: 2, lineHeight: 1.3 }}>
+              <span style={{ fontWeight: 600, fontSize: 15 }}>Manychat</span>
+              <span style={{ fontSize: 13, color: "#5A6178" }}>Automatiza Instagram, WhatsApp y Messenger</span>
+            </span>
+          </Link>
           <div style={{ height: 1, background: "rgba(1,14,37,.1)", margin: "4px 0" }} />
           <Link href="/services" className="ck-dd-item ck-dd-sub" onClick={() => setOpen(false)}>
             Ver todos los servicios <span className="ck-arrow">→</span>

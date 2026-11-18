@@ -1394,6 +1394,12 @@ export const services: Service[] = [
           note: "Multi-channel · CRM integration · Manychat subscription paid separately",
           features: ["All channels", "Advanced bot flows", "CRM integration", "Email marketing sync", "Broadcast campaigns", "30-day support"],
         },
+        {
+          name: "Enterprise",
+          price: "Custom",
+          note: "High-volume flows · custom integrations · Manychat subscription paid separately",
+          features: ["Everything in Growth", "Multi-account setup", "Advanced conditional logic", "Custom API integrations", "Dedicated project manager", "Priority support"],
+        },
       ],
       faq: [
         { q: "Does Manychat use the official WhatsApp Business API?", a: "Yes. Manychat is an official Meta Business Partner with access to the WhatsApp Business API." },
@@ -1438,6 +1444,12 @@ export const services: Service[] = [
           price: "Desde $499 (pago único)",
           note: "Multi-canal · integración con CRM · la herramienta se paga aparte",
           features: ["Todos los canales disponibles", "Flujos de chatbot avanzados", "Integración con CRM", "Sincronización con email marketing", "Campañas de broadcast", "Soporte 30 días"],
+        },
+        {
+          name: "Enterprise",
+          price: "Personalizado",
+          note: "Flujos de alto volumen · integraciones a medida · la herramienta se paga aparte",
+          features: ["Todo lo del Growth", "Configuración multi-cuenta", "Lógica condicional avanzada", "Integraciones API a medida", "Gestor de proyecto dedicado", "Soporte prioritario"],
         },
       ],
       faq: [

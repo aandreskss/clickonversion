@@ -61,9 +61,10 @@
 .ck-navlinks { display: flex; align-items: center; gap: 2px; }
 .ck-burger { display: none; }
 .ck-nav-cta { display: inline-flex; }
-@media (max-width: 1280px) { .ck-navstatus { display: none !important; } }
-@media (max-width: 1180px) { .ck-navlink { padding: 10px 10px; font-size: 15px; } }
-@media (max-width: 900px) {
+@media (max-width: 1480px) { .ck-navstatus { display: none !important; } }
+@media (max-width: 1360px) { .ck-navlink { padding: 10px 11px; font-size: 15.5px; } }
+@media (max-width: 1200px) { .ck-navlink { padding: 10px 9px; font-size: 15px; } }
+@media (max-width: 1024px) {
   .ck-navlinks { display: none; }
   .ck-burger { display: inline-flex; }
   .ck-nav-cta { display: none !important; }
@@ -268,7 +269,7 @@ a.ck-post:hover .ck-cover-g { transform: rotate(-6deg) scale(1.08); }
 
 /* ── Fix: el menú hamburguesa solo en pantallas chicas ── */
 .ck-icon-btn.ck-burger { display: none; }
-@media (max-width: 900px) { .ck-icon-btn.ck-burger { display: inline-flex; } }
+@media (max-width: 1024px) { .ck-icon-btn.ck-burger { display: inline-flex; } }
 
 /* ── Página de servicios: ilustraciones 3D ────────────── */
 .ck-viz-stage { perspective: 1300px; display: flex; justify-content: center; }

@@ -8,6 +8,7 @@ import { waLink } from "@/lib/whatsapp"
 
 const NAV_LINKS = [
   { key: "services", href: "/services", label: "Servicios" },
+  { key: "crm-whatsapp", href: "/services", label: "CRM WhatsApp" },
   { key: "pricing", href: "/pricing", label: "Precios" },
   { key: "projects", href: "/projects", label: "Proyectos" },
   { key: "apps", href: "/apps", label: "Apps" },
@@ -77,6 +78,59 @@ function AppsMenu({ active }: { active: boolean }) {
   )
 }
 
+function WhatsappCrmMenu({ active }: { active: boolean }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const close = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false) }
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false) }
+    document.addEventListener("mousedown", close)
+    document.addEventListener("keydown", esc)
+    return () => { document.removeEventListener("mousedown", close); document.removeEventListener("keydown", esc) }
+  }, [open])
+
+  const tools = [
+    { href: "/services/callbell", icon: "🔔", name: "Callbell CRM", desc: "WhatsApp multicanal para equipos de ventas" },
+    { href: "/services/kommo", icon: "💼", name: "Kommo CRM", desc: "CRM conversacional con pipeline y WhatsApp" },
+    { href: "/services/manychat", icon: "⚡", name: "Manychat", desc: "Automatiza Instagram, WhatsApp y Messenger" },
+  ]
+
+  return (
+    <div ref={ref} className="ck-dd" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <Link
+        href="/services"
+        className="ck-navlink ck-dd-btn"
+        aria-current={active ? "page" : undefined}
+        aria-expanded={open}
+        aria-haspopup="true"
+        onFocus={() => setOpen(true)}
+      >
+        CRM WhatsApp
+        <svg aria-hidden="true" viewBox="0 0 24 24" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" style={{ transition: "transform .2s", transform: open ? "rotate(180deg)" : "none" }}><path d="M6 9l6 6 6-6" /></svg>
+      </Link>
+      {open && (
+        <div className="ck-dd-panel">
+          {tools.map((t) => (
+            <Link key={t.href} href={t.href} className="ck-dd-item" onClick={() => setOpen(false)}>
+              <span className="ck-dd-icon" aria-hidden="true" style={{ fontSize: 18 }}>{t.icon}</span>
+              <span style={{ display: "flex", flexDirection: "column", gap: 2, lineHeight: 1.3 }}>
+                <span style={{ fontWeight: 600, fontSize: 15 }}>{t.name}</span>
+                <span style={{ fontSize: 13, color: "#5A6178" }}>{t.desc}</span>
+              </span>
+            </Link>
+          ))}
+          <div style={{ height: 1, background: "rgba(1,14,37,.1)", margin: "4px 0" }} />
+          <Link href="/services" className="ck-dd-item ck-dd-sub" onClick={() => setOpen(false)}>
+            Ver todos los servicios <span className="ck-arrow">→</span>
+          </Link>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function Navbar({ active }: NavbarProps) {
   const [open, setOpen] = useState(false)
   const { count } = useCart()
@@ -86,8 +140,8 @@ export function Navbar({ active }: NavbarProps) {
       <nav
         aria-label="Principal"
         style={{
-          maxWidth: 1240, margin: "0 auto", display: "flex", flexWrap: "wrap", alignItems: "center",
-          justifyContent: "space-between", gap: "8px 16px", padding: "8px 10px 8px 22px",
+          maxWidth: 1480, margin: "0 auto", display: "flex", flexWrap: "wrap", alignItems: "center",
+          justifyContent: "space-between", gap: "8px 12px", padding: "8px 10px 8px 20px",
           background: "rgba(255,248,240,.88)", backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
           border: "1.5px solid rgba(1,14,37,.1)", borderRadius: open ? 28 : 999, transition: "border-radius .3s",
         }}
@@ -100,6 +154,8 @@ export function Navbar({ active }: NavbarProps) {
           {NAV_LINKS.map((l) =>
             l.key === "apps" ? (
               <AppsMenu key={l.key} active={active === "apps"} />
+            ) : l.key === "crm-whatsapp" ? (
+              <WhatsappCrmMenu key={l.key} active={active === "crm-whatsapp"} />
             ) : (
               <Link key={l.key} href={l.href} className="ck-navlink" aria-current={active === l.key ? "page" : undefined}>
                 {l.label}
@@ -143,6 +199,13 @@ export function Navbar({ active }: NavbarProps) {
                   <Link href="/apps/synclead" className="ck-navlink" style={{ fontSize: 18, paddingLeft: 32, display: "flex", alignItems: "center", gap: 10 }} onClick={() => setOpen(false)}>
                     ↳ SyncLead <span className="ck-mono" style={{ fontSize: 11, background: "#FE5C02", borderRadius: 6, padding: "2px 7px" }}>CRM</span>
                   </Link>
+                )}
+                {l.key === "crm-whatsapp" && (
+                  <>
+                    <Link href="/services/callbell" className="ck-navlink" style={{ fontSize: 16, paddingLeft: 32 }} onClick={() => setOpen(false)}>↳ Callbell CRM</Link>
+                    <Link href="/services/kommo" className="ck-navlink" style={{ fontSize: 16, paddingLeft: 32 }} onClick={() => setOpen(false)}>↳ Kommo CRM</Link>
+                    <Link href="/services/manychat" className="ck-navlink" style={{ fontSize: 16, paddingLeft: 32 }} onClick={() => setOpen(false)}>↳ Manychat</Link>
+                  </>
                 )}
               </div>
             ))}

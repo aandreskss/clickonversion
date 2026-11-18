@@ -370,6 +370,32 @@ export default function YoliPage() {
           </div>
         </section>
 
+        {/* LO QUE ME MUEVE */}
+        <section className="yo-sec yo-mom-sec">
+          <div className="yo-wrap">
+            <div className="yo-mom">
+              <div className="yo-mom-art" aria-hidden="true">
+                <svg viewBox="0 0 220 200" className="yo-heart">
+                  <path d="M110 178 C 52 136, 18 104, 18 66 C 18 38, 40 20, 64 20 C 84 20, 100 32, 110 50 C 120 32, 136 20, 156 20 C 180 20, 202 38, 202 66 C 202 104, 168 136, 110 178 Z" fill="#FFDCC7" stroke="#010E25" strokeWidth="4" strokeLinejoin="round" />
+                  <path d="M64 52 C 52 56, 44 66, 44 78" fill="none" stroke="#FE5C02" strokeWidth="5" strokeLinecap="round" />
+                </svg>
+                <span className="ck-hand yo-mom-note">mi motor</span>
+              </div>
+              <div className="yo-mom-txt">
+                <span className="ck-eyebrow"><b>08</b> · Lo que me mueve</span>
+                <h2>Antes que todo, <span className="ck-hand yo-hl">soy mamá</span>.</h2>
+                <p>Mi hija es lo que más quiero en el mundo. Por ella me levanto con ganas cada día y le pongo corazón a todo lo que hago: a cada clase, a cada marca y a cada historia que cuento.</p>
+                <p>Ser mamá me enseñó paciencia, creatividad y a escuchar de verdad. Eso mismo es lo que traigo a mi trabajo.</p>
+                <div className="yo-mom-tags">
+                  <span>Mamá de tiempo completo</span>
+                  <span>Docente</span>
+                  <span>Mercadóloga</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="yo-cta">
           <div className="yo-wrap yo-cta-grid">

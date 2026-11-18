@@ -49,6 +49,7 @@ Implementa la página de perfil de Yolimar Padrón ("Yoli") en `/about/yoli`. De
    - tags: `{ label: "[CONTENIDO]", bg: "#E4DEFF" }`, `{ label: "[RR. PP.]", bg: "#FFDCC7" }`
    - photo: `"/team/yoli/retrato.webp"`
    - cv: `"/about/yoli"`
+7b. **Sección «Lo que me mueve»:** el texto de la sección de mamá (08) va tal cual; no agregues fotos de su hija ni su nombre.
 8. **Móvil:** el CSS ya trae las reglas para ≤ 960 px y ≤ 640 px. Revisa con Playwright a 360, 390, 768 y 1440 px:
    - Nada provoca scroll horizontal.
    - Los carruseles deslizan: "Dónde estoy hoy", "Lo que hago", "Herramientas" y las polaroids.
@@ -235,6 +236,25 @@ En el hero, el isotipo usa el componente `Isotipo` de `src/components/brand/isot
 </div>
 </section>
 
+<!-- MAMÁ -->
+<section class="yo-sec yo-mom-sec">
+<div class="yo-wrap">
+<div class="yo-mom">
+<div class="yo-mom-art" aria-hidden="true">
+<svg viewBox="0 0 220 200" class="yo-heart"><path d="M110 178 C 52 136, 18 104, 18 66 C 18 38, 40 20, 64 20 C 84 20, 100 32, 110 50 C 120 32, 136 20, 156 20 C 180 20, 202 38, 202 66 C 202 104, 168 136, 110 178 Z" fill="#FFDCC7" stroke="#010E25" stroke-width="4" stroke-linejoin="round"/><path d="M64 52 C 52 56, 44 66, 44 78" fill="none" stroke="#FE5C02" stroke-width="5" stroke-linecap="round"/></svg>
+<span class="hand yo-mom-note">mi motor</span>
+</div>
+<div class="yo-mom-txt">
+<span class="eyebrow"><b>08</b> · Lo que me mueve</span>
+<h2>Antes que todo, <span class="hand yo-hl">soy mamá</span>.</h2>
+<p>Mi hija es lo que más quiero en el mundo. Por ella me levanto con ganas cada día y le pongo corazón a todo lo que hago: a cada clase, a cada marca y a cada historia que cuento.</p>
+<p>Ser mamá me enseñó paciencia, creatividad y a escuchar de verdad. Eso mismo es lo que traigo a mi trabajo.</p>
+<div class="yo-mom-tags"><span>Mamá de tiempo completo</span><span>Docente</span><span>Mercadóloga</span></div>
+</div>
+</div>
+</div>
+</section>
+
 <!-- CTA -->
 <section class="yo-cta">
 <div class="yo-wrap yo-cta-grid">
@@ -395,6 +415,17 @@ En el hero, el isotipo usa el componente `Isotipo` de `src/components/brand/isot
 .yo-pola.p5{transform:rotate(-2.5deg) translateY(12px)}
 @media (max-width:960px){.yo-pola{flex-basis:calc((100% - 32px) / 2)}}
 @media (max-width:640px){.yo-polas{flex-wrap:nowrap;justify-content:flex-start}.yo-pola{flex:0 0 72%}.yo-pola.p5{transform:rotate(-2.5deg)}}
+/* mamá */
+.yo-mom-sec{padding-top:0}
+.yo-mom{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:48px;align-items:center;background:var(--lav);border:2px solid var(--n);border-radius:40px;padding:clamp(28px,4vw,56px);box-shadow:12px 14px 0 var(--n)}
+.yo-mom-art{position:relative;display:flex;justify-content:center}
+.yo-heart{width:min(260px,100%);height:auto;transform:rotate(-6deg)}
+.yo-mom-note{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) rotate(-6deg);font-size:38px;font-weight:700;color:var(--n);white-space:nowrap}
+.yo-mom-txt p{font-size:18px;line-height:1.65;color:var(--bo);margin-top:16px !important;max-width:620px}
+.yo-mom-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.yo-mom-tags span{font-family:'JetBrains Mono',monospace;font-size:12.5px;padding:6px 12px;border-radius:999px;background:#fff;border:1.5px solid var(--n)}
+.yo-mom-tags span:first-child{background:var(--o);color:#fff;border-color:var(--o)}
+@media (max-width:760px){.yo-mom{grid-template-columns:1fr;gap:16px;border-radius:28px;box-shadow:7px 8px 0 var(--n)}.yo-heart{width:170px}.yo-mom-note{font-size:28px}.yo-mom-txt p{font-size:16px}}
 /* cta */
 .yo-cta{background:var(--n);color:var(--cr);border-radius:48px;margin:clamp(24px,4vw,48px) 0;padding:clamp(56px,7vw,96px) 0;overflow:hidden}
 .yo-cta-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:40px;align-items:center}

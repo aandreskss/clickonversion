@@ -133,6 +133,18 @@
 .yo-pola.p4{transform:rotate(3deg)}
 .yo-pola.p5{transform:rotate(-2.5deg) translateY(12px)}
 
+/* mamá */
+.yo-mom-sec{padding-top:0}
+.yo-mom{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:48px;align-items:center;background:var(--lav);border:2px solid var(--n);border-radius:40px;padding:clamp(28px,4vw,56px);box-shadow:12px 14px 0 var(--n)}
+.yo-mom-art{position:relative;display:flex;justify-content:center}
+.yo-heart{width:min(260px,100%);height:auto;transform:rotate(-6deg)}
+.yo-mom-note{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) rotate(-6deg);font-size:38px;font-weight:700;color:var(--n);white-space:nowrap}
+.yo-mom-txt p{font-size:18px;line-height:1.65;color:var(--bo);margin-top:16px !important;max-width:620px}
+.yo-mom-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.yo-mom-tags span{font-family:'JetBrains Mono',monospace;font-size:12.5px;padding:6px 12px;border-radius:999px;background:#fff;border:1.5px solid var(--n)}
+.yo-mom-tags span:first-child{background:var(--o);color:#fff;border-color:var(--o)}
+@media (max-width:760px){.yo-mom{grid-template-columns:1fr;gap:16px;border-radius:28px;box-shadow:7px 8px 0 var(--n)}.yo-heart{width:170px}.yo-mom-note{font-size:28px}.yo-mom-txt p{font-size:16px}}
+
 /* cta */
 .yo-cta{background:var(--n);color:var(--cr);border-radius:48px;margin:clamp(24px,4vw,48px) 0;padding:clamp(56px,7vw,96px) 0;overflow:hidden}
 .yo-cta-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:40px;align-items:center}

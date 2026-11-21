@@ -17,7 +17,11 @@ export function TeamGrid() {
                   style={{ position: "absolute", inset: 0, borderRadius: 30, border: "1.5px solid #010E25", display: "flex", alignItems: "flex-end", padding: 20, boxShadow: "0 50px 80px -50px rgba(1,14,37,.6)", ["--a" as string]: m.stripes[0], ["--b" as string]: m.stripes[1] } as React.CSSProperties}
                 >
                   {!m.photo && <span className="ck-mono" style={{ fontSize: 11.5, color: "#5A6178", background: "#fff", padding: "6px 10px", borderRadius: 8 }}>FOTO · {first}, luz natural</span>}
-                  {m.photo && <Image src={m.photo} alt={m.name} fill sizes="(max-width: 760px) 100vw, 400px" style={{ objectFit: "cover", objectPosition: "50% 22%", borderRadius: 29 }} />}
+                  {m.photo && (
+                    <div style={{ position: "absolute", inset: 0, borderRadius: 29, overflow: "hidden", background: m.photoBg ?? "transparent" }}>
+                      <Image src={m.photo} alt={m.name} fill sizes="(max-width: 760px) 100vw, 400px" style={{ objectFit: m.photoBg ? "contain" : "cover", objectPosition: m.photoBg ? "50% 100%" : "50% 22%" }} />
+                    </div>
+                  )}
                 </div>
                 <div style={{ position: "absolute", right: -16, top: -22, zIndex: 2, background: "#010E25", borderRadius: 999, padding: "8px 16px", transform: `rotate(${m.sticker}deg)`, boxShadow: "0 16px 30px -16px rgba(1,14,37,.6)" }}>
                   <span className="ck-hand" style={{ fontSize: 22, color: "#fff" }}>¡hola, soy {first}!</span>

@@ -8,6 +8,8 @@ export interface TeamMember {
   linkedin?: string
   /** Foto real (opcional). Sin foto se muestra el marcador rayado. */
   photo?: string
+  /** Fondo del contenedor de foto (útil para imágenes con fondo transparente). */
+  photoBg?: string
   /** Página de CV (opcional) */
   cv?: string
   stripes: [string, string]
@@ -62,6 +64,7 @@ export const TEAM: TeamMember[] = [
       { label: "[RR. PP.]", bg: "#FFDCC7" },
     ],
     photo: "/team/yoli/pose-brazos-sonrisa.webp",
+    photoBg: "#EEEAFF",
     cv: "/about/yoli",
     stripes: ["#E4DEFF", "#EEEAFF"],
     tilt: "ck-p3",

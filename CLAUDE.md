@@ -6,9 +6,9 @@
 Build a growth operating system to help ClicKonversion acquire its first 3 clients and reach $2,000 MRR.
 
 ## Current Phase
-**Phase 9 — Marca v5 + SEO + Seguridad + i18n** 🚧 En progreso
+**Phase 9 — Marca v5 + SEO + CRM WhatsApp pages** 🚧 En progreso
 
-Identidad visual v5 completa (ONV isotipo). SyncLead con suscripciones PayPal reales. CV de Arnaldo en `/about/arnaldo`. Audit de seguridad completo aplicado (Next.js 16.4.5, CSP, bcrypt, admin role check, JSON-LD sanitizado). SEO técnico auditado y corregido (OG image dinámica, apple-icon, manifest PWA, twitter card, sitemap, robots). i18n standards aplicados (todos los discriminadores de tipo en inglés). Favicon y app icons actualizados al isotipo ONV v5 (naranja sobre marino).
+Identidad visual v5 completa (ONV isotipo). SyncLead con suscripciones PayPal reales. CV de Arnaldo en `/about/arnaldo`. CV de Yoli en `/about/yoli` (diseño propio `yo-*`, poses con fondo transparente, SEO + JSON-LD Person). CV de Abisai en `/about/abisai` (diseño propio `ab-*`, hero marino oscuro, casos Meta Ads, SEO + JSON-LD Person). Tarjetas del equipo completas con datos y fotos reales. Audit de seguridad completo (Next.js 16.4.5, CSP, bcrypt, admin role check, JSON-LD sanitizado). SEO técnico completo (OG image dinámica, apple-icon, manifest PWA, sitemap, robots). i18n standards aplicados. Páginas de servicios en español con CTAs WhatsApp y sección de servicios relacionados. 3 páginas dedicadas CRM WhatsApp (Callbell, Kommo, Manychat) con diseño brand v4 y navbar "CRM WhatsApp" dropdown.
 
 ---
 
@@ -73,6 +73,16 @@ Los logos y el isotipo son SVG vectoriales en `/public/brand/`. **No editar `log
 - `pricing-packages.tsx` — 3 planes hardcodeados + `PackageBuilder` (arma tu paquete con descuento por volumen sobre `SERVICES`).
 - `projects-grid.tsx`, `blog-list.tsx`, `articles/*` — Portfolio y blog.
 - `service-rows.tsx` — Visualizaciones de servicios en `/services`.
+- `service-detail-layout.tsx` — Layout genérico v4 (ya no lo usan las páginas CRM; quedó sin importadores). No borrar.
+
+**`src/components/brand/crm/`** — Páginas dedicadas Callbell, Kommo, Manychat:
+- `crm.css` — Estilos propios (prefijos `crm-`, `cb-`, `km-`, `mc-`). Se importa desde `crm-shared.tsx`, no toca `brand.css`.
+- `crm-shared.tsx` — Piezas compartidas: `CrmBreadcrumb`, `CrmJsonLd`, `CrmFaq` (acordeón `<details>`), `CrmPlans` (3 variantes: `tickets` / `columns` / `stack`), `CrmCrossLinks`. Los planes leen `service.es.plans` de `src/data/services.ts` — una sola fuente de verdad.
+- `callbell-page.tsx` — Ángulo: "todo el equipo atendiendo un solo WhatsApp". Color: menta `#D3F2E3`. Planes variante `tickets`.
+- `kommo-page.tsx` — Ángulo: "del anuncio al cierre". Color: marino `#010E25` + celeste `#D6EBFF`. Planes variante `columns`.
+- `manychat-page.tsx` — Ángulo: "comentario → DM automático". Color: durazno `#FFDCC7` + lavanda `#E4DEFF`. Planes variante `stack`.
+
+Cada página emite JSON-LD `Service` + `FAQPage` + `BreadcrumbList`. Mobile: carruseles con `scroll-snap`, botones a full-width, `prefers-reduced-motion` respetado. Referencia visual en `docs/handoff/paginas-crm/capturas/`.
 
 ### Precios de los paquetes (hardcodeados)
 
@@ -88,12 +98,16 @@ Los logos y el isotipo son SVG vectoriales en `/public/brand/`. **No editar `log
 - Se abre automáticamente **5 segundos** después de la primera visita.
 - Si el usuario cierra el popup, se guarda `ck_wa_dismissed = "1"` en `localStorage` → nunca más se abre solo (el botón flotante siempre funciona).
 
-### Navbar (v4)
+### Navbar (v4 — actualizado)
 
 `src/components/marketing/navbar.tsx`:
-- Hamburger visible desde `≤900px` (antes era 1020px).
-- En `≤1180px` los navlinks reducen padding/font.
-- En `≤1280px` el indicador "en línea" se oculta.
+- `maxWidth: 1480px` — ampliado para que todos los items quepan en una línea.
+- **CRM WhatsApp dropdown** (`WhatsappCrmMenu`) — muestra Callbell, Kommo y Manychat; se activa on hover igual que `AppsMenu`. El trigger usa `<Link href="/services">` (no `<button>`) para respetar los estilos `.ck-navlink`. Iconos SVG ilustrativos (no emojis): burbuja con dos agentes (Callbell), barras de pipeline (Kommo), flujo ramificado (Manychat).
+- **Apps dropdown** (`AppsMenu`) — muestra SyncLead.
+- Hamburger visible desde `≤1024px`.
+- En `≤1360px` los navlinks reducen a `padding: 11px; font-size: 15.5px`.
+- En `≤1200px` los navlinks reducen a `padding: 9px; font-size: 15px`.
+- En `≤1480px` el indicador "en línea" se oculta.
 - CTA "Hablemos →" oculto en mobile con `display: none !important`.
 
 ### Páginas marketing (v4)
@@ -102,8 +116,15 @@ Los logos y el isotipo son SVG vectoriales en `/public/brand/`. **No editar `log
 |------|--------|
 | `/` | ✅ Rediseñada v4 |
 | `/services` | ✅ Rediseñada v4 con ServiceRows |
+| `/services/[slug]` | ✅ 19 servicios en español, CTAs WhatsApp, servicios relacionados |
+| `/services/callbell` | ✅ Página dedicada brand v4 (acento mint `#D3F2E3`) |
+| `/services/kommo` | ✅ Página dedicada brand v4 (acento lavanda `#E4DEFF`) |
+| `/services/manychat` | ✅ Página dedicada brand v4 (acento peach `#FFDCC7`) |
 | `/pricing` | ✅ Paquetes hardcodeados + PackageBuilder |
 | `/about` | ✅ Rediseñada v4 |
+| `/about/arnaldo` | ✅ CV personal — diseño propio `cv-*`, SEO + JSON-LD Person |
+| `/about/yoli` | ✅ CV personal — diseño propio `yo-*`, poses transparentes, SEO + JSON-LD Person, CSS en `src/components/brand/yoli/yoli.css` |
+| `/about/abisai` | ✅ CV personal — diseño propio `ab-*`, hero marino, casos Meta Ads, SEO + JSON-LD Person, CSS en `src/components/brand/abisai/abisai.css` |
 | `/projects` | ✅ Grid filtrable + páginas de caso individuales + galería |
 | `/projects/[slug]` | ✅ Página de caso por proyecto con galería desktop/mobile |
 | `/blog` | ✅ Nueva |
@@ -160,28 +181,37 @@ Los logos y el isotipo son SVG vectoriales en `/public/brand/`. **No editar `log
 ### Pendiente Fase 9
 
 #### Contenido
-- Datos reales de Abisai y Yoli en `src/data/team.ts`
 - Reseñas y casos de éxito reales
 - Artículos de blog reales en `src/data/blog.ts`
+- Más artículos para clusters no cubiertos: Google Ads, CRM, GEO/AEO, tracking, comparativas
+- Internal linking entre artículos de blog y páginas de servicio
 
 #### Configuración Vercel (env vars pendientes)
 - `NEXT_PUBLIC_WHATSAPP_NUMBER` — número WA sin + ni espacios
 - Verificar que `NEXT_PUBLIC_SITE_URL=https://www.clickonversion.com` esté configurado
 
 #### SEO pendiente
-- **OG images por página** — actualmente todas usan la misma imagen genérica (`/opengraph-image`). Cuando haya screenshots o fotos disponibles, crear OG images específicas por página clave (homepage, services, synclead)
+- **OG images por página** — actualmente todas usan la misma imagen genérica (`/opengraph-image`). Cuando haya screenshots disponibles, crear OG images específicas por página clave
 - **Google Search Console** — agregar `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` en Vercel y hacer submit de `/sitemap.xml` en GSC
 - **`twitter.site`** — si se crea cuenta Twitter/X, agregar el handle en root `layout.tsx` metadata
-- **Verificar OG image en producción** — usar opengraph.xyz para confirmar que el preview se ve bien en WhatsApp/LinkedIn/Twitter
+- **sameAs social profiles** — agregar Instagram, Facebook, Google Business Profile en Organization schema
+- **Más FAQs** en páginas clave: `ai-seo`, `local-seo`, `whatsapp-business`
 
 #### Seguridad pendiente
-- **Rate limiting persistente** — el limiter actual es en memoria por instancia serverless (suficiente para volumen actual). Escalar a **Vercel KV (Upstash Redis)** cuando el tráfico crezca: instalar desde Vercel Storage, agregar `@vercel/kv`, reemplazar el `Map` en `src/lib/rate-limit.ts`
+- **Rate limiting persistente** — el limiter actual es en memoria por instancia serverless (suficiente para volumen actual). Escalar a **Vercel KV (Upstash Redis)** cuando el tráfico crezca
 
 #### ✅ Completado en esta fase
-- Favicon + app icons actualizados a identidad v5 usando kit oficial (`01_naranja_marino`): `favicon.ico`, `icon.svg`, `icon.png`, `apple-icon.png`, ICO en `src/app/` (fix del default de Next.js que sobreescribía el favicon)
+- **Página de Yoli** — `/about/yoli` estática; secciones (hero, banda, sobre mí, hoy, trayectoria, lo que hago, formación, herramientas, detrás, CTA); poses con fondo transparente (`pose-arriba.webp`, etc.); `Isotipo` component en hero bg; CSS propio en `src/components/brand/yoli/yoli.css` (prefijo `yo-`); SEO + JSON-LD Person/BreadcrumbList; tarjeta con `pose-brazos-sonrisa.webp`; `/about/yoli` en sitemap
+- **Página de Abisai** — `/about/abisai` estática; secciones (hero marino + dot bg, ticker durazno, sobre mí, hoy, resultados Meta Ads, lo que hago, de la calle, familia, polas, CTA); CSS propio en `src/components/brand/abisai/abisai.css` (prefijo `ab-`); SEO + JSON-LD Person/BreadcrumbList; tarjeta en `src/data/team.ts` con datos y foto reales; `/about/abisai` en sitemap
+- Favicon + app icons actualizados a identidad v5 usando kit oficial (`01_naranja_marino`)
 - i18n standards: todos los discriminadores `"único"/"mensual"` → `"one-time"/"monthly"` en 6 archivos
-- Audit de seguridad: CSP headers, Next.js 16.4.5 (4 CVE RCE parchados), JSON-LD sanitizado, admin role check, console.log limpiado de IDs internos, validación GA ID
-- SEO técnico: OG image dinámica 1200×630, apple-icon, manifest PWA, sitemap completo, robots.txt explícito, JSON-LD en todas las páginas clave, twitter card
+- Audit de seguridad: CSP headers, Next.js 16.4.5, JSON-LD sanitizado, admin role check
+- SEO técnico: OG image dinámica 1200×630, apple-icon, manifest PWA, sitemap completo, robots.txt, JSON-LD en todas las páginas clave
+- **Páginas de servicio en español** — `/services/[slug]` usa `service.es` en lugar de `service.en`; locale `es_419`; CTAs WhatsApp contextuales; sección "Servicios relacionados" computada con `getServicesByCategory()`
+- **3 páginas CRM WhatsApp** — `/services/callbell`, `/services/kommo`, `/services/manychat`; rutas estáticas que sobreescriben el `[slug]` dinámico; componentes en `src/components/brand/crm/`; diseño único por página (ángulo, color, secciones, variante de planes); 33/33 tests Playwright pasan
+- **Navbar "CRM WhatsApp" dropdown** — `WhatsappCrmMenu` con Callbell, Kommo, Manychat; navbar ampliado a `maxWidth: 1480px`; burger a `≤1024px`; iconos SVG ilustrativos (no emojis)
+- **Manychat** agregado como nuevo servicio en `src/data/services.ts` (categoría `automation`); plan Enterprise/Personalizado incluido en `en` y `es`
+- **Test suite CRM** — `src/e2e/crm-pages.spec.ts`: sin scroll horizontal a 5 viewports, precios visibles, FAQ abre
 
 ---
 
@@ -219,9 +249,10 @@ Los logos y el isotipo son SVG vectoriales en `/public/brand/`. **No editar `log
 
 ### Componentes marketing nuevos/actualizados
 
-**`src/components/marketing/navbar.tsx`** — v4:
-- Sticky, crema bg `#FFF8F0`, borde marino suave.
-- Hamburger visible desde `≤900px`. Nav links se ocultan a `≤900px`, reducen tamaño a `≤1180px`.
+**`src/components/marketing/navbar.tsx`** — v4 (actualizado):
+- Sticky, crema bg `#FFF8F0`, borde marino suave. `maxWidth: 1480px`.
+- Dropdowns: `AppsMenu` (SyncLead) y `WhatsappCrmMenu` (Callbell / Kommo / Manychat).
+- Hamburger visible desde `≤1024px`. Nav links se ocultan a `≤1024px`, reducen tamaño a `≤1360px` y `≤1200px`.
 - CTA "Hablemos →" oculto en mobile (`display: none !important`).
 - Menú mobile desplegable con links + botones WhatsApp.
 
@@ -663,12 +694,19 @@ SyncLeadPreview → CTA Lime
 |---|---|---|
 | `/` | ✅ | Homepage |
 | `/services` | ✅ | Catálogo de servicios con carrito |
+| `/services/[slug]` | ✅ | 19 páginas de servicio — español, WA CTA, relacionados |
+| `/services/callbell` | ✅ | Callbell CRM — brand v4, estática |
+| `/services/kommo` | ✅ | Kommo CRM — brand v4, estática |
+| `/services/manychat` | ✅ | Manychat — brand v4, estática |
 | `/pricing` | ✅ | Grid de precios filtrable |
 | `/projects` | ✅ | Portfolio |
 | `/apps` | ✅ | Catálogo apps |
 | `/apps/synclead` | ✅ | Landing SyncLead con suscripciones PayPal |
 | `/apps/synclead/gracias` | ❌ noindex | Confirmación post-suscripción |
 | `/about` | ✅ | Historia y contacto |
+| `/about/arnaldo` | ✅ | CV Arnaldo Casadiego |
+| `/about/yoli` | ✅ | CV Yolimar Padrón |
+| `/about/abisai` | ✅ | CV Abisai Pérez |
 | `/resources` | ✅ | Recursos descargables |
 | `/checkout` | ❌ noindex | Checkout |
 | `/audit` | ✅ | 2-column layout with value props |

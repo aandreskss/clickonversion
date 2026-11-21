@@ -49,12 +49,12 @@ Implementa la página de perfil de Yolimar Padrón ("Yoli") en `/about/yoli`. De
    - tags: `{ label: "[CONTENIDO]", bg: "#E4DEFF" }`, `{ label: "[RR. PP.]", bg: "#FFDCC7" }`
    - photo: `"/team/yoli/retrato.webp"`
    - cv: `"/about/yoli"`
-7b. **Sección «Lo que me mueve»:** el texto de la sección de mamá (08) va tal cual; no agregues fotos de su hija ni su nombre.
 8. **Móvil:** el CSS ya trae las reglas para ≤ 960 px y ≤ 640 px. Revisa con Playwright a 360, 390, 768 y 1440 px:
    - Nada provoca scroll horizontal.
    - Los carruseles deslizan: "Dónde estoy hoy", "Lo que hago", "Herramientas" y las polaroids.
    - Los botones del hero ocupan todo el ancho en móvil.
    - Las burbujas naranjas no tapan la cara de Yoli. Si alguna la tapa, muévela.
+   - Las poses recortadas (`pose-*.webp`) tienen fondo transparente; no les pongas fondo ni borde.
 9. **Verificación:** corre `npx tsc --noEmit`, `npx eslint` sobre los archivos nuevos y `npm run build`, y confirma que `/about/yoli` sale estática.
 10. **Commit:** muéstrame un resumen y haz un commit solo con estos archivos:
     - `src/app/(marketing)/about/yoli/`
@@ -69,15 +69,20 @@ Implementa la página de perfil de Yolimar Padrón ("Yoli") en `/about/yoli`. De
 **Reglas de marca:**
 - El naranja `#FE5C02` nunca va de fondo de sección; solo en botones, burbujas, isotipo y palabras clave.
 - No inventes datos. Las cifras (+80 %, +20 %, 10+ marcas) salen del CV de Yoli.
+- La sección «Lo que me mueve» (08, su lado de mamá) va tal cual, sin fotos de su hija ni su nombre.
 - No uses fotos con menores de edad ni muestres la cédula, su teléfono ni su correo personal.
 
 ## Imágenes (ya en `public/team/yoli/`)
 
 | Archivo | Dónde va |
 |---------|----------|
-| `retrato.webp` | Hero (arco) y foto del CTA final |
-| `sticker-verde.webp` | Sticker junto a la trayectoria |
-| `sticker-grado.webp` | Sticker en la sección Formación |
+| `pose-arriba.webp` | Hero: Yoli señalando hacia arriba |
+| `pose-pulgar.webp` | Trayectoria: señala con el pulgar la línea de tiempo |
+| `pose-senala-lado.webp` | «Lo que hago»: señala las tarjetas de servicios |
+| `pose-cruzada-senala.webp` | Formación: señala la lista de estudios |
+| `pose-brazos-seria.webp` | «La caja de herramientas» |
+| `pose-brazos-sonrisa.webp` | CTA final |
+| `retrato.webp` | Tarjeta del equipo en Quiénes somos y Open Graph |
 | `certificado-unitec.webp` | Certificado UNITEC 2025 (cédula difuminada) |
 | `con-abisai-savaya.webp` | Polaroid «con Abisai en Savaya» |
 | `grado.webp` | Polaroid «día de grado» |
@@ -106,7 +111,7 @@ En el hero, el isotipo usa el componente `Isotipo` de `src/components/brand/isot
 <p class="mono yo-loc"><span class="dot"></span> Los Guayos, Carabobo · disponible para trabajo remoto</p>
 </div>
 <div class="yo-hero-vis">
-<div class="yo-arch"><img src="/team/yoli/retrato.webp" alt="Retrato de Yolimar Padrón" width="432" height="592"/></div>
+<img class="yo-pose-hero" src="/team/yoli/pose-arriba.webp" alt="Yoli sonriendo y señalando hacia arriba con la camiseta de ClicKonversion" width="690" height="1000"/>
 <svg class="yo-iso-bg" aria-hidden="true" viewBox="-20 -20 1040 524"><path fill="#FE5C02" fill-rule="evenodd" d="M214.4 477.5 C238.9 474.6 260.5 467.9 281.1 456.7 C303.8 444.4 326.1 424.8 339.9 404.8 C341.3 402.8 342.6 401.2 342.9 401.2 C343.3 401.2 343.6 406.5 343.8 415.7 L344.0 430.3 L347.1 430.1 C355.1 429.7 369.3 425.3 380.8 419.5 C404.3 407.9 421.6 389.5 431.3 365.9 C434.4 358.3 436.3 351.9 437.8 343.8 C438.9 337.8 439.0 335.1 439.3 296.8 C439.7 257.1 439.7 256.1 440.9 251.8 C442.6 245.7 444.0 241.9 446.3 237.8 C455.7 220.5 474.4 209.8 495.0 209.8 C501.8 209.8 506.1 210.4 512.4 212.5 C518.8 214.5 523.8 217.5 529.1 222.5 C536.7 229.7 540.4 236.5 544.8 251.8 C550.8 273.1 571.1 332.3 588.1 378.4 C591.2 386.7 594.8 396.4 596.1 400.1 C602.6 418.3 607.8 428.3 616.8 439.7 C632.3 459.5 654.2 471.9 679.7 475.3 C687.2 476.3 691.8 476.3 699.7 475.3 C720.5 472.7 738.3 464.3 753.6 449.8 C763.0 440.9 768.7 432.2 781.4 407.5 C793.4 384.2 796.3 378.5 810.8 350.6 C825.5 322.4 831.5 311.1 833.7 307.0 C834.8 305.0 838.7 297.7 842.4 290.8 C846.1 283.8 856.9 263.6 866.5 245.7 C876.0 227.9 885.8 209.5 888.3 204.8 C890.7 200.2 894.4 193.2 896.5 189.5 C898.5 185.7 902.1 179.0 904.4 174.6 C906.8 170.2 916.4 152.5 925.7 135.1 C949.7 90.6 954.8 81.1 957.6 75.8 C958.9 73.2 961.5 68.5 963.2 65.3 C965.0 62.2 969.4 53.9 973.1 47.0 C976.8 40.0 983.0 28.4 986.9 21.1 C990.8 13.9 993.9 7.7 993.7 7.4 C993.5 6.6 995.0 6.4 962.7 12.4 C950.1 14.7 938.8 16.8 937.4 17.0 C934.4 17.5 907.1 22.5 869.3 29.4 C853.7 32.2 838.8 35.0 836.1 35.5 C833.3 36.0 830.7 36.8 830.2 37.3 C829.7 37.8 823.7 48.4 816.8 61.0 C810.0 73.5 802.3 87.5 799.8 92.0 C793.1 104.2 770.1 146.4 765.9 154.0 C764.0 157.7 755.8 172.7 747.7 187.5 C729.1 221.6 718.5 241.2 706.6 263.0 C703.8 268.3 698.5 278.0 695.0 284.6 C691.4 291.2 688.2 296.5 687.9 296.4 C687.6 296.3 686.1 292.5 684.6 288.0 C672.3 250.9 651.8 191.3 649.0 184.9 C641.2 166.6 631.5 152.1 617.9 138.6 C606.0 126.7 593.6 118.0 578.0 110.4 C558.4 100.8 540.3 96.1 516.5 94.4 C498.8 93.2 476.9 95.9 458.3 101.5 C419.9 113.1 384.8 138.7 364.5 169.8 C362.0 173.6 359.7 176.8 359.3 176.8 C358.9 176.8 356.4 173.6 353.7 169.5 C318.2 117.1 253.6 88.3 186.4 95.1 C151.5 98.6 115.3 112.7 86.9 134.0 C57.0 156.3 35.4 183.6 21.2 216.6 C11.1 240.4 6.6 262.4 6.6 288.3 C6.6 304.7 8.1 316.8 12.1 332.9 C21.5 370.2 42.4 404.6 71.4 430.2 C102.0 457.3 139.0 473.4 180.1 477.5 C189.9 478.5 206.0 478.5 214.4 477.5Z M187.8 363.5 C182.4 362.8 171.9 360.0 166.7 357.8 C140.7 347.1 121.0 321.3 117.5 293.6 C116.7 286.9 117.1 273.1 118.4 267.4 C120.7 256.8 125.1 246.5 131.3 237.0 C134.9 231.5 146.4 219.9 152.2 215.9 C171.7 202.6 196.1 198.1 218.0 203.6 C228.4 206.3 234.7 209.2 244.7 215.9 C261.6 227.2 274.0 246.3 278.1 267.4 C279.6 274.7 279.8 285.8 278.7 293.1 C277.5 301.3 276.7 304.2 273.5 312.5 C262.9 339.3 238.1 358.9 209.4 363.3 C203.6 364.1 193.6 364.2 187.8 363.5Z"/></svg>
 <span class="yo-bubble hand yo-b1">te lo explico<br/>como en clase</span>
 <div class="yo-float yo-f1"><span class="mono">COMUNIDAD DIGITAL · @SAVAYAVZLA</span><b>+80%</b><span>en TikTok e Instagram</span></div>
@@ -165,7 +170,7 @@ En el hero, el isotipo usa el componente `Isotipo` de `src/components/brand/isot
 </ol>
 </div>
 <aside class="yo-tl-side">
-<img class="yo-st-verde" src="/team/yoli/sticker-verde.webp" alt="Yoli de espaldas con camisa verde, mirando a cámara y sonriendo" width="617" height="540"/>
+<img class="yo-pose-tl" src="/team/yoli/pose-pulgar.webp" alt="Yoli sonriendo y señalando con el pulgar hacia su trayectoria" width="631" height="1000"/>
 <span class="yo-bubble hand yo-b2">¡esto sí lo viví!</span>
 <div class="yo-side-card"><span class="mono">MARCAS Y EVENTOS</span><div class="yo-chips"><span>Savaya</span><span>ArtMurale</span><span>Biosuplisel</span><span>Distalim C.A.</span><span>Colegio de Fisioterapeutas de Carabobo</span><span>Miss Carabobo</span></div></div>
 </aside>
@@ -176,6 +181,7 @@ En el hero, el isotipo usa el componente `Isotipo` de `src/components/brand/isot
 <section class="yo-sec yo-do-sec">
 <div class="yo-wrap">
 <div class="yo-head-split"><div><span class="eyebrow"><b>04</b> · Lo que hago</span><h2>Estrategia con voz propia.</h2></div><p>Lo que más me piden las marcas, y lo que hago todos los días.</p></div>
+<div class="yo-do-wrap"><div class="yo-do-pose"><img src="/team/yoli/pose-senala-lado.webp" alt="Yoli señalando sus servicios" width="664" height="1000"/><span class="yo-bubble hand">¡mira!</span></div>
 <div class="yo-do">
 <article class="yo-lav"><span class="mono">01</span><h3>Estrategia de contenido</h3><p>Calendario, formatos y guiones para TikTok e Instagram que hacen crecer la comunidad.</p></article>
 <article class="yo-peach"><span class="mono">02</span><h3>Gestión de marcas</h3><p>Identidad digital, tono y ecosistema de contenidos para marcas nuevas o que se renuevan.</p></article>
@@ -183,6 +189,7 @@ En el hero, el isotipo usa el componente `Isotipo` de `src/components/brand/isot
 <article class="yo-sky"><span class="mono">04</span><h3>IA para marketing</h3><p>Herramientas de inteligencia artificial para crear contenido y ganar productividad.</p></article>
 <article class="yo-white"><span class="mono">05</span><h3>Formación para equipos</h3><p>Talleres de marketing digital e IA, en modalidad virtual o presencial.</p></article>
 <article class="yo-white"><span class="mono">06</span><h3>Locución y oratoria</h3><p>Voz para piezas de audio y video, y oratoria de alto impacto para presentaciones.</p></article>
+</div>
 </div>
 </div>
 </section>
@@ -202,8 +209,8 @@ En el hero, el isotipo usa el componente `Isotipo` de `src/components/brand/isot
 </ul>
 </div>
 <div class="yo-edu-vis">
-<img class="yo-st-grado" src="/team/yoli/sticker-grado.webp" alt="Yoli sonriendo con toga y birrete el día de su graduación" width="881" height="640"/>
-<span class="yo-bubble hand yo-b3">¡graduada!</span>
+<img class="yo-pose-edu" src="/team/yoli/pose-cruzada-senala.webp" alt="Yoli de brazos cruzados señalando su formación" width="589" height="1000"/>
+<span class="yo-bubble hand yo-b3">¡nunca dejo<br/>de aprender!</span>
 <figure class="yo-cert"><img src="/team/yoli/certificado-unitec.webp" alt="Certificado de UNITEC del taller Transinclusión educativa, tecnoeducación e IA" width="650" height="428"/><figcaption class="mono">CERTIFICACIÓN UNITEC · 2025</figcaption></figure>
 </div>
 </div>
@@ -212,8 +219,8 @@ En el hero, el isotipo usa el componente `Isotipo` de `src/components/brand/isot
 <!-- HERRAMIENTAS -->
 <section class="yo-sec">
 <div class="yo-wrap">
-<span class="eyebrow"><b>06</b> · Habilidades</span>
-<h2>La caja de herramientas.</h2>
+<div class="yo-tools-head"><div><span class="eyebrow"><b>06</b> · Habilidades</span>
+<h2>La caja de herramientas.</h2></div><div class="yo-tools-pose"><img src="/team/yoli/pose-brazos-seria.webp" alt="Yoli de brazos cruzados con una sonrisa segura" width="638" height="1000"/></div></div>
 <div class="yo-tools">
 <div class="yo-lav"><span class="mono">IA PARA MARKETING</span><div class="yo-chips"><span>Creación de contenido con IA</span><span>Productividad con IA</span></div></div>
 <div class="yo-peach"><span class="mono">MARKETING</span><div class="yo-chips"><span>Analítica de métricas</span><span>Diseño digital</span><span>Edición de video básica</span><span>Copywriting</span><span>TikTok</span><span>Instagram</span></div></div>
@@ -265,7 +272,7 @@ En el hero, el isotipo usa el componente `Isotipo` de `src/components/brand/isot
 <div class="yo-ctas"><a class="btn btn-primary" href="https://wa.me/?text=Hola%20Yoli%2C%20quiero%20hablar%20de%20mi%20marca" style="border-color:#FFF8F0;box-shadow:0 4px 0 #FFF8F0">Escríbeme por WhatsApp ↗</a><a class="btn yo-btn-ghost" href="/about">Ver el equipo</a></div>
 <p class="hand yo-sign">Un abrazo, Yoli</p>
 </div>
-<div class="yo-cta-photo"><img src="/team/yoli/retrato.webp" alt="Retrato de Yolimar Padrón" width="432" height="592"/></div>
+<div class="yo-cta-pose"><img src="/team/yoli/pose-brazos-sonrisa.webp" alt="Yoli sonriendo de brazos cruzados" width="650" height="1000"/></div>
 </div>
 </section>
 
@@ -284,8 +291,6 @@ En el hero, el isotipo usa el componente `Isotipo` de `src/components/brand/isot
 .yo .eyebrow b{color:var(--od)}
 .yo-hl{color:var(--o);font-weight:700;font-size:1.18em;letter-spacing:0}
 .yo-o{color:var(--o)}
-.btn-line{background:#fff;color:var(--n)}
-.btn-line:hover{background:var(--pe);color:var(--n)}
 .yo-bubble{position:absolute;z-index:4;background:var(--o);color:#fff;font-size:24px;font-weight:700;line-height:1;padding:10px 16px 11px;border-radius:18px;box-shadow:0 10px 24px rgba(1,14,37,.18)}
 .yo-chips{display:flex;flex-wrap:wrap;gap:6px}
 .yo-chips span{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:#fff;border:1.5px solid rgba(1,14,37,.12);border-radius:999px;padding:5px 11px;color:var(--n)}
@@ -489,5 +494,63 @@ En el hero, el isotipo usa el componente `Isotipo` de `src/components/brand/isot
   .yo-note{font-size:24px}
   .yo-cta-photo{width:200px}
   .yo-sign{font-size:28px}
+}
+
+
+/* ---- poses de Yoli ---- */
+.yo-pose-hero{position:relative;z-index:2;height:600px;width:auto;display:block;filter:drop-shadow(0 18px 30px rgba(1,14,37,.18))}
+.yo-hero{padding-bottom:0}
+.yo-hero-txt{padding-bottom:80px}
+.yo-b1{left:-10px;top:24px}
+.yo-tl-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.5fr)}
+.yo-tl-side{order:-1}
+.yo-pose-tl{width:auto;height:470px;max-width:100%;display:block;filter:drop-shadow(0 14px 22px rgba(1,14,37,.15))}
+.yo-tl-side .yo-b2{right:auto;left:0;top:30px;transform:rotate(-5deg)}
+.yo-edu-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+.yo-edu-vis{order:-1;min-height:540px}
+.yo-pose-edu{position:absolute;right:0;bottom:-24px;height:520px;width:auto;z-index:3;filter:drop-shadow(0 16px 26px rgba(0,0,0,.35))}
+.yo-edu-vis .yo-cert{left:0;top:40px;bottom:auto;width:62%;z-index:1}
+.yo-edu-vis .yo-b3{left:0;top:auto;bottom:70px;z-index:4}
+.yo-do-wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:end}
+.yo-do-pose{position:relative;align-self:stretch;min-height:420px}
+.yo-do-pose img{position:absolute;left:-10px;bottom:0;height:460px;width:auto}
+.yo-do-pose .yo-bubble{left:10px;top:0;transform:rotate(-6deg)}
+.yo-tools-head{display:grid;grid-template-columns:minmax(0,1fr) 240px;align-items:end;gap:20px}
+.yo-tools-pose{position:relative;height:200px}
+.yo-tools-pose img{position:absolute;right:0;bottom:-70px;height:290px;width:auto;z-index:1}
+.yo-tools{position:relative;z-index:2}
+.yo-cta{padding-bottom:0}
+.yo-cta-grid{align-items:end}
+.yo-cta-grid>div:first-child{padding-bottom:clamp(56px,7vw,96px)}
+.yo-cta-pose{display:flex;justify-content:center}
+.yo-cta-pose img{height:440px;width:auto;display:block}
+@media (max-width:960px){
+  .yo-hero-txt{padding-bottom:0}
+  .yo-tl-grid,.yo-edu-grid{grid-template-columns:minmax(0,1fr)}
+  .yo-tl-side,.yo-edu-vis{order:0}
+  .yo-pose-tl{height:380px}
+  .yo-edu-vis{min-height:480px}
+  .yo-do-wrap{grid-template-columns:1fr}
+  .yo-do-pose{min-height:0;height:300px;order:2}
+  .yo-do-pose img{left:50%;transform:translateX(-50%);height:320px;bottom:-56px}
+  .yo-cta-grid>div:first-child{padding-bottom:0}
+}
+@media (max-width:640px){
+  .yo-hero-vis{padding:40px 0 0}
+  .yo-pose-hero{height:440px}
+  .yo-b1{top:0}
+  .yo-f1{bottom:60px}
+  .yo-f2{bottom:20px}
+  .yo-pose-tl{height:320px}
+  .yo-edu-vis{min-height:400px}
+  .yo-pose-edu{height:360px;bottom:-56px}
+  .yo-edu-vis .yo-cert{width:70%;top:10px}
+  .yo-edu-vis .yo-b3{bottom:40px}
+  .yo-do-pose{height:260px}
+  .yo-do-pose img{height:290px}
+  .yo-tools-head{grid-template-columns:1fr}
+  .yo-tools-pose{height:150px}
+  .yo-tools-pose img{right:50%;transform:translateX(50%);height:230px;bottom:-56px}
+  .yo-cta-pose img{height:320px}
 }
 ```

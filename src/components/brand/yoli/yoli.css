@@ -7,7 +7,6 @@
 .yo .ck-eyebrow b{color:var(--od)}
 .yo-hl{color:var(--o);font-weight:700;font-size:1.18em;letter-spacing:0}
 .yo-o{color:var(--o)}
-/* .btn-line omitida — ya existe como .ck-btn-line en brand.css */
 .yo-bubble{position:absolute;z-index:4;background:var(--o);color:#fff;font-size:24px;font-weight:700;line-height:1;padding:10px 16px 11px;border-radius:18px;box-shadow:0 10px 24px rgba(1,14,37,.18)}
 .yo-chips{display:flex;flex-wrap:wrap;gap:6px}
 .yo-chips span{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:#fff;border:1.5px solid rgba(1,14,37,.12);border-radius:999px;padding:5px 11px;color:var(--n)}
@@ -30,8 +29,6 @@
 .yo-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
 .yo-loc{margin-top:18px !important;font-size:12.5px;color:var(--sl);display:flex;align-items:center;gap:8px}
 .yo-hero-vis{position:relative;min-height:600px;display:flex;justify-content:center;align-items:flex-end}
-.yo-arch{position:relative;z-index:2;width:min(420px,88%);aspect-ratio:432/560;border-radius:220px 220px 32px 32px;overflow:hidden;border:2px solid var(--n);box-shadow:14px 16px 0 var(--n);background:#ddd}
-.yo-arch img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 .yo-iso-bg{position:absolute;z-index:1;width:520px;right:-120px;top:40px;opacity:.95;display:block}
 .yo-b1{left:0;top:70px;transform:rotate(-6deg)}
 .yo-b1::after{content:"";position:absolute;right:-8px;bottom:14px;border:9px solid transparent;border-left-color:var(--o);border-right:0}
@@ -48,7 +45,6 @@
 .yo-band-in{display:flex;gap:22px;white-space:nowrap;width:max-content;font-size:15px;letter-spacing:.06em;text-transform:uppercase;animation:yo-mq 40s linear infinite}
 .yo-band-in i{color:var(--o);font-style:normal}
 @keyframes yo-mq{to{transform:translateX(-50%)}}
-/* .still .yo-band-in omitida — no existe clase .still en este sitio */
 @media (prefers-reduced-motion:reduce){.yo-band-in{animation:none}}
 
 /* sobre mí */
@@ -85,7 +81,6 @@
 .yo-tl ul{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:5px}
 .yo-tl ul li{font-size:15.5px;color:var(--bo);line-height:1.5}
 .yo-tl-side{position:sticky;top:110px;display:flex;flex-direction:column;align-items:center;gap:18px}
-.yo-st-verde{width:min(360px,100%);height:auto;transform:rotate(-4deg);filter:drop-shadow(0 14px 22px rgba(1,14,37,.15))}
 .yo-b2{right:10px;top:-10px;transform:rotate(6deg)}
 .yo-side-card{background:var(--lav);border-radius:26px;padding:22px;width:100%}
 .yo-side-card>.ck-mono{display:block;font-size:11px;letter-spacing:.08em;color:var(--sl);margin-bottom:12px}
@@ -110,7 +105,6 @@
 .yo-edu div span{font-size:14.5px;color:rgba(255,248,240,.65)}
 .yo-edu li.new b::after{content:"NUEVO";margin-left:10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;background:var(--mi);color:var(--n);padding:2px 7px;border-radius:6px;vertical-align:3px}
 .yo-edu-vis{position:relative;min-height:480px}
-.yo-st-grado{position:absolute;right:-10px;top:0;width:78%;height:auto;transform:rotate(5deg);z-index:2;filter:drop-shadow(0 16px 26px rgba(0,0,0,.35))}
 .yo-b3{left:10px;top:30px;transform:rotate(-6deg)}
 .yo-cert{position:absolute;left:0;bottom:0;width:72%;margin:0;background:#fff;padding:8px 8px 10px;border-radius:6px;transform:rotate(-4deg);box-shadow:0 20px 40px rgba(0,0,0,.4);z-index:3}
 .yo-cert img{width:100%;height:auto;display:block}
@@ -153,10 +147,8 @@
 .yo-btn-ghost{background:transparent;color:var(--cr);border-color:rgba(255,248,240,.5)}
 .yo-btn-ghost:hover{background:var(--cr);color:var(--n)}
 .yo-sign{font-size:34px;color:var(--o);font-weight:700;margin-top:20px !important;transform:rotate(-2deg);transform-origin:left}
-.yo-cta-photo{justify-self:center;width:min(280px,100%);aspect-ratio:432/540;border-radius:150px 150px 24px 24px;overflow:hidden;border:2px solid var(--cr);box-shadow:10px 12px 0 var(--lav);transform:rotate(3deg)}
-.yo-cta-photo img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 
-/* responsive */
+/* responsive base */
 @media (max-width:960px){
   .yo-hero-grid,.yo-about,.yo-tl-grid,.yo-edu-grid,.yo-cta-grid{grid-template-columns:minmax(0,1fr)}
   .yo-today,.yo-do,.yo-tools{grid-template-columns:1fr 1fr}
@@ -176,7 +168,6 @@
   .yo-ctas{flex-direction:column}
   .yo-ctas .ck-btn{width:100%}
   .yo-hero-vis{min-height:0;padding:30px 0 70px}
-  .yo-arch{width:78%;box-shadow:8px 10px 0 var(--n)}
   .yo-iso-bg{width:320px;right:-110px;top:10px}
   .yo-b1{font-size:19px;left:-4px;top:12px}
   .yo-f1{left:-6px;bottom:20px;padding:10px 12px}
@@ -197,7 +188,6 @@
   .yo-when{text-align:left}
   .yo-tl h3{font-size:18px}
   .yo-tl ul li{font-size:14.5px}
-  .yo-st-verde{width:70%}
   .yo-b2{font-size:19px;right:0}
   .yo-edu li{grid-template-columns:1fr;gap:2px}
   .yo-edu b{font-size:16.5px}
@@ -208,6 +198,63 @@
   .yo-pola.p2{transform:rotate(2deg)}
   .yo-pola.p5{transform:rotate(-2.5deg)}
   .yo-note{font-size:24px}
-  .yo-cta-photo{width:200px}
   .yo-sign{font-size:28px}
+}
+
+/* ---- poses de Yoli ---- */
+.yo-pose-hero{position:relative;z-index:2;height:600px;width:auto;display:block;filter:drop-shadow(0 18px 30px rgba(1,14,37,.18))}
+.yo-hero{padding-bottom:0}
+.yo-hero-txt{padding-bottom:80px}
+.yo-b1{left:-10px;top:24px}
+.yo-tl-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.5fr)}
+.yo-tl-side{order:-1}
+.yo-pose-tl{width:auto;height:470px;max-width:100%;display:block;filter:drop-shadow(0 14px 22px rgba(1,14,37,.15))}
+.yo-tl-side .yo-b2{right:auto;left:0;top:30px;transform:rotate(-5deg)}
+.yo-edu-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+.yo-edu-vis{order:-1;min-height:540px}
+.yo-pose-edu{position:absolute;right:0;bottom:-24px;height:520px;width:auto;z-index:3;filter:drop-shadow(0 16px 26px rgba(0,0,0,.35))}
+.yo-edu-vis .yo-cert{left:0;top:40px;bottom:auto;width:62%;z-index:1}
+.yo-edu-vis .yo-b3{left:0;top:auto;bottom:70px;z-index:4}
+.yo-do-wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:end}
+.yo-do-pose{position:relative;align-self:stretch;min-height:420px}
+.yo-do-pose img{position:absolute;left:-10px;bottom:0;height:460px;width:auto}
+.yo-do-pose .yo-bubble{left:10px;top:0;transform:rotate(-6deg)}
+.yo-tools-head{display:grid;grid-template-columns:minmax(0,1fr) 240px;align-items:end;gap:20px}
+.yo-tools-pose{position:relative;height:200px}
+.yo-tools-pose img{position:absolute;right:0;bottom:-70px;height:290px;width:auto;z-index:1}
+.yo-tools{position:relative;z-index:2}
+.yo-cta{padding-bottom:0}
+.yo-cta-grid{align-items:end}
+.yo-cta-grid>div:first-child{padding-bottom:clamp(56px,7vw,96px)}
+.yo-cta-pose{display:flex;justify-content:center}
+.yo-cta-pose img{height:440px;width:auto;display:block}
+
+@media (max-width:960px){
+  .yo-hero-txt{padding-bottom:0}
+  .yo-tl-grid,.yo-edu-grid{grid-template-columns:minmax(0,1fr)}
+  .yo-tl-side,.yo-edu-vis{order:0}
+  .yo-pose-tl{height:380px}
+  .yo-edu-vis{min-height:480px}
+  .yo-do-wrap{grid-template-columns:1fr}
+  .yo-do-pose{min-height:0;height:300px;order:2}
+  .yo-do-pose img{left:50%;transform:translateX(-50%);height:320px;bottom:-56px}
+  .yo-cta-grid>div:first-child{padding-bottom:0}
+}
+@media (max-width:640px){
+  .yo-hero-vis{padding:40px 0 0}
+  .yo-pose-hero{height:440px}
+  .yo-b1{top:0}
+  .yo-f1{bottom:60px}
+  .yo-f2{bottom:20px}
+  .yo-pose-tl{height:320px}
+  .yo-edu-vis{min-height:400px}
+  .yo-pose-edu{height:360px;bottom:-56px}
+  .yo-edu-vis .yo-cert{width:70%;top:10px}
+  .yo-edu-vis .yo-b3{bottom:40px}
+  .yo-do-pose{height:260px}
+  .yo-do-pose img{height:290px}
+  .yo-tools-head{grid-template-columns:1fr}
+  .yo-tools-pose{height:150px}
+  .yo-tools-pose img{right:50%;transform:translateX(50%);height:230px;bottom:-56px}
+  .yo-cta-pose img{height:320px}
 }

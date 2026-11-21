@@ -36,6 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/about`,    lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${siteUrl}/about/arnaldo`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${siteUrl}/about/yoli`,    lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
+    { url: `${siteUrl}/about/abisai`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${siteUrl}/blog`,     lastModified: new Date(), changeFrequency: "weekly",  priority: 0.7 },
     ...POSTS.filter((p) => p.published).map((p) => ({ url: `${siteUrl}/blog/${p.slug}`, lastModified: new Date(p.date), changeFrequency: "monthly" as const, priority: 0.7 })),
     { url: `${siteUrl}/resources`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },

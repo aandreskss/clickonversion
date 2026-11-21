@@ -94,10 +94,8 @@ export default function YoliPage() {
                 <p className="ck-mono yo-loc"><span className="ck-dot"></span> Los Guayos, Carabobo · disponible para trabajo remoto</p>
               </div>
               <div className="yo-hero-vis">
-                <div className="yo-arch">
-                  <img src="/team/yoli/retrato.webp" alt="Retrato de Yolimar Padrón" width={432} height={592} />
-                </div>
-                <span className="yo-iso-bg">
+                <img className="yo-pose-hero" src="/team/yoli/pose-arriba.webp" alt="Yoli sonriendo y señalando hacia arriba con la camiseta de ClicKonversion" width={690} height={1000} />
+                <span className="yo-iso-bg" aria-hidden="true">
                   <Isotipo color="#FE5C02" width={520} style={{ width: "100%", height: "auto" }} />
                 </span>
                 <span className="yo-bubble ck-hand yo-b1">te lo explico<br />como en clase</span>
@@ -235,7 +233,7 @@ export default function YoliPage() {
               </ol>
             </div>
             <aside className="yo-tl-side">
-              <img className="yo-st-verde" src="/team/yoli/sticker-verde.webp" alt="Yoli de espaldas con camisa verde, mirando a cámara y sonriendo" width={617} height={540} />
+              <img className="yo-pose-tl" src="/team/yoli/pose-pulgar.webp" alt="Yoli sonriendo y señalando con el pulgar hacia su trayectoria" width={631} height={1000} />
               <span className="yo-bubble ck-hand yo-b2">¡esto sí lo viví!</span>
               <div className="yo-side-card">
                 <span className="ck-mono">MARCAS Y EVENTOS</span>
@@ -262,13 +260,19 @@ export default function YoliPage() {
               </div>
               <p>Lo que más me piden las marcas, y lo que hago todos los días.</p>
             </div>
-            <div className="yo-do">
-              <article className="yo-lav"><span className="ck-mono">01</span><h3>Estrategia de contenido</h3><p>Calendario, formatos y guiones para TikTok e Instagram que hacen crecer la comunidad.</p></article>
-              <article className="yo-peach"><span className="ck-mono">02</span><h3>Gestión de marcas</h3><p>Identidad digital, tono y ecosistema de contenidos para marcas nuevas o que se renuevan.</p></article>
-              <article className="yo-mint"><span className="ck-mono">03</span><h3>Relaciones públicas y eventos</h3><p>Presencia de marca en eventos, alianzas y medios, de la planificación a la cobertura.</p></article>
-              <article className="yo-sky"><span className="ck-mono">04</span><h3>IA para marketing</h3><p>Herramientas de inteligencia artificial para crear contenido y ganar productividad.</p></article>
-              <article className="yo-white"><span className="ck-mono">05</span><h3>Formación para equipos</h3><p>Talleres de marketing digital e IA, en modalidad virtual o presencial.</p></article>
-              <article className="yo-white"><span className="ck-mono">06</span><h3>Locución y oratoria</h3><p>Voz para piezas de audio y video, y oratoria de alto impacto para presentaciones.</p></article>
+            <div className="yo-do-wrap">
+              <div className="yo-do-pose">
+                <img src="/team/yoli/pose-senala-lado.webp" alt="Yoli señalando sus servicios" width={664} height={1000} />
+                <span className="yo-bubble ck-hand">¡mira!</span>
+              </div>
+              <div className="yo-do">
+                <article className="yo-lav"><span className="ck-mono">01</span><h3>Estrategia de contenido</h3><p>Calendario, formatos y guiones para TikTok e Instagram que hacen crecer la comunidad.</p></article>
+                <article className="yo-peach"><span className="ck-mono">02</span><h3>Gestión de marcas</h3><p>Identidad digital, tono y ecosistema de contenidos para marcas nuevas o que se renuevan.</p></article>
+                <article className="yo-mint"><span className="ck-mono">03</span><h3>Relaciones públicas y eventos</h3><p>Presencia de marca en eventos, alianzas y medios, de la planificación a la cobertura.</p></article>
+                <article className="yo-sky"><span className="ck-mono">04</span><h3>IA para marketing</h3><p>Herramientas de inteligencia artificial para crear contenido y ganar productividad.</p></article>
+                <article className="yo-white"><span className="ck-mono">05</span><h3>Formación para equipos</h3><p>Talleres de marketing digital e IA, en modalidad virtual o presencial.</p></article>
+                <article className="yo-white"><span className="ck-mono">06</span><h3>Locución y oratoria</h3><p>Voz para piezas de audio y video, y oratoria de alto impacto para presentaciones.</p></article>
+              </div>
             </div>
           </div>
         </section>
@@ -288,8 +292,8 @@ export default function YoliPage() {
               </ul>
             </div>
             <div className="yo-edu-vis">
-              <img className="yo-st-grado" src="/team/yoli/sticker-grado.webp" alt="Yoli sonriendo con toga y birrete el día de su graduación" width={881} height={640} />
-              <span className="yo-bubble ck-hand yo-b3">¡graduada!</span>
+              <img className="yo-pose-edu" src="/team/yoli/pose-cruzada-senala.webp" alt="Yoli de brazos cruzados señalando su formación" width={589} height={1000} />
+              <span className="yo-bubble ck-hand yo-b3">¡nunca dejo<br />de aprender!</span>
               <figure className="yo-cert">
                 <img src="/team/yoli/certificado-unitec.webp" alt="Certificado de UNITEC del taller Transinclusión educativa, tecnoeducación e IA" width={650} height={428} />
                 <figcaption className="ck-mono">CERTIFICACIÓN UNITEC · 2025</figcaption>
@@ -301,8 +305,15 @@ export default function YoliPage() {
         {/* HERRAMIENTAS */}
         <section className="yo-sec">
           <div className="yo-wrap">
-            <span className="ck-eyebrow"><b>06</b> · Habilidades</span>
-            <h2>La caja de herramientas.</h2>
+            <div className="yo-tools-head">
+              <div>
+                <span className="ck-eyebrow"><b>06</b> · Habilidades</span>
+                <h2>La caja de herramientas.</h2>
+              </div>
+              <div className="yo-tools-pose">
+                <img src="/team/yoli/pose-brazos-seria.webp" alt="Yoli de brazos cruzados con una sonrisa segura" width={638} height={1000} />
+              </div>
+            </div>
             <div className="yo-tools">
               <div className="yo-lav">
                 <span className="ck-mono">IA PARA MARKETING</span>
@@ -409,8 +420,8 @@ export default function YoliPage() {
               </div>
               <p className="ck-hand yo-sign">Un abrazo, Yoli</p>
             </div>
-            <div className="yo-cta-photo">
-              <img src="/team/yoli/retrato.webp" alt="Retrato de Yolimar Padrón" width={432} height={592} />
+            <div className="yo-cta-pose">
+              <img src="/team/yoli/pose-brazos-sonrisa.webp" alt="Yoli sonriendo de brazos cruzados" width={650} height={1000} />
             </div>
           </div>
         </section>

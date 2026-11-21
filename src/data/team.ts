@@ -61,7 +61,7 @@ export const TEAM: TeamMember[] = [
       { label: "[CONTENIDO]", bg: "#E4DEFF" },
       { label: "[RR. PP.]", bg: "#FFDCC7" },
     ],
-    photo: "/team/yoli/retrato.webp",
+    photo: "/team/yoli/pose-brazos-sonrisa.webp",
     cv: "/about/yoli",
     stripes: ["#E4DEFF", "#EEEAFF"],
     tilt: "ck-p3",
